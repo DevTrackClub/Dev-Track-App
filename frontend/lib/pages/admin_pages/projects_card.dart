@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../common_pages/specific_project.dart';
+import 'package:dev_track_app/pages/common_pages/specific_project.dart';
+
 
 
 class Data {
