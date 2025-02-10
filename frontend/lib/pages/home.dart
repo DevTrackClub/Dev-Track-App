@@ -4,7 +4,6 @@ import 'package:dev_track_app/pages/common_pages/previous_projects.dart';
 import 'package:dev_track_app/pages/common_pages/splashscreen.dart';
 import 'package:dev_track_app/pages/common_pages/confirm_page.dart';
 import 'package:dev_track_app/pages/common_pages/domain.dart';
-import 'package:dev_track_app/pages/common_pages/specific_project.dart';
 import 'package:dev_track_app/pages/common_pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:dev_track_app/pages/user_pages/tracker.dart';
