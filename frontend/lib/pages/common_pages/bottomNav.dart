@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 //Testing change
-import 'package:dev_track_app/pages/common_pages/domain.dart';
+import 'package:dev_track_app/pages/domain_pages/domain.dart';
 import 'package:dev_track_app/pages/home.dart';
 
 class BottomNav extends StatefulWidget {

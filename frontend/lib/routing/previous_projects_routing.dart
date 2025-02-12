@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../pages/common_pages/specific_project.dart';
+import '../pages/project_pages/project_display/specific_project.dart';
 
 class PreviousProjectsRouting {
   static void pop(BuildContext context) {

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart'; // For local storage
-import 'package:dev_track_app/pages/user_pages/imageuploadpage.dart'; // Ensure this is the correct path
+import 'package:dev_track_app/utils/imageuploadpage.dart'; // Ensure this is the correct path
 
 class Studentview extends StatefulWidget {
   const Studentview({super.key});
