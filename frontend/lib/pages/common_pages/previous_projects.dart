@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'specific_project.dart';
+import '../../routing/previous_projects_routing.dart';
 
 class PreviousProjects extends StatefulWidget {
   const PreviousProjects({super.key});
@@ -21,7 +22,7 @@ class _PreviousProjectsState extends State<PreviousProjects> {
                   Expanded(
                     child: IconButton(
                       onPressed: () {
-                        Navigator.pop(context);
+                        PreviousProjectsRouting.pop(context);
                       },
                       icon: Icon(
                         Icons.arrow_back_ios,
@@ -72,7 +73,7 @@ class _PreviousProjectsState extends State<PreviousProjects> {
                   ),
                   title: const Text('1'),
                   onTap: () {
-                    Navigator.pop(context);
+                    PreviousProjectsRouting.pop(context);
                   },
                 ),
                 ListTile(
@@ -81,7 +82,7 @@ class _PreviousProjectsState extends State<PreviousProjects> {
                   ),
                   title: const Text('2'),
                   onTap: () {
-                    Navigator.pop(context);
+                    PreviousProjectsRouting.pop(context);
                   },
                 ),
               ],
@@ -185,12 +186,7 @@ class _PreviousProjectsState extends State<PreviousProjects> {
                                   height: double.infinity,
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  SpecificProject())
-                                      );
+                                      PreviousProjectsRouting.pushToSpecificProject(context);
                                     },
                                     child: Text(
                                       'Learn More',
@@ -263,12 +259,7 @@ class _PreviousProjectsState extends State<PreviousProjects> {
                                   height: double.infinity,
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  SpecificProject())
-                                      );
+                                      PreviousProjectsRouting.pushToSpecificProject(context);
                                     },
                                     child: Text(
                                       'Learn More',
@@ -341,12 +332,7 @@ class _PreviousProjectsState extends State<PreviousProjects> {
                                   height: double.infinity,
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  SpecificProject())
-                                      );
+                                      PreviousProjectsRouting.pushToSpecificProject(context);
                                     },
                                     child: Text(
                                       'Learn More',
@@ -419,12 +405,7 @@ class _PreviousProjectsState extends State<PreviousProjects> {
                                   height: double.infinity,
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  SpecificProject())
-                                      );
+                                      PreviousProjectsRouting.pushToSpecificProject(context);
                                     },
                                     child: Text(
                                       'Learn More',
@@ -497,12 +478,7 @@ class _PreviousProjectsState extends State<PreviousProjects> {
                                   height: double.infinity,
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  SpecificProject())
-                                      );
+                                      PreviousProjectsRouting.pushToSpecificProject(context);
                                     },
                                     child: Text(
                                       'Learn More',
