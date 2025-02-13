@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../../std_class.dart';
+import '../../../../models/std_class.dart';
 
 class TeamCard extends StatefulWidget {
   final STD std;

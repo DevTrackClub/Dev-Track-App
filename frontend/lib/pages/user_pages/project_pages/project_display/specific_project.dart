@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:readmore/readmore.dart';
-import '../../std_details.dart';
+import '../../../../models/std_details.dart';
 import 'teamcard.dart';
 
 class SpecificProject extends StatefulWidget {

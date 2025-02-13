@@ -1,15 +1,15 @@
 import 'package:dev_track_app/utils/bottom_nav_bar.dart';
 import 'package:dev_track_app/pages/admin_pages//mgmg_prev_projects.dart';
-import 'package:dev_track_app/pages/project_pages/project_display/previous_projects.dart';
-import 'package:dev_track_app/pages/common_pages/splashscreen.dart';
+import 'package:dev_track_app/pages/user_pages/project_pages/project_display/previous_projects.dart';
+import 'package:dev_track_app/theme/splashscreen.dart';
 import 'package:dev_track_app/pages/common_pages/confirm_page.dart';
-import 'package:dev_track_app/pages/domain_pages/domain.dart';
-import 'package:dev_track_app/pages/project_pages/project_display/specific_project.dart';
+import 'package:dev_track_app/pages/common_pages/domain_pages/domain.dart';
+import 'package:dev_track_app/pages/user_pages/project_pages/project_display/specific_project.dart';
 import 'package:dev_track_app/pages/common_pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:dev_track_app/pages/user_pages/tracker.dart';
 import 'package:dev_track_app/pages/user_pages/studentview.dart';
-import 'package:dev_track_app/pages/project_pages/submission_page/submission_page.dart';
+import 'package:dev_track_app/pages/user_pages/project_pages/submission_page/submission_page.dart';
 
 class HomePag extends StatelessWidget {
   const HomePag({super.key});

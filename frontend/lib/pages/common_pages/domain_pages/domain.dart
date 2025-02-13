@@ -1,4 +1,4 @@
-import 'package:dev_track_app/pages/domain_pages/topNav.dart';
+import 'package:dev_track_app/pages/common_pages/domain_pages/topNav.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
