@@ -1,6 +1,11 @@
+
+import 'package:dev_track_app/utils/bottom_nav_bar.dart';
+import 'package:dev_track_app/utils/custom_button.dart';
 import 'package:flutter/material.dart';
-import 'login_page.dart';
-import 'register_page.dart';
+
+import 'package:dev_track_app/pages/common_pages/login_page.dart';
+import 'package:dev_track_app/pages/common_pages/register_page.dart';
+
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -44,47 +49,27 @@ class HomePage extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: <Widget>[
-                      ElevatedButton(
+                      CustomButton(
+                        text: 'Login',
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const LoginPage()),
+                              builder: (context) => const LoginPage(),
+                            ),
                           );
                         },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              const Color.fromARGB(255, 53, 156, 19),
-                          fixedSize: const Size(120, 50),
-                        ),
-                        child: const Text(
-                          'Login',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
                       ),
-                      ElevatedButton(
+                      CustomButton(
+                        text: 'Register',
                         onPressed: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const RegisterPage()),
+                              builder: (context) => const RegisterPage(),
+                            ),
                           );
                         },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor:
-                              const Color.fromARGB(255, 53, 156, 19),
-                          fixedSize: const Size(120, 50),
-                        ),
-                        child: const Text(
-                          'Register',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
                       ),
                     ],
                   ),
@@ -94,25 +79,7 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.grey[850],
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-        ],
-      ),
+      bottomNavigationBar: const BottomNavBar(),
     );
   }
 }
