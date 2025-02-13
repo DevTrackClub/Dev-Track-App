@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../std_class.dart';
+import '../../std_class.dart';
 
 class TeamCard extends StatefulWidget {
   final STD std;
@@ -17,7 +17,7 @@ class _TeamCardState extends State<TeamCard> {
       scrollDirection: Axis.horizontal,
       child: Container(
         child: SizedBox(
-          width:150,
+          width: 150,
           child: Card(
             clipBehavior: Clip.antiAlias,
             elevation: 0,
@@ -32,14 +32,17 @@ class _TeamCardState extends State<TeamCard> {
                   height: 150,
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.black26),
-                    borderRadius: BorderRadius.circular(10), // Adjust the radius as needed
+                    borderRadius: BorderRadius.circular(
+                        10), // Adjust the radius as needed
                   ),
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10), // Ensure the image fits within the rounded corners
+                    borderRadius: BorderRadius.circular(
+                        10), // Ensure the image fits within the rounded corners
                     child: Image.asset(
                       widget.std.profilepic,
                       width: double.infinity,
-                      fit: BoxFit.fill, // Use cover for better aspect ratio handling
+                      fit: BoxFit
+                          .fill, // Use cover for better aspect ratio handling
                     ),
                   ),
                 ),

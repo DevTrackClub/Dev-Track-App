@@ -1,4 +1,4 @@
-import 'package:dev_track_app/pages/common_pages/bottomNav.dart';
+import 'package:dev_track_app/utils/bottom_nav_bar.dart';
 import 'package:dev_track_app/pages/admin_pages//mgmg_prev_projects.dart';
 import 'package:dev_track_app/pages/project_pages/project_display/previous_projects.dart';
 import 'package:dev_track_app/pages/common_pages/splashscreen.dart';
@@ -78,7 +78,7 @@ class HomePag extends StatelessWidget {
               ),
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => BottomNav()));
+                    MaterialPageRoute(builder: (context) => BottomNavBar()));
               },
               child: Text("Bottom Nav"),
             ),

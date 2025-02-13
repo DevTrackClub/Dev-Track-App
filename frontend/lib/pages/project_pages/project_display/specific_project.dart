@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:readmore/readmore.dart';
 import '../../std_details.dart';
-import '../../common_pages/teamcard.dart';
+import 'teamcard.dart';
 
 class SpecificProject extends StatefulWidget {
   const SpecificProject({super.key});
