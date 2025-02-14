@@ -2,6 +2,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from pydantic import ValidationError
+from .managers import CustomUserManager
 
 
 from django.core.exceptions import ValidationError
@@ -24,6 +25,18 @@ class CustomUser(AbstractUser):
     semester = models.CharField(max_length=2, default='1')
     github = models.URLField(default='', blank=True)
     linkedin = models.URLField(default='', blank=True)
+    is_active = models.BooleanField(default=True)
+    otp_token = models.CharField(max_length=6, blank=True, null=True)
+    otp_expiration = models.DateTimeField(null=True, blank=True)
+
+
+
+    ROLE_CHOICES = [
+        ('admin', 'Admin'),
+        ('student', 'Student')
+    ]
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='student')
+    objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name', 'phone', 'srn', 'branch', 'semester']
