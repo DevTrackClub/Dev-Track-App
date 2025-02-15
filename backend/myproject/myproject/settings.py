@@ -31,27 +31,11 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
-from datetime import timedelta
-#Django-ninja jwt settings
-NINJA_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'ROTATE_REFRESH_TOKENS': True,
-    'BLACKLIST_AFTER_ROTATION': True,
-    'ALGORITHM': 'HS256',
-    'SIGNING_KEY': SECRET_KEY,
-    'VERIFYING_KEY': None,
-    'AUTH_HEADER_TYPES': ('Bearer',),
-    'USER_ID_FIELD': 'id',
-    'USER_ID_CLAIM': 'user_id',
-}
-
-
 
 # Application definition
 
 INSTALLED_APPS = [
-    # 'django.contrib.admin',
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -60,12 +44,22 @@ INSTALLED_APPS = [
     'members',
     'ninja',
     'corsheaders',
-    'ninja_jwt',
     'ninja_extra',
     'projects',
     'announcements',
     'registrations',
+    
 ]
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend", 
+]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
 
 MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -163,9 +157,28 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = ["http://localhost:8000"] 
 CSRF_TRUSTED_ORIGINS = ['http://localhost:8000']
+CSRF_USE_SESSIONS = True
 
 AUTH_USER_MODEL = 'members.CustomUser'
 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+
+# database-backed sessions
+SESSION_ENGINE = "django.contrib.sessions.backends.db"  
+
+# Name of the session cookie
+SESSION_COOKIE_NAME = "sessionid"  
+
+# Ensure the session expires when the browser is closed 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  
+
+# Set session age (e.g., 2 weeks)
+SESSION_COOKIE_AGE = 1209600  # 2 weeks in seconds
+
+# Secure session settings for production
+SESSION_COOKIE_SECURE = False  # Set to True in production if using HTTPS
+SESSION_COOKIE_HTTPONLY = True  
+SESSION_COOKIE_SAMESITE = "Lax"  # Change to 'None' if working with cross-site requests
