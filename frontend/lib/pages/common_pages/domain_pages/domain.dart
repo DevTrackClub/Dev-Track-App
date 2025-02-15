@@ -1,9 +1,6 @@
 import 'package:dev_track_app/pages/common_pages/domain_pages/topNav.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/painting.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class DomainPage extends StatelessWidget {
@@ -13,7 +10,7 @@ class DomainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Color(0xFF040D12),
+        backgroundColor: const Color(0xFF040D12),
         body: Column(
           children: [
             TopNav(),

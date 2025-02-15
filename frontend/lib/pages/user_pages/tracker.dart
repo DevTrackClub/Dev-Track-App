@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../logic/tracker_logic.dart';
 
 void main() {
   runApp(const MaterialApp(
@@ -16,34 +17,29 @@ class ProgressTrackerPage extends StatefulWidget {
 
 class ProgressTrackerPageState extends State<ProgressTrackerPage>
     with SingleTickerProviderStateMixin {
-  List<bool> isExpandedList = []; // Initialize an empty list for expanded state
-  List<TextEditingController> progressControllers =
-      []; // Initialize an empty list for controllers
+  late ProgressTrackerLogic _logic;
   late AnimationController _controller;
   late Animation<double> _animation;
 
   @override
   void initState() {
     super.initState();
+
+    // Instantiate the logic class, which sets up expanded lists & controllers
+    _logic = ProgressTrackerLogic(numberOfMembers: 4);
+
+    //set up animation
     _controller = AnimationController(
       duration: const Duration(seconds: 8),
       vsync: this,
     )..repeat(reverse: true);
     _animation = CurvedAnimation(parent: _controller, curve: Curves.easeInOut);
-
-    // Initialize lists based on the number of items
-    int numberOfMembers = 4;
-    isExpandedList = List.generate(numberOfMembers, (_) => false);
-    progressControllers =
-        List.generate(numberOfMembers, (_) => TextEditingController());
   }
 
   @override
   void dispose() {
     _controller.dispose();
-    for (var controller in progressControllers) {
-      controller.dispose();
-    }
+    _logic.dispose();
     super.dispose();
   }
 
@@ -129,7 +125,7 @@ class ProgressTrackerPageState extends State<ProgressTrackerPage>
             const SizedBox(height: 20),
             Expanded(
               child: ListView.builder(
-                itemCount: isExpandedList.length, // Use the length of the list
+                itemCount: _logic.isExpandedList.length, // Use the length of the list
                 itemBuilder: (context, index) {
                   return Card(
                     elevation: 4,
@@ -139,7 +135,7 @@ class ProgressTrackerPageState extends State<ProgressTrackerPage>
                       expandedHeaderPadding: const EdgeInsets.all(0),
                       expansionCallback: (int itemIndex, bool isExpanded) {
                         setState(() {
-                          isExpandedList[index] = !isExpandedList[index];
+                          _logic.isExpandedList[index] = !_logic.isExpandedList[index];
                         });
                       },
                       children: [
@@ -187,7 +183,7 @@ class ProgressTrackerPageState extends State<ProgressTrackerPage>
                                 ),
                                 const SizedBox(height: 16),
                                 TextField(
-                                  controller: progressControllers[index],
+                                  controller: _logic.progressControllers[index],
                                   decoration: const InputDecoration(
                                     labelText: 'Add progress here...',
                                     border: OutlineInputBorder(),
@@ -213,7 +209,7 @@ class ProgressTrackerPageState extends State<ProgressTrackerPage>
                               ],
                             ),
                           ),
-                          isExpanded: isExpandedList[index],
+                          isExpanded: _logic.isExpandedList[index],
                         ),
                       ],
                     ),
@@ -229,7 +225,7 @@ class ProgressTrackerPageState extends State<ProgressTrackerPage>
 
   void _showEditDialog(BuildContext context, int index) {
     TextEditingController editController =
-        TextEditingController(text: progressControllers[index].text);
+        TextEditingController(text: _logic.progressControllers[index].text);
 
     showDialog(
       context: context,
@@ -254,7 +250,7 @@ class ProgressTrackerPageState extends State<ProgressTrackerPage>
             ElevatedButton(
               onPressed: () {
                 setState(() {
-                  progressControllers[index].text = editController.text;
+                  _logic.progressControllers[index].text = editController.text;
                 });
                 Navigator.of(context).pop();
                 ScaffoldMessenger.of(context).showSnackBar(
