@@ -1,18 +1,24 @@
-import 'package:dev_track_app/pages/common_pages/topNav.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class DomainPage extends StatelessWidget {
+class DomainPage extends StatefulWidget {
   const DomainPage({super.key});
 
+  @override
+  State<DomainPage> createState() => _DomainPageState();
+}
+
+class _DomainPageState extends State<DomainPage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: const Color(0xFF040D12),
+        appBar: appBarCommon(),
+        backgroundColor: Colors.white,
         body: Column(
           children: [
-            const TopNav(),
+            searchBar(),
+            welcomeBack(),
             cycleCard(),
             const SizedBox(height: 40),
             Expanded(child: domianGrid()),
@@ -162,6 +168,62 @@ class DomainPage extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+
+  PreferredSizeWidget appBarCommon() {
+    return AppBar(
+      elevation: 0.00,
+      backgroundColor: Colors.white,
+      actions: <Widget>[
+        IconButton(
+          icon: const Icon(Icons.notifications),
+          tooltip: 'Setting Icon',
+          onPressed: () {},
+        ), //IconButton
+      ],
+    );
+  }
+
+  Widget searchBar() {
+    return Container(
+      padding: EdgeInsets.all(16),
+      child: TextField(
+        decoration: InputDecoration(
+          labelText: 'search all projects',
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20.0)),
+          ),
+          prefixIcon: Icon(Icons.search),
+        ),
+      ),
+    );
+  }
+
+  Widget welcomeBack() {
+    return Container(
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.symmetric(horizontal: 14),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Text(
+                'Welcome Back,',
+                style: TextStyle(fontSize: 30),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Text(
+                'STUDENT',
+                style: TextStyle(fontSize: 40),
+              ),
+            ],
+          )
+        ],
+      ),
     );
   }
 }
