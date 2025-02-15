@@ -1,4 +1,5 @@
-import 'package:dev_track_app/utils/bottom_nav_bar.dart';
+// import 'package:dev_track_app/utils/bottom_nav_bar.dart';
+import 'package:dev_track_app/pages/common_pages/Theme-Demo-Page/sample.dart';
 import 'package:dev_track_app/pages/admin_pages//mgmg_prev_projects.dart';
 import 'package:dev_track_app/pages/user_pages/project_pages/project_display/previous_projects.dart';
 import 'package:dev_track_app/theme/splashscreen.dart';
@@ -78,9 +79,9 @@ class HomePag extends StatelessWidget {
               ),
               onPressed: () {
                 Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => BottomNavBar()));
+                    MaterialPageRoute(builder: (context) => ThemedPage()));
               },
-              child: Text("Bottom Nav"),
+              child: Text("Theme Page Implementation"),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
