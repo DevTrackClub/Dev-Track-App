@@ -1,26 +1,21 @@
 import 'package:flutter/material.dart';
 
-import 'package:dev_track_app/pages/common_pages/specific_project.dart';
-
-
+import 'package:dev_track_app/pages/user_pages/project_pages/project_display/specific_project.dart';
 
 class Data {
   String domain_name;
 
   String content;
 
-  Data(
-      {required this.domain_name,
-
-        required this.content});
+  Data({required this.domain_name, required this.content});
 }
 
 Widget ProjectsCard(List<Data> projectlist, int index, BuildContext contextt,
     Function onUpdate, Function onDelete) {
   TextEditingController _domainController =
-  TextEditingController(text: projectlist[index].domain_name);
+      TextEditingController(text: projectlist[index].domain_name);
   TextEditingController _contentController =
-  TextEditingController(text: projectlist[index].content);
+      TextEditingController(text: projectlist[index].content);
 
   return Padding(
     padding: const EdgeInsets.fromLTRB(0, 15, 0, 15),
@@ -60,9 +55,12 @@ Widget ProjectsCard(List<Data> projectlist, int index, BuildContext contextt,
                         ),
                         Text(
                           projectlist[index].domain_name,
-                          style: TextStyle(fontSize: 15,color: Colors.white),
+                          style: TextStyle(fontSize: 15, color: Colors.white),
                         ),
-                        Text(projectlist[index].content,style: TextStyle(color: Colors.white),),
+                        Text(
+                          projectlist[index].content,
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ],
                     ),
                   ],
@@ -73,12 +71,12 @@ Widget ProjectsCard(List<Data> projectlist, int index, BuildContext contextt,
                   child: Container(
                     height: 50,
                     width: 50,
-
                     child: Container(
                       width: 30,
                       child: PopupMenuButton<int>(
                         offset: Offset(0, 40),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10)),
                         itemBuilder: (context) => [
                           PopupMenuItem(
                               child: Row(
@@ -109,16 +107,19 @@ Widget ProjectsCard(List<Data> projectlist, int index, BuildContext contextt,
                                             TextField(
                                               controller: _domainController,
                                               cursorColor: Colors.black45,
-                                              style: TextStyle(color: Colors.black),
+                                              style: TextStyle(
+                                                  color: Colors.black),
                                               decoration: InputDecoration(
                                                 labelText: 'Edit Caption',
                                                 labelStyle: TextStyle(
                                                     color: Colors.black45),
-                                                enabledBorder: UnderlineInputBorder(
+                                                enabledBorder:
+                                                    UnderlineInputBorder(
                                                   borderSide: BorderSide(
                                                       color: Colors.black38),
                                                 ),
-                                                focusedBorder: UnderlineInputBorder(
+                                                focusedBorder:
+                                                    UnderlineInputBorder(
                                                   borderSide: BorderSide(
                                                       color: Colors.black45),
                                                 ),
@@ -127,16 +128,19 @@ Widget ProjectsCard(List<Data> projectlist, int index, BuildContext contextt,
                                             TextField(
                                               controller: _contentController,
                                               cursorColor: Colors.black45,
-                                              style: TextStyle(color: Colors.black),
+                                              style: TextStyle(
+                                                  color: Colors.black),
                                               decoration: InputDecoration(
                                                 labelText: 'Edit Content',
                                                 labelStyle: TextStyle(
                                                     color: Colors.black45),
-                                                enabledBorder: UnderlineInputBorder(
+                                                enabledBorder:
+                                                    UnderlineInputBorder(
                                                   borderSide: BorderSide(
                                                       color: Colors.black38),
                                                 ),
-                                                focusedBorder: UnderlineInputBorder(
+                                                focusedBorder:
+                                                    UnderlineInputBorder(
                                                   borderSide: BorderSide(
                                                       color: Colors.black45),
                                                 ),
@@ -154,11 +158,12 @@ Widget ProjectsCard(List<Data> projectlist, int index, BuildContext contextt,
                                               },
                                               child: Text(
                                                 'Update',
-                                                style:
-                                                TextStyle(color: Colors.white),
+                                                style: TextStyle(
+                                                    color: Colors.white),
                                               ),
                                               style: ElevatedButton.styleFrom(
-                                                backgroundColor: Color(0xFF93B1A6),
+                                                backgroundColor:
+                                                    Color(0xFF93B1A6),
                                               ),
                                             ),
                                           ],
@@ -189,11 +194,7 @@ Widget ProjectsCard(List<Data> projectlist, int index, BuildContext contextt,
                         ],
                         iconColor: Color(0xFF93B1A6),
                       ),
-
-
                     ),
-
-
                   ),
                 ),
               ],
@@ -209,15 +210,18 @@ Widget ProjectsCard(List<Data> projectlist, int index, BuildContext contextt,
               height: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  Navigator.push(contextt,
-                      MaterialPageRoute(builder: (context) => SpecificProject()));
+                  Navigator.push(
+                      contextt,
+                      MaterialPageRoute(
+                          builder: (context) => SpecificProject()));
                 },
                 child: Text(
                   'Learn More',
                   style: TextStyle(fontSize: 15, color: Colors.grey[800]),
                 ),
                 style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                  shape:
+                      RoundedRectangleBorder(borderRadius: BorderRadius.zero),
                   backgroundColor: Colors.grey[400],
                 ),
               ),

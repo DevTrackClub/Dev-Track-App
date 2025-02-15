@@ -1,15 +1,16 @@
-import 'package:dev_track_app/pages/common_pages/bottomNav.dart';
+// import 'package:dev_track_app/utils/bottom_nav_bar.dart';
+import 'package:dev_track_app/pages/common_pages/Theme-Demo-Page/sample.dart';
 import 'package:dev_track_app/pages/admin_pages//mgmg_prev_projects.dart';
-import 'package:dev_track_app/pages/common_pages/previous_projects.dart';
-import 'package:dev_track_app/pages/common_pages/splashscreen.dart';
+import 'package:dev_track_app/pages/user_pages/project_pages/project_display/previous_projects.dart';
+import 'package:dev_track_app/theme/splashscreen.dart';
 import 'package:dev_track_app/pages/common_pages/confirm_page.dart';
-import 'package:dev_track_app/pages/common_pages/domain.dart';
-import 'package:dev_track_app/pages/common_pages/specific_project.dart';
+import 'package:dev_track_app/pages/common_pages/domain_pages/domain.dart';
+import 'package:dev_track_app/pages/user_pages/project_pages/project_display/specific_project.dart';
 import 'package:dev_track_app/pages/common_pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:dev_track_app/pages/user_pages/tracker.dart';
 import 'package:dev_track_app/pages/user_pages/studentview.dart';
-import 'package:dev_track_app/pages/user_pages/submission_page.dart';
+import 'package:dev_track_app/pages/user_pages/project_pages/submission_page/submission_page.dart';
 
 class HomePag extends StatelessWidget {
   const HomePag({super.key});
@@ -31,11 +32,14 @@ class HomePag extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                textStyle:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => HomePage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => HomePage()));
               },
               child: Text("Home Page"),
             ),
@@ -48,11 +52,14 @@ class HomePag extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                textStyle:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => DomainPage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => DomainPage()));
               },
               child: Text("Domain Page"),
             ),
@@ -65,13 +72,16 @@ class HomePag extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                textStyle:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => BottomNav()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ThemedPage()));
               },
-              child: Text("Bottom Nav"),
+              child: Text("Theme Page Implementation"),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -82,11 +92,14 @@ class HomePag extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                textStyle:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => SubmissionPage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => SubmissionPage()));
               },
               child: Text("Submission Page"),
             ),
@@ -99,11 +112,14 @@ class HomePag extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                textStyle:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ConfirmPage()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ConfirmPage()));
               },
               child: const Text("Confirm"),
             ),
@@ -116,11 +132,16 @@ class HomePag extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                textStyle:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => PreviousProjects()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => PreviousProjects()));
               },
               child: Text("Previous Projects"),
             ),
@@ -134,10 +155,12 @@ class HomePag extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30.0),
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                textStyle:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Splash()));
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => Splash()));
               },
               child: const Text("SplashScreen"),
             ),
@@ -150,11 +173,16 @@ class HomePag extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                textStyle:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => ProgressTrackerPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ProgressTrackerPage()));
               },
               child: const Text("Tracker Page"),
             ),
@@ -167,11 +195,16 @@ class HomePag extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                textStyle:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => MgmtPreviousProjects()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MgmtPreviousProjects()));
               },
               child: const Text("Management Project View Page"),
             ),
@@ -185,10 +218,12 @@ class HomePag extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30.0),
                 ),
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                textStyle:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Studentview()));
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => Studentview()));
               },
               child: const Text("Student View"),
             ),
