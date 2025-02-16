@@ -3,6 +3,7 @@ import 'package:dev_track_app/pages/common_pages/domain_pages/topNav.dart';
 import 'specific_project.dart';
 import 'package:dev_track_app/routing/previous_projects_routing.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:dev_track_app/theme/colors.dart';
 
 class PreviousProjects extends StatefulWidget {
   const PreviousProjects({super.key});
@@ -18,7 +19,7 @@ class _PreviousProjectsState extends State<PreviousProjects> {
    Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: const Color(0xFFF7F4F3),
+        backgroundColor: AppColors.backgroundLight,
         body: Stack(
           children: [
             Column(
@@ -57,9 +58,9 @@ class _PreviousProjectsState extends State<PreviousProjects> {
         child: TextField(
           decoration: InputDecoration(
             filled: true,
-            fillColor: Colors.white,
+            fillColor: AppColors.backgroundLight,
             labelText: 'search all projects',
-            prefixIcon: Icon(Icons.search, color: Colors.black54),
+            prefixIcon: Icon(Icons.search, color: AppColors.neutralDark),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14.0),
               borderSide: BorderSide(color: const Color(0xFF5B2333)),
@@ -85,7 +86,8 @@ class _PreviousProjectsState extends State<PreviousProjects> {
     );
   }
 
-  final List<Map<String, String>> projects = [
+  final List<Map<String, String>> projects = 
+  [
     {
       "title": "UI/UX 42",
       "subtitle": "Budgeting application",
@@ -116,36 +118,8 @@ class _PreviousProjectsState extends State<PreviousProjects> {
       "description": "An intuitive mobile shopping experience.",
       "image": "assets/images/ecommerce.png"
     },
-    {
-      "title": "E-commerce App",
-      "subtitle": "Shopping made easy",
-      "description": "An intuitive mobile shopping experience.",
-      "image": "assets/images/ecommerce.png"
-    },
-    {
-      "title": "E-commerce App",
-      "subtitle": "Shopping made easy",
-      "description": "An intuitive mobile shopping experience.",
-      "image": "assets/images/ecommerce.png"
-    },
-    {
-      "title": "E-commerce App",
-      "subtitle": "Shopping made easy",
-      "description": "An intuitive mobile shopping experience.",
-      "image": "assets/images/ecommerce.png"
-    },
   ];
 
-//logic to geneterate project cards
-  // Widget _buildProjectList() {
-  //   return ListView.builder(
-  //     padding: EdgeInsets.symmetric(horizontal: 15),
-  //     itemCount: projects.length,
-  //     itemBuilder: (context, index) {
-  //       return _buildProjectCard(projects[index]);
-  //     },
-  //   );
-  // }
 
 //ui for cards
   Widget _buildProjectCard(Map<String, String> project) {
