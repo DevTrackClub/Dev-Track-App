@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'specific_project.dart';
+import '../../../../To-Be-Discarded/specific_project.dart';
 import '../../../../routing/previous_projects_routing.dart';
 
 class PreviousProjects extends StatefulWidget {
