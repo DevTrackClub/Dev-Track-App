@@ -111,7 +111,7 @@ class LoginPage extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 15),
               Text.rich(
                 TextSpan(
                   text: "Don't have an account? ",
@@ -133,6 +133,31 @@ class LoginPage extends StatelessWidget {
                       }
                     ),
                   ],
+                ),
+              ),
+              SizedBox(height: 20),
+               const Text('OR',
+                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+                 ),
+                Padding(
+                padding: const EdgeInsets.fromLTRB(25, 15, 25, 10),
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Add your login logic here
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    side: BorderSide(color: Color(0xFF5e00b0)),
+                    padding: EdgeInsets.symmetric(vertical: 15),
+                    textStyle: TextStyle(fontSize: 18,color: Colors.grey),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(5),
+                    ),
+                  ),
+                  child: Center(
+                    child: Text('Browse as a Guest',
+                     style: TextStyle(color: Colors.black)),
+                  ),
                 ),
               ),
             ],
