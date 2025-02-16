@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:readmore/readmore.dart';
-import '../std_details.dart';
+import '../../../../models/std_details.dart';
 import 'teamcard.dart';
-
 
 class SpecificProject extends StatefulWidget {
   const SpecificProject({super.key});
@@ -65,7 +64,6 @@ class _SpecificProjectState extends State<SpecificProject> {
             padding: EdgeInsets.zero,
             children: [
               const DrawerHeader(
-
                 decoration: BoxDecoration(
                   color: Colors.grey,
                 ),
@@ -111,8 +109,7 @@ class _SpecificProjectState extends State<SpecificProject> {
                     width: double.infinity,
                     decoration: BoxDecoration(
                         border: Border.all(color: Colors.black26),
-                        borderRadius: BorderRadius.all(Radius.circular(20))
-                    ),
+                        borderRadius: BorderRadius.all(Radius.circular(20))),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -145,7 +142,6 @@ class _SpecificProjectState extends State<SpecificProject> {
                               'About:',
                               style: TextStyle(fontSize: 20),
                             ),
-
                             Wrap(
                               children: [
                                 ReadMoreText(
@@ -168,7 +164,6 @@ class _SpecificProjectState extends State<SpecificProject> {
                                 ),
                               ],
                             )
-
                           ],
                         ),
                       ),
@@ -180,26 +175,24 @@ class _SpecificProjectState extends State<SpecificProject> {
                 ),
                 Row(
                   children: [
-                    SizedBox(width: 10,),
+                    SizedBox(
+                      width: 10,
+                    ),
                     Text(
                       'Team Members:',
                       style: TextStyle(fontSize: 20),
                     )
                   ],
                 ),
-
-
                 Container(
                   height: 190,
-
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     itemCount: STD_details.stdlist.length,
                     itemBuilder: (context, index) {
                       return Container(
                         width: 150,
-                        margin: EdgeInsets.symmetric(
-                            horizontal: 2),
+                        margin: EdgeInsets.symmetric(horizontal: 2),
                         child: TeamCard(std: STD_details.stdlist[index]),
                       );
                     },
@@ -216,7 +209,8 @@ class _SpecificProjectState extends State<SpecificProject> {
                         width: 250,
                         color: Colors.grey[300],
                       ),
-                    )],
+                    )
+                  ],
                 )
               ],
             ),
