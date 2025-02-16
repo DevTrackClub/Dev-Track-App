@@ -5,7 +5,7 @@ import 'package:dev_track_app/pages/user_pages/project_pages/project_display/pre
 import 'package:dev_track_app/theme/splashscreen.dart';
 import 'package:dev_track_app/pages/common_pages/confirm_page.dart';
 import 'package:dev_track_app/pages/common_pages/domain_pages/domain.dart';
-import 'package:dev_track_app/pages/user_pages/project_pages/project_display/specific_project.dart';
+import 'package:dev_track_app/pages/user_pages/project_pages/project_display/new_specific_project.dart';
 import 'package:dev_track_app/pages/common_pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:dev_track_app/pages/user_pages/tracker.dart';
@@ -226,6 +226,27 @@ class HomePag extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => Studentview()));
               },
               child: const Text("Student View"),
+            ),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromARGB(255, 50, 7, 120),
+                foregroundColor: Color.fromARGB(255, 242, 244, 244),
+                shadowColor: Colors.black12,
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30.0),
+                ),
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                textStyle:
+                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ProjectDetailPage()));
+              },
+              child: const Text("New Project Detail Page"),
             ),
           ],
         ),
