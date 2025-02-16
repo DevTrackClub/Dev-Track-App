@@ -51,16 +51,20 @@ class LoginPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 10),
-              Text(
-                'Sign in to your account',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.black54,
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                child: Text(
+                  'Sign in to your account',
+                  textAlign: TextAlign.left,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black54,
+                  ),
                 ),
               ),
-              SizedBox(height: 20),
+              SizedBox(height: 0),
               Padding(
-                padding: const EdgeInsets.fromLTRB(25, 10, 25, 25),
+                padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
                 child: TextField(
                   decoration: InputDecoration(
                     prefixIcon: Icon(Icons.person),
@@ -99,10 +103,10 @@ class LoginPage extends StatelessWidget {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFF5e00b0),
-                    padding: EdgeInsets.symmetric(vertical: 15),
+                    padding: EdgeInsets.symmetric(vertical: 10),
                     textStyle: TextStyle(fontSize: 18),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                   child: Center(
@@ -148,10 +152,10 @@ class LoginPage extends StatelessWidget {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     side: BorderSide(color: Color(0xFF5e00b0)),
-                    padding: EdgeInsets.symmetric(vertical: 15),
+                    padding: EdgeInsets.symmetric(vertical: 10),
                     textStyle: TextStyle(fontSize: 18,color: Colors.grey),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(5),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
                   child: Center(
