@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../../../To-Be-Discarded/specific_project.dart';
-import '../../../../routing/previous_projects_routing.dart';
+import 'package:dev_track_app/pages/common_pages/domain_pages/topNav.dart';
+import 'package:dev_track_app/To-Be-Discarded/specific_project.dart';
+import 'package:dev_track_app/routing/previous_projects_routing.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:dev_track_app/theme/colors.dart';
 
 class PreviousProjects extends StatefulWidget {
   const PreviousProjects({super.key});
@@ -11,503 +14,195 @@ class PreviousProjects extends StatefulWidget {
 
 class _PreviousProjectsState extends State<PreviousProjects> {
   @override
+
+  //all our components gets built here
   Widget build(BuildContext context) {
     return SafeArea(
-        child: Scaffold(
-      appBar: AppBar(
-        leading: Container(
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Expanded(
-                child: IconButton(
-                  onPressed: () {
-                    PreviousProjectsRouting.pop(context);
-                  },
-                  icon: Icon(
-                    Icons.arrow_back_ios,
-                    size: 30,
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Builder(
-                  builder: (context) => IconButton(
-                    icon: Icon(
-                      Icons.menu,
-                      size: 40,
-                    ),
-                    onPressed: () {
-                      Scaffold.of(context).openDrawer();
-                    },
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-        backgroundColor: Colors.white,
-        actions: <Widget>[
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.notifications_none,
-              size: 40,
-            ),
-          )
-        ],
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
+      child: Scaffold(
+        backgroundColor: AppColors.backgroundLight,
+        body: Stack(
           children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.grey,
-              ),
-              child: Text('Drawer Header'),
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.home,
-              ),
-              title: const Text('1'),
-              onTap: () {
-                PreviousProjectsRouting.pop(context);
-              },
-            ),
-            ListTile(
-              leading: Icon(
-                Icons.train,
-              ),
-              title: const Text('2'),
-              onTap: () {
-                PreviousProjectsRouting.pop(context);
-              },
+            Column(
+              children: [
+                const TopNav(), // Fixed at top
+                _buildSearchBar(), // Fixed below navbar
+                Expanded(
+                  child: CustomScrollView(
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: _buildTitle(), // Title scrolls with projects
+                      ),
+                      SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (context, index) =>
+                              _buildProjectCard(projects[index]),
+                          childCount: projects.length,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          width: double.infinity,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(25, 15, 15, 0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Welcome back,',
-                      style: TextStyle(fontSize: 18, color: Colors.grey),
-                    ),
-                    Text(
-                      'Nameeee',
-                      style: TextStyle(fontSize: 25),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(18.0),
-                child: TextField(
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.grey[300],
-                    labelText: 'Search all projects ....',
-                    // suffixIcon: Icon(Icons.search),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(25.0),
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                width: double.infinity,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Column(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.grey[300],
-                          ),
-                          height: 90,
-                          width: 350,
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                              left: 10,
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Colors.grey[800],
-                                  ),
-                                  height: 70,
-                                  width: 70,
-                                ),
-                                SizedBox(
-                                  width: 19,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      height: 15,
-                                    ),
-                                    Text(
-                                      'DOMAIN',
-                                      style: TextStyle(fontSize: 15),
-                                    ),
-                                    Text('Project Name'),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 30,
-                          width: 320,
-                          child: Align(
-                            alignment: Alignment.topRight,
-                            child: SizedBox(
-                              height: double.infinity,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  PreviousProjectsRouting.pushToSpecificProject(
-                                      context);
-                                },
-                                child: Text(
-                                  'Learn More',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Colors.grey[800]),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.zero),
-                                  backgroundColor: Colors.grey[400],
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Column(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.grey[300],
-                          ),
-                          height: 90,
-                          width: 350,
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                              left: 10,
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Colors.grey[800],
-                                  ),
-                                  height: 70,
-                                  width: 70,
-                                ),
-                                SizedBox(
-                                  width: 19,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      height: 15,
-                                    ),
-                                    Text(
-                                      'DOMAIN',
-                                      style: TextStyle(fontSize: 15),
-                                    ),
-                                    Text('Project Name'),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 30,
-                          width: 320,
-                          child: Align(
-                            alignment: Alignment.topRight,
-                            child: SizedBox(
-                              height: double.infinity,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  PreviousProjectsRouting.pushToSpecificProject(
-                                      context);
-                                },
-                                child: Text(
-                                  'Learn More',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Colors.grey[800]),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.zero),
-                                  backgroundColor: Colors.grey[400],
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Column(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.grey[300],
-                          ),
-                          height: 90,
-                          width: 350,
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                              left: 10,
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Colors.grey[800],
-                                  ),
-                                  height: 70,
-                                  width: 70,
-                                ),
-                                SizedBox(
-                                  width: 19,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      height: 15,
-                                    ),
-                                    Text(
-                                      'DOMAIN',
-                                      style: TextStyle(fontSize: 15),
-                                    ),
-                                    Text('Project Name'),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 30,
-                          width: 320,
-                          child: Align(
-                            alignment: Alignment.topRight,
-                            child: SizedBox(
-                              height: double.infinity,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  PreviousProjectsRouting.pushToSpecificProject(
-                                      context);
-                                },
-                                child: Text(
-                                  'Learn More',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Colors.grey[800]),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.zero),
-                                  backgroundColor: Colors.grey[400],
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Column(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.grey[300],
-                          ),
-                          height: 90,
-                          width: 350,
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                              left: 10,
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Colors.grey[800],
-                                  ),
-                                  height: 70,
-                                  width: 70,
-                                ),
-                                SizedBox(
-                                  width: 19,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      height: 15,
-                                    ),
-                                    Text(
-                                      'DOMAIN',
-                                      style: TextStyle(fontSize: 15),
-                                    ),
-                                    Text('Project Name'),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 30,
-                          width: 320,
-                          child: Align(
-                            alignment: Alignment.topRight,
-                            child: SizedBox(
-                              height: double.infinity,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  PreviousProjectsRouting.pushToSpecificProject(
-                                      context);
-                                },
-                                child: Text(
-                                  'Learn More',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Colors.grey[800]),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.zero),
-                                  backgroundColor: Colors.grey[400],
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Column(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.grey[300],
-                          ),
-                          height: 90,
-                          width: 350,
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                              left: 10,
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(20),
-                                    color: Colors.grey[800],
-                                  ),
-                                  height: 70,
-                                  width: 70,
-                                ),
-                                SizedBox(
-                                  width: 19,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      height: 15,
-                                    ),
-                                    Text(
-                                      'DOMAIN',
-                                      style: TextStyle(fontSize: 15),
-                                    ),
-                                    Text('Project Name'),
-                                  ],
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          height: 30,
-                          width: 320,
-                          child: Align(
-                            alignment: Alignment.topRight,
-                            child: SizedBox(
-                              height: double.infinity,
-                              child: ElevatedButton(
-                                onPressed: () {
-                                  PreviousProjectsRouting.pushToSpecificProject(
-                                      context);
-                                },
-                                child: Text(
-                                  'Learn More',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Colors.grey[800]),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.zero),
-                                  backgroundColor: Colors.grey[400],
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
-                ),
-              )
-            ],
+    );
+  }
+
+  //builds our search bar
+  Widget _buildSearchBar() {
+    return Padding(
+      padding: const EdgeInsets.all(18.0),
+      child: SizedBox(
+        height: 50,
+        child: TextField(
+          decoration: InputDecoration(
+            filled: true,
+            fillColor: AppColors.backgroundLight,
+            labelText: 'search all projects',
+            prefixIcon: Icon(Icons.search, color: AppColors.neutralDark),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(14.0),
+              borderSide: BorderSide(color: const Color(0xFF5B2333)),
+            ),
           ),
         ),
       ),
-    ));
+    );
+  }
+
+  Widget _buildTitle() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(25, 15, 15, 0),
+      child: Text(
+        'Explore our projects',
+        style: GoogleFonts.poppins(
+          fontSize: 30,
+          fontWeight: FontWeight.w600,
+          fontStyle: FontStyle.italic,
+          color: const Color(0xFF6901AE),
+        ),
+      ),
+    );
+  }
+
+  final List<Map<String, String>> projects = [
+    {
+      "title": "UI/UX 42",
+      "subtitle": "Budgeting application",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      "image": "assets/images/game.png"
+    },
+    {
+      "title": "Dev Track",
+      "subtitle": "Project management tool",
+      "description": "A tool to track developer progress in real-time.",
+      "image": "assets/images/devtrack.png"
+    },
+    {
+      "title": "E-commerce App",
+      "subtitle": "Shopping made easy",
+      "description": "An intuitive mobile shopping experience.",
+      "image": "assets/images/ecommerce.png"
+    },
+    {
+      "title": "E-commerce App",
+      "subtitle": "Shopping made easy",
+      "description": "An intuitive mobile shopping experience.",
+      "image": "assets/images/ecommerce.png"
+    },
+    {
+      "title": "E-commerce App",
+      "subtitle": "Shopping made easy",
+      "description": "An intuitive mobile shopping experience.",
+      "image": "assets/images/ecommerce.png"
+    },
+  ];
+
+//ui for cards
+  Widget _buildProjectCard(Map<String, String> project) {
+    return Container(
+      padding: EdgeInsets.all(24),
+      margin: EdgeInsets.symmetric(vertical: 16, horizontal: 15),
+      decoration: BoxDecoration(
+        color: const Color(0xFF6901AE),
+        borderRadius: BorderRadius.circular(4),
+      ),
+      child: Row(
+        children: [
+          Flexible(
+              flex: 1, // Image takes available space proportionally
+              child: Container(
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    'assets/images/game.png', // Replace with actual image URL or use AssetImage
+                    fit: BoxFit
+                        .cover, // Ensures the image fills the available space
+                  ),
+                ),
+              )),
+          SizedBox(width: 15),
+          Expanded(
+            flex: 3, // Text takes more space
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "UI/UX 42",
+                  style: GoogleFonts.poppins(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  "Budgeting application",
+                  style: GoogleFonts.poppins(
+                    color: Colors.white,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: 4),
+                Text(
+                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor",
+                  style: GoogleFonts.poppins(
+                    color: Colors.white,
+                    fontSize: 10,
+                  ),
+                ),
+                SizedBox(height: 8),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding: EdgeInsets.only(
+                        left: 20, right: 20, top: 10, bottom: 10),
+                    textStyle: GoogleFonts.poppins(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onPressed: () {
+                    PreviousProjectsRouting.pushToSpecificProject(context);
+                  },
+                  child: Text("Explore"),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
