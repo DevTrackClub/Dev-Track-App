@@ -1,4 +1,7 @@
+import 'package:dev_track_app/pages/common_pages/register_page.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+
 
 class LoginPage extends StatelessWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -6,101 +9,164 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32.0),
+      backgroundColor: Colors.white,
+      body: SingleChildScrollView(
         child: Center(
-          child: Container(
-            padding: const EdgeInsets.all(20.0),
-            decoration: BoxDecoration(
-              color: Colors.grey[850],
-              borderRadius: BorderRadius.circular(10.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.5),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: const Offset(0, 3),
+          child: Column(
+            children: [
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Container(
+                    height: 150,
+                    decoration: BoxDecoration(
+                      color: Color(0xFF5e00b0),
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(10),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 48,
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Colors.white,
+                      child: CircleAvatar(
+                        radius: 45,
+                        backgroundImage: NetworkImage(
+                          'https://storage.googleapis.com/a1aa/image/FMzESL12uGqBDRIcbgyzHWSJA_eagcTLOcV2KYexVXY.jpg',
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 60),
+              Text(
+                'Welcome Back',
+                style: TextStyle(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
                 ),
-              ],
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                const Text(
-                  'Login with your details',
+              ),
+              SizedBox(height: 10),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                child: Text(
+                  'Sign in to your account',
+                  textAlign: TextAlign.left,
                   style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Colors.black54,
                   ),
                 ),
-                const SizedBox(height: 20),
-                TextField(
+              ),
+              SizedBox(height: 0),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
+                child: TextField(
                   decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.grey[700],
-                    hintText: 'Username',
-                    hintStyle: const TextStyle(color: Colors.white54),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide: BorderSide.none,
-                    ),
+                    prefixIcon: Icon(Icons.person),
+                    labelText: 'Username',
+                    // border: OutlineInputBorder(),
                   ),
                 ),
-                const SizedBox(height: 10),
-                TextField(
+              ),
+              SizedBox(height: 0),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(25, 0, 25, 25), // Adjust padding
+                child: TextField(
+                  obscureText: true,
                   decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.grey[700],
-                    hintText: 'Registered Email',
-                    hintStyle: const TextStyle(color: Colors.white54),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                      borderSide: BorderSide.none,
-                    ),
+                    prefixIcon: Icon(Icons.lock),
+                    labelText: 'Password',
+                    // border: OutlineInputBorder(),
+                    suffix: GestureDetector(
+                        onTap: () {
+                          // logic....
+                        },
+                        child: Text(
+                          'Forgot ?',
+                          style: TextStyle(color: Colors.black54),
+                        ),
+                      ),
                   ),
                 ),
-                const SizedBox(height: 20),
-                ElevatedButton(
+              ),
+              SizedBox(height: 0),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(25, 10, 25, 10),
+                child: ElevatedButton(
                   onPressed: () {
-                    // Handle login action
+                    // Add your login logic here
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 53, 156, 19),
-                    fixedSize: const Size(double.infinity, 50),
-                  ),
-                  child: const Text(
-                    'Login',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
+                    backgroundColor: Color(0xFF5e00b0),
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    textStyle: TextStyle(fontSize: 18),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
                   ),
+                  child: Center(
+                    child: Text('login',
+                     style: TextStyle(color: Colors.white)),
+                  ),
                 ),
-              ],
-            ),
+              ),
+              SizedBox(height: 15),
+              Text.rich(
+                TextSpan(
+                  text: "Don't have an account? ",
+                  children: [
+                    TextSpan(
+                      text: 'Create',
+                      style: TextStyle(
+                        color: Color(0xFF5e00b0),
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                      ..onTap = () {
+                        // write on tap logiv here.....
+                        // Example given below....
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const RegisterPage()),);
+                      }
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 20),
+               const Text('OR',
+                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
+                 ),
+                Padding(
+                padding: const EdgeInsets.fromLTRB(25, 15, 25, 10),
+                child: ElevatedButton(
+                  onPressed: () {
+                    // Add your login logic here
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    side: BorderSide(color: Color(0xFF5e00b0)),
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    textStyle: TextStyle(fontSize: 18,color: Colors.grey),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                  child: Center(
+                    child: Text('Browse as a Guest',
+                     style: TextStyle(color: Colors.black)),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Colors.grey[850],
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.grey,
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            label: 'Settings',
-          ),
-        ],
       ),
     );
   }
