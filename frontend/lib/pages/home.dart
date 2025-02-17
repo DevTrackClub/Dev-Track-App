@@ -1,3 +1,5 @@
+import 'package:dev_track_app/pages/admin_pages/admin_feed_page.dart';
+import 'package:dev_track_app/pages/user_pages/user_feed_page.dart';
 import 'package:flutter/material.dart';
 import 'package:dev_track_app/pages/common_pages/Theme-Demo-Page/sample.dart';
 import 'package:dev_track_app/pages/admin_pages/mgmg_prev_projects.dart';
@@ -53,6 +55,8 @@ class HomePag extends StatelessWidget {
             buildNavButton(context, "Management Project View", Colors.teal, const MgmtPreviousProjects()),
             buildNavButton(context, "Student View", Colors.indigo, const Studentview()),
             buildNavButton(context, "New Project Detail Page", Colors.indigo, const ProjectDetailPage()),
+            buildNavButton(context, "Admin fees", const Color.fromARGB(255, 9, 9, 9), const AdminFeedPage()),
+            buildNavButton(context, "User feed", const Color.fromARGB(255, 200, 198, 49), const UserFeedPage()),
           ],
         ),
       ),
