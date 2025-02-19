@@ -33,7 +33,7 @@ SECRET_KEY = 'django-insecure-kq3as+jr%-qb4eaw6!b51ca@2adbt4b^hdd-gap5dk*)&$wp!f
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
 
 
@@ -112,6 +112,7 @@ if os.getenv('DJANGO_ENV') == 'production':
             'PASSWORD': os.getenv('DB_PASSWORD', ''),
             'HOST': os.getenv('DB_HOST', 'localhost'),
             'PORT': int(os.getenv('DB_PORT', 6543)),  # Cast to integer
+            'OPTIONS': {'sslmode': 'require'},
         }
     }
 else:

@@ -10,11 +10,11 @@ def main():
     """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'myproject.settings')
     
-    if "runserver" in sys.argv:
-        import debugpy
-        debugpy.listen(("0.0.0.0", 5678))
-        print("Waiting for debugger attach...")
-        debugpy.wait_for_client()
+    # if "runserver" in sys.argv:
+    #     import debugpy
+    #     debugpy.listen(("0.0.0.0", 9000))
+    #     print("Waiting for debugger attach...")
+    #     debugpy.wait_for_client()
     
     try:
         from django.core.management import execute_from_command_line
