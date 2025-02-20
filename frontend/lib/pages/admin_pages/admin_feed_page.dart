@@ -1,20 +1,5 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: AdminFeedPage(),
-    );
-  }
-}
 
 class AdminFeedPage extends StatefulWidget {
   const AdminFeedPage({super.key});
@@ -207,8 +192,8 @@ class CreatePostPage extends StatelessWidget {
       home: Scaffold(
         body: Center(
           child: Container(
-            width: MediaQuery.of(context).size.width * 0.8, // 80% of the screen width
-            height: MediaQuery.of(context).size.height * 0.5, // 50% of the screen height
+            width: MediaQuery.of(context).size.width * 0.8, 
+            height: MediaQuery.of(context).size.height * 0.5, 
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(color: Colors.purple, width: 2),
@@ -256,8 +241,8 @@ class EditPostPage extends StatelessWidget {
       home: Scaffold(
         body: Center(
           child: Container(
-            width: MediaQuery.of(context).size.width * 0.8, // 80% of the screen width
-            height: MediaQuery.of(context).size.height * 0.5, // 50% of the screen height
+            width: MediaQuery.of(context).size.width * 0.8, 
+            height: MediaQuery.of(context).size.height * 0.5, 
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(color: Colors.purple, width: 2),
