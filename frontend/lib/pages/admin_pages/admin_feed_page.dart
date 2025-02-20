@@ -69,26 +69,6 @@ class _FeedScreenState extends State<AdminFeedPage> {
     );
   }
 
-  void showPopup(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Popup Title"),
-          content: Text("This is a popup message."),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the popup
-              },
-              child: Text("Close"),
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   Widget _buildHeader() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -102,8 +82,13 @@ class _FeedScreenState extends State<AdminFeedPage> {
             backgroundColor: Colors.purple,
             foregroundColor: Colors.white,
           ),
-          onPressed: () {},
-          child: const Text("More details"),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CreatePostPage()),
+            );
+          },
+          child: const Text("+ Create Post"),
         ),
       ],
     );
@@ -196,7 +181,12 @@ class _FeedScreenState extends State<AdminFeedPage> {
                 ),
               ),
               FloatingActionButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>  EditPostPage()),
+                  );
+                },
                 backgroundColor: Colors.purple,
                 mini: true,
                 child: const Icon(Icons.edit, color: Colors.white, size: 18),
@@ -204,6 +194,105 @@ class _FeedScreenState extends State<AdminFeedPage> {
             ],
           ),
         ],
+      ),
+    );
+  }
+}
+
+class CreatePostPage extends StatelessWidget {
+  const CreatePostPage({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.8, // 80% of the screen width
+            height: MediaQuery.of(context).size.height * 0.5, // 50% of the screen height
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.purple, width: 2),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Create Post',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: TextField(
+                    maxLines: 4,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Type your message',
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.purple),
+                  onPressed: () {
+                  },
+                  child: Text('Post',
+                    style: TextStyle(color: Colors.white),
+                ),  
+              ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class EditPostPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        body: Center(
+          child: Container(
+            width: MediaQuery.of(context).size.width * 0.8, // 80% of the screen width
+            height: MediaQuery.of(context).size.height * 0.5, // 50% of the screen height
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.purple, width: 2),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Edit Post',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: TextField(
+                    maxLines: 4,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: 'Type your message',
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.purple),
+                  onPressed: () {
+                  },
+                  child: Text('Save',
+                    style: TextStyle(color: Colors.white),
+                ),  
+              ),
+            ],
+            ),
+          ),
+        ),
       ),
     );
   }
