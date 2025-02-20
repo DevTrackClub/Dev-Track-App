@@ -12,7 +12,9 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 
 
+
 from projects.api import ProjectsAPI
+from announcements.api import PostAPIController 
 
 
 
@@ -87,7 +89,9 @@ class UserAuthAPI(ControllerBase):
 
 api = NinjaExtraAPI(csrf=False)
 api.register_controllers(UserAuthAPI)
+api.register_controllers(PostAPIController)
 api.register_controllers(ProjectsAPI)
+
 
 
 
