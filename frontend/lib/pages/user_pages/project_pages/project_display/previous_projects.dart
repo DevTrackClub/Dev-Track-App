@@ -3,6 +3,7 @@ import 'package:dev_track_app/utils/topnavbar.dart';
 import 'package:dev_track_app/routing/previous_projects_routing.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dev_track_app/theme/colors.dart';
+import 'package:dev_track_app/models/previous_projectModels.dart';
 
 class PreviousProjects extends StatefulWidget {
   const PreviousProjects({super.key});
@@ -12,6 +13,10 @@ class PreviousProjects extends StatefulWidget {
 }
 
 class _PreviousProjectsState extends State<PreviousProjects> {
+
+  //loading dummy data for development
+  final previousProjectData = dummyPreviousProjectData;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -33,8 +38,8 @@ class _PreviousProjectsState extends State<PreviousProjects> {
                   ),
                   SliverList(
                     delegate: SliverChildBuilderDelegate(
-                      (context, index) => _buildProjectCard(projects[index]),
-                      childCount: projects.length,
+                      (context, index) => _buildProjectCard(previousProjectData[index]),
+                      childCount: previousProjectData.length,
                     ),
                   ),
                 ],
@@ -59,7 +64,7 @@ class _PreviousProjectsState extends State<PreviousProjects> {
             prefixIcon: Icon(Icons.search, color: AppColors.neutralDark),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(14.0),
-              borderSide: const BorderSide(color: Color(0xFF5B2333)),
+              borderSide: const BorderSide(color: AppColors.primaryLight),
             ),
           ),
         ),
@@ -82,40 +87,7 @@ class _PreviousProjectsState extends State<PreviousProjects> {
     );
   }
 
-  final List<Map<String, String>> projects = [
-    {
-      "title": "UI/UX 42",
-      "subtitle": "Budgeting application",
-      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-      "image": "assets/images/game.png"
-    },
-    {
-      "title": "Dev Track",
-      "subtitle": "Project management tool",
-      "description": "A tool to track developer progress in real-time.",
-      "image": "assets/images/devtrack.png"
-    },
-    {
-      "title": "E-commerce App",
-      "subtitle": "Shopping made easy",
-      "description": "An intuitive mobile shopping experience.",
-      "image": "assets/images/ecommerce.png"
-    },
-    {
-      "title": "E-commerce App",
-      "subtitle": "Shopping made easy",
-      "description": "An intuitive mobile shopping experience.",
-      "image": "assets/images/ecommerce.png"
-    },
-    {
-      "title": "E-commerce App",
-      "subtitle": "Shopping made easy",
-      "description": "An intuitive mobile shopping experience.",
-      "image": "assets/images/ecommerce.png"
-    },
-  ];
-
-  Widget _buildProjectCard(Map<String, String> project) {
+  Widget _buildProjectCard(previousProjectData) {
     return Container(
       padding: const EdgeInsets.all(24),
       margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 15),
@@ -135,7 +107,7 @@ class _PreviousProjectsState extends State<PreviousProjects> {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Image.asset(
-                  project["image"]!,
+                  previousProjectData.image,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -148,7 +120,7 @@ class _PreviousProjectsState extends State<PreviousProjects> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  project["title"]!,
+                  previousProjectData.title,
                   style: GoogleFonts.poppins(
                     color: Colors.white,
                     fontSize: 18,
@@ -157,7 +129,7 @@ class _PreviousProjectsState extends State<PreviousProjects> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  project["subtitle"]!,
+                  previousProjectData.subtitle,
                   style: GoogleFonts.poppins(
                     color: Colors.white,
                     fontSize: 13,
@@ -166,7 +138,7 @@ class _PreviousProjectsState extends State<PreviousProjects> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  project["description"]!,
+                  previousProjectData.description,
                   style: GoogleFonts.poppins(
                     color: Colors.white,
                     fontSize: 10,

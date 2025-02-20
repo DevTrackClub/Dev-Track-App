@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:dev_track_app/theme/colors.dart';
 import 'package:dev_track_app/utils/topnavbar.dart';
-import 'package:dev_track_app/models/new_specific_projectModels.dart';
+import 'package:dev_track_app/models/specific_projectModels.dart';
 
 class TeamMemberCard extends StatelessWidget {
   final TeamMember member;
@@ -73,7 +73,7 @@ class ProjectDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Use the dummy data from models
-    final projectData = dummyProjectData;
+    final projectData = dummySpecificProjectData;
 
     return Scaffold(
       backgroundColor: AppColors.backgroundLight,
@@ -110,7 +110,7 @@ class ProjectDetailPage extends StatelessWidget {
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Image.network(
-                  dummyProjectData.projectImage,
+                  dummySpecificProjectData.projectImage,
                   fit: BoxFit.cover,
                   errorBuilder: (context, error, stackTrace) {
                     debugPrint("Error loading image: $error");

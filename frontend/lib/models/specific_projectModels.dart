@@ -60,7 +60,7 @@ class SpecificProjectData {
 }
 
 // Dummy data for development
-final dummyProjectData = SpecificProjectData(
+final dummySpecificProjectData = SpecificProjectData(
   projectName: "SAMPLE PROJECT",
   projectCycle: "Project Cycle 1",
   projectImage: "https://i.imgur.com/ea9PB3H.png",
@@ -92,4 +92,7 @@ final dummyProjectData = SpecificProjectData(
       linkedInUrl: "https://www.linkedin.com/in/sarahwilson",
     ),
   ],
+
+  
 );
+
