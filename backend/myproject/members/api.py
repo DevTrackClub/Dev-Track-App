@@ -22,7 +22,7 @@ from announcements.api import PostAPIController
 class UserAuthAPI(ControllerBase):
 
     #API call for user to login by giving username and password.
-    @route.post("/login", url_name="User login", auth=None)
+    @route.post("/login", url_name="User login", auth=None, response=schemas.LoginResponseSchema)
     def login_view(self, request, payload: schemas.SignInSchema):
         user = authenticate(request, username=payload.email, password=payload.password)
         if user is not None:
@@ -43,7 +43,7 @@ class UserAuthAPI(ControllerBase):
 
 
     #API call made by user to view their profile. 
-    @route.get("/user")
+    @route.get("/user", response=schemas.UserProfileResponseSchema)
     def user_profile(self, request):
         if request.user.is_authenticated:
             return {

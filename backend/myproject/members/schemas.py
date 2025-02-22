@@ -9,6 +9,8 @@ class SignInSchema(BaseModel):
     email: str
     password: str
 
+    model_config = {"arbitrary_types_allowed": True}
+
 
 class RegisterSchema(ModelSchema):
     class Meta:
@@ -20,3 +22,23 @@ class RegisterSchema(ModelSchema):
             'password',
             'srn',
         ]
+
+    model_config = {"arbitrary_types_allowed": True}
+
+class LoginResponseSchema(Schema):
+    message: str
+    role: str
+    csrf_token: str
+
+    model_config = {
+        "arbitrary_types_allowed": True,
+    }
+
+
+class UserProfileResponseSchema(Schema):
+    username: str
+    email: str
+    github: str
+    fname: str
+
+    model_config = {"arbitrary_types_allowed": True}

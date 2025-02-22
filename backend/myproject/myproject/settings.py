@@ -124,7 +124,7 @@ else:
     }
 
 import dj_database_url
-if 'DATABASE_URL' in os.environ:
+if os.getenv('DJANGO_ENV') == 'production' and 'DATABASE_URL' in os.environ:
     DATABASES['default'] = dj_database_url.config(default=os.environ['DATABASE_URL'])
 
 # Password validation
