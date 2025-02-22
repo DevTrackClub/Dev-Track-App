@@ -2,7 +2,8 @@ from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from ninja_extra import NinjaExtraAPI, ControllerBase, api_controller, route
 from django.middleware.csrf import get_token
-from .models import PostModel
+from django.core.paginator import Paginator
+from .models import PostModel, NotificationModel
 from . import schemas
 from .schemas import PostSchema
 
@@ -13,6 +14,11 @@ class PostAPIController(ControllerBase):
         # Check if the user is authenticated and has an admin role.
         if not request.user.is_authenticated or request.user.role != 'admin':
             return JsonResponse({"detail": "Admin privileges required"}, status=403)
+        return None
+    
+    def _check_user(self, request):
+        if not request.user.is_authenticated or request.user.role !='member':
+            return JsonResponse({"detail": "User privileges required"}, status=403)
         return None
 
     # API endpoint to create a new post (admin only).
@@ -35,21 +41,67 @@ class PostAPIController(ControllerBase):
 
     # API endpoint to list all posts.
     @route.get("/", url_name="List Posts")
-    def list_posts(self, request):
+    def list_posts(self, request, page: int=1, per_page: int=10):
         posts = PostModel.objects.all().order_by("created_at")
+        paginator=Paginator(posts,per_page)
+        page_obj=paginator.get_page(page)
 
-        result = [
-            {
-            "id": post.id,
-            "title": post.title,
-            "description": post.description,
-            "created_at": post.created_at.isoformat(),  
-            "created_by": post.created_by.id,
+        return{
+            "total_pages": paginator.num_pages, "current_page": page, "data": [
+                {
+                "id": post.id,
+                "title": post.title,
+                "description": post.description,
+                "created_at": post.created_at.isoformat(),  
+                "created_by": post.created_by.id,
             }
-            for post in posts
-        ]
-        return result
+            for post in page_obj
+        ],
+        }
     
+    @route.post("/notifications/", url_name="Notifications")
+    def user_notifications(self, request, unread:bool=False, page: int = 1, per_page: int = 10):
+            user=request.user
+            result=self._check_user(request)
+            if result is not None:
+                return result
+
+            notifications = NotificationModel.objects.filter(user=user, notification_type__in=["SC", "DE"])
+            
+            if unread:
+                notifications = notifications.filter(is_read=False)
+            else:
+                notifications.update(is_read=True)
+
+            notifications = notifications.order_by("-is_read", "-created_at")
+            
+            paginator=Paginator(notifications, per_page)
+            page_obj=paginator.get_page(page)
+
+            return {
+                    "total_pages": paginator.num_pages,"current_page": page,
+                    "notifications": [
+                {
+                    "id": notif.id,
+                    "message": notif.message,
+                    "is_read": notif.is_read,
+                    "created_at": notif.created_at.isoformat(),
+                }
+                for notif in page_obj
+            ]
+            }
+            
+    # @route.patch("/notifications/{notification_id}/read/", url_name="Mark Notification Read")
+    # @login_required
+    # def mark_notification_as_read(request, notification_id: int):
+    #     user = request.user  
+    #     notification = get_object_or_404(NotificationModel, id=notification_id, user=user)
+    
+    #     if not notification.is_read:
+    #         notification.is_read = True
+    #         notification.save()
+
+    #         return {"message": "Notification marked as read", "id": notification.id}
 
     @route.put("/{post_id}", url_name="Update Post", response=PostSchema)
     def update_post(self, request, post_id: int, payload: schemas.PostUpdateSchema):
