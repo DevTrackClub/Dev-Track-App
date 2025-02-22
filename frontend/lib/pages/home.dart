@@ -1,13 +1,14 @@
-// import 'package:dev_track_app/utils/bottom_nav_bar.dart';
+import 'package:dev_track_app/pages/admin_pages/admin_feed_page.dart';
+import 'package:dev_track_app/pages/user_pages/user_feed_page.dart';
+import 'package:flutter/material.dart';
 import 'package:dev_track_app/pages/common_pages/Theme-Demo-Page/sample.dart';
-import 'package:dev_track_app/pages/admin_pages//mgmg_prev_projects.dart';
+import 'package:dev_track_app/pages/admin_pages/mgmg_prev_projects.dart';
 import 'package:dev_track_app/pages/user_pages/project_pages/project_display/previous_projects.dart';
 import 'package:dev_track_app/theme/splashscreen.dart';
 import 'package:dev_track_app/pages/common_pages/confirm_page.dart';
 import 'package:dev_track_app/pages/common_pages/domain_pages/domain.dart';
 import 'package:dev_track_app/pages/user_pages/project_pages/project_display/specific_project.dart';
 import 'package:dev_track_app/pages/common_pages/home_page.dart';
-import 'package:flutter/material.dart';
 import 'package:dev_track_app/pages/user_pages/tracker.dart';
 import 'package:dev_track_app/pages/user_pages/studentview.dart';
 import 'package:dev_track_app/pages/user_pages/project_pages/submission_page/submission_page.dart';
@@ -15,218 +16,47 @@ import 'package:dev_track_app/pages/user_pages/project_pages/submission_page/sub
 class HomePag extends StatelessWidget {
   const HomePag({super.key});
 
+  Widget buildNavButton(BuildContext context, String text, Color color, Widget page) {
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        backgroundColor: color,
+        foregroundColor: Colors.white,
+        shadowColor: Colors.blueAccent,
+        elevation: 5,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        textStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      ),
+      onPressed: () {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => page));
+      },
+      child: Text(text),
+    );
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) { 
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                foregroundColor: Colors.white,
-                shadowColor: Colors.blueAccent,
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                textStyle:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => HomePage()));
-              },
-              child: Text("Home Page"),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.purple,
-                foregroundColor: Colors.white,
-                shadowColor: Colors.blueAccent,
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                textStyle:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => DomainPage()));
-              },
-              child: Text("Domain Page"),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 39, 94, 176),
-                foregroundColor: Colors.white,
-                shadowColor: Colors.blueAccent,
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                textStyle:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ThemedPage()));
-              },
-              child: Text("Theme Page Implementation"),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color.fromARGB(255, 39, 94, 176),
-                foregroundColor: Colors.white,
-                shadowColor: Colors.blueAccent,
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                textStyle:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => SubmissionPage()));
-              },
-              child: Text("Submission Page"),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.amber,
-                foregroundColor: Colors.white,
-                shadowColor: Colors.blueAccent,
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                textStyle:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => ConfirmPage()));
-              },
-              child: const Text("Confirm"),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepOrange,
-                foregroundColor: Colors.white,
-                shadowColor: Colors.blueAccent,
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                textStyle:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => PreviousProjects()));
-              },
-              child: Text("Previous Projects"),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(255, 50, 7, 120),
-                foregroundColor: Color.fromARGB(255, 242, 244, 244),
-                shadowColor: Colors.black12,
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                textStyle:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              onPressed: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => Splash()));
-              },
-              child: const Text("SplashScreen"),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.teal,
-                foregroundColor: Colors.white,
-                shadowColor: Colors.blueAccent,
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                textStyle:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ProgressTrackerPage()));
-              },
-              child: const Text("Tracker Page"),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.teal,
-                foregroundColor: Colors.white,
-                shadowColor: Colors.blueAccent,
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                textStyle:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MgmtPreviousProjects()));
-              },
-              child: const Text("Management Project View Page"),
-            ),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(255, 50, 7, 120),
-                foregroundColor: Color.fromARGB(255, 242, 244, 244),
-                shadowColor: Colors.black12,
-                elevation: 5,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                textStyle:
-                    const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => Studentview()));
-              },
-              child: const Text("Student View"),
-            ),
+            buildNavButton(context, "Home Page", Colors.green, const HomePage()),
+            buildNavButton(context, "Domain Page", Colors.purple, const DomainPage()),
+            buildNavButton(context, "Theme Page Implementation", Colors.blue, const ThemedPage()),
+            buildNavButton(context, "Submission Page", Colors.blue,  SubmissionPage()),
+            buildNavButton(context, "Confirm", Colors.amber, const ConfirmPage()),
+            buildNavButton(context, "Previous Projects", Colors.deepOrange, const PreviousProjects()),
+            buildNavButton(context, "SplashScreen", Colors.indigo, const Splash()),
+            buildNavButton(context, "Tracker Page", Colors.teal, const ProgressTrackerPage()),
+            buildNavButton(context, "Management Project View", Colors.teal, const MgmtPreviousProjects()),
+            buildNavButton(context, "Student View", Colors.indigo, const Studentview()),
+            buildNavButton(context, "New Project Detail Page", Colors.indigo, const ProjectDetailPage()),
+            buildNavButton(context, "Admin fees", const Color.fromARGB(255, 9, 9, 9), const AdminFeedPage()),
+            buildNavButton(context, "User feed", const Color.fromARGB(255, 200, 198, 49), const UserFeedPage()),
           ],
         ),
       ),
