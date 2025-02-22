@@ -7,16 +7,14 @@ import '../models/user_model.dart';
 // static const String loginEndpoint = "$baseUrl/user/login";
 
 class AuthService {
-  final String baseUrl = "https://dev-track-app.onrender.com/api/user/login/";
+  final String baseUrl = "https://dev-track-app.onrender.com/api/user/login";
 
   Future<UserModel> login(String email, String password) async {
     try {
       final response = await http.post(
         Uri.parse(baseUrl),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          "payload": {"email": email, "password": password}
-        }),
+        body: jsonEncode({"email": email, "password": password}),
       );
       print("Response Status Code: ${response.statusCode}");
       print("Response Body: ${response.body}");
