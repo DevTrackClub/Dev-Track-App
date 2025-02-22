@@ -23,7 +23,7 @@ class UserAuthAPI(ControllerBase):
 
     #API call for user to login by giving username and password.
     @route.post("/login", url_name="User login", auth=None)
-    def login_view(self, request, payload: schemas.SignInSchema):
+    def login_view(self, request, payload: schemas.SignInSchema, response=schemas.LoginResponseSchema):
         user = authenticate(request, username=payload.email, password=payload.password)
         if user is not None:
             login(request, user)  
@@ -44,7 +44,7 @@ class UserAuthAPI(ControllerBase):
 
     #API call made by user to view their profile. 
     @route.get("/user")
-    def user_profile(self, request):
+    def user_profile(self, request, response=schemas.UserProfileResponseSchema):
         if request.user.is_authenticated:
             return {
                 "username": request.user.username,

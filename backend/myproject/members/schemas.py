@@ -20,3 +20,15 @@ class RegisterSchema(ModelSchema):
             'password',
             'srn',
         ]
+
+class LoginResponseSchema(ModelSchema):
+    message: str
+    role: str
+    csrf_token: str
+
+
+class UserProfileResponseSchema(ModelSchema):
+    username: str
+    email: str
+    github: str
+    fname: str
