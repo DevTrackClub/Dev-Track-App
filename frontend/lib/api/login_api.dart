@@ -1,42 +1,34 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/user_model.dart';
+// static const String baseUrl = "https://dev-track-app.onrender.com";
+// static const String loginEndpoint = "$baseUrl/user/login";
 
 class AuthService {
-  //TODO: add base url
-  static const String baseUrl = "";
+  final String baseUrl = "https://dev-track-app.onrender.com/api/user/login/";
 
-  Future<UserModel?> login(String email, String password) async {
+  Future<UserModel> login(String email, String password) async {
     try {
       final response = await http.post(
         Uri.parse(baseUrl),
         headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({"email": email, "password": password}),
+        body: jsonEncode({
+          "payload": {"email": email, "password": password}
+        }),
       );
+      print("Response Status Code: ${response.statusCode}");
+      print("Response Body: ${response.body}");
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        final user = UserModel.fromJson(data);
-
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('user_email', user.email);
-        await prefs.setString('user_role', user.role);
-
-        return user;
+        return UserModel.fromJson(data);
       } else {
-        return null;
+        throw Exception('Failed to login  ${response.body}');
       }
     } catch (e) {
-      print("Error: $e");
-      return null;
+      throw Exception('Error: $e');
     }
-  }
-
-  Future<void> logout() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.clear();
   }
 }

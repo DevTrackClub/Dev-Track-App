@@ -1,13 +1,16 @@
 class UserModel {
-  final String email;
-  final String role; // 'admin' or 'user'
+  final String message;
+  final String role;
+  final String csrfToken;
 
-  UserModel({required this.email, required this.role});
+  UserModel(
+      {required this.message, required this.role, required this.csrfToken});
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      email: json['email'],
+      message: json['message'],
       role: json['role'],
+      csrfToken: json['csrf_token'],
     );
   }
 }

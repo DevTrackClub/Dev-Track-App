@@ -1,33 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../api/login_api.dart';
 import '../models/user_model.dart';
 
 class LoginViewModel extends ChangeNotifier {
   final AuthService _authService = AuthService();
 
-  bool _isLoading = false;
-  bool get isLoading => _isLoading;
-
-  UserModel? _user;
-  UserModel? get user => _user;
-
-  String? _errorMessage;
-  String? get errorMessage => _errorMessage;
+  bool isLoading = false;
+  String? errorMessage;
+  UserModel? user;
 
   Future<void> login(String email, String password) async {
-    _isLoading = true;
-    _errorMessage = null;
+    isLoading = true;
+    errorMessage = null;
     notifyListeners();
 
-    final user = await _authService.login(email, password);
+    try {
+      user = await _authService.login(email, password);
 
-    if (user != null) {
-      _user = user;
-    } else {
-      _errorMessage = "Invalid email or password!";
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('role', user!.role);
+      await prefs.setString('csrf_token', user!.csrfToken);
+    } catch (e) {
+      errorMessage = 'Login failed. Please check your credentials.';
     }
 
-    _isLoading = false;
+    isLoading = false;
     notifyListeners();
+  }
+
+  Future<String?> getUserRole() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('role');
   }
 }
