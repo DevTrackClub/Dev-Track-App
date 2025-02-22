@@ -91,18 +91,6 @@ class PostAPIController(ControllerBase):
             ]
             }
             
-    # @route.patch("/notifications/{notification_id}/read/", url_name="Mark Notification Read")
-    # @login_required
-    # def mark_notification_as_read(request, notification_id: int):
-    #     user = request.user  
-    #     notification = get_object_or_404(NotificationModel, id=notification_id, user=user)
-    
-    #     if not notification.is_read:
-    #         notification.is_read = True
-    #         notification.save()
-
-    #         return {"message": "Notification marked as read", "id": notification.id}
-
     @route.put("/{post_id}", url_name="Update Post", response=PostSchema)
     def update_post(self, request, post_id: int, payload: schemas.PostUpdateSchema):
         admin_check = self._check_admin(request)
