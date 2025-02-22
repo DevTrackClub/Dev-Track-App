@@ -33,7 +33,7 @@ SECRET_KEY = 'django-insecure-kq3as+jr%-qb4eaw6!b51ca@2adbt4b^hdd-gap5dk*)&$wp!f
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1","localhost").split(",")
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
 
 
@@ -124,7 +124,7 @@ else:
     }
 
 import dj_database_url
-if 'DATABASE_URL' in os.environ:
+if os.getenv('DJANGO_ENV') == 'production' and 'DATABASE_URL' in os.environ:
     DATABASES['default'] = dj_database_url.config(default=os.environ['DATABASE_URL'])
 
 # Password validation
