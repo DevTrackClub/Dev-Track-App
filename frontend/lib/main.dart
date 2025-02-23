@@ -1,6 +1,5 @@
+import 'package:dev_track_app/routing/main_routing.dart';
 import 'package:flutter/material.dart';
-
-import 'package:dev_track_app/pages/home.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +16,8 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
       ),
       debugShowCheckedModeBanner: false,
-      home: const HomePag(),
+      initialRoute: '/',
+      onGenerateRoute: Routes.generateRoute,
     );
   }
 }

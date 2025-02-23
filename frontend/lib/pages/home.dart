@@ -2,7 +2,7 @@
 import 'package:dev_track_app/pages/common_pages/Theme-Demo-Page/sample.dart';
 import 'package:dev_track_app/pages/admin_pages//mgmg_prev_projects.dart';
 import 'package:dev_track_app/pages/user_pages/project_pages/project_display/previous_projects.dart';
-import 'package:dev_track_app/theme/splashscreen.dart';
+import 'package:dev_track_app/theme/landing_page.dart';
 import 'package:dev_track_app/pages/common_pages/confirm_page.dart';
 import 'package:dev_track_app/pages/common_pages/domain_pages/domain.dart';
 import 'package:dev_track_app/pages/user_pages/project_pages/project_display/specific_project.dart';
