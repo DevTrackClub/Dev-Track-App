@@ -174,8 +174,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_NAME = "csrftoken"
+CSRF_COOKIE_HTTPONLY = False
 CORS_ALLOWED_ORIGINS = ["http://localhost:8000"] 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8000']
+CSRF_TRUSTED_ORIGINS = ["https://dev-track-app.onrender.com/", 'http://localhost:8000']
 CSRF_USE_SESSIONS = True
 
 AUTH_USER_MODEL = 'members.CustomUser'
