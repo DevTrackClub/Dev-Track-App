@@ -1,4 +1,5 @@
 import 'package:dev_track_app/pages/admin_pages/admin_dummy_home.dart';
+import 'package:dev_track_app/pages/common_pages/general_feed_page.dart';
 import 'package:dev_track_app/pages/common_pages/register_page.dart';
 import 'package:dev_track_app/pages/user_pages/user_dummy_home.dart';
 import 'package:flutter/gestures.dart';
@@ -158,7 +159,11 @@ class LoginPage extends StatelessWidget {
                 padding: const EdgeInsets.fromLTRB(25, 15, 25, 10),
                 child: ElevatedButton(
                   onPressed: () {
-                    // Add your login logic here
+                    Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const GeneralFeedPage()),
+                          );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
