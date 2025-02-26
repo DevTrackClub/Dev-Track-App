@@ -1,0 +1,15 @@
+name: Prevent PR to Main
+
+on:
+  pull_request:
+    branches:
+      - main  # This triggers the action when a PR is made to "main"
+
+jobs:
+  block-main-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fail PR if targeting main
+        run: |
+          echo "❌ Pull requests to 'main' are not allowed. Please target 'develop' instead."
+          exit 1
