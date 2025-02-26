@@ -1,3 +1,4 @@
+import 'package:dev_track_app/pages/admin_pages/edit_post_dialog.dart';
 import 'package:flutter/material.dart';
 
 import '../../models/admin_post_model.dart';
@@ -30,7 +31,7 @@ class _FeedScreenState extends State<AdminFeedPage> {
                 child: ListView.builder(
                   itemCount: Post.samplePosts.length,
                   itemBuilder: (context, index) =>
-                      _buildPostCard(Post.samplePosts[index], context),
+                      _buildPostCard(Post.samplePosts[index], context, index),
                 ),
               ),
             ],
@@ -88,38 +89,7 @@ class _FeedScreenState extends State<AdminFeedPage> {
     );
   }
 
-  Widget _buildTabBar() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey[200],
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _buildTab("Primary", isSelected: true),
-          _buildTab("Secondary"),
-          _buildTab("Ternary"),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTab(String title, {bool isSelected = false}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-          color: isSelected ? Colors.purple : Colors.black,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPostCard(Post post, BuildContext context) {
+  Widget _buildPostCard(Post post, BuildContext context, int index) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.all(16),
@@ -175,9 +145,21 @@ class _FeedScreenState extends State<AdminFeedPage> {
               ),
               FloatingActionButton(
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => EditPostPage()),
+                  showDialog(
+                    context: context,
+                    builder: (context) => EditPostDialog(
+                      index: index,
+                      onPostUpdated: (updatedPost) {
+                        setState(() {
+                          Post.samplePosts[index] = updatedPost;
+                        });
+                      },
+                      onPostDeleted: () {
+                        setState(() {
+                          Post.samplePosts.removeAt(index);
+                        });
+                      },
+                    ),
                   );
                 },
                 backgroundColor: Colors.purple,
