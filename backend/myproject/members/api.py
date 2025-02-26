@@ -9,6 +9,7 @@ from .models import CustomUser as User
 from .services import UserAuthService
 from projects.api import ProjectsAPI
 from announcements.api import PostAPIController
+from registrations.api import ProjectApplicationAPI 
 
 @api_controller("/user", tags="User Authentication")
 class UserAuthAPI(ControllerBase):
@@ -54,3 +55,4 @@ api = NinjaExtraAPI(csrf=False)
 api.register_controllers(UserAuthAPI)
 api.register_controllers(PostAPIController)
 api.register_controllers(ProjectsAPI)
+api.register_controllers(ProjectApplicationAPI)
