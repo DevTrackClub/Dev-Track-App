@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../models/admin_post_model.dart';
+import 'create_post_dialog.dart';
 
 class AdminFeedPage extends StatefulWidget {
   const AdminFeedPage({super.key});
@@ -23,12 +25,12 @@ class _FeedScreenState extends State<AdminFeedPage> {
               const SizedBox(height: 10),
               _buildHeader(),
               const SizedBox(height: 10),
-              _buildTabBar(),
               const SizedBox(height: 10),
               Expanded(
                 child: ListView.builder(
-                  itemCount: 3,
-                  itemBuilder: (context, index) => _buildPostCard(),
+                  itemCount: Post.samplePosts.length,
+                  itemBuilder: (context, index) =>
+                      _buildPostCard(Post.samplePosts[index], context),
                 ),
               ),
             ],
@@ -68,9 +70,16 @@ class _FeedScreenState extends State<AdminFeedPage> {
             foregroundColor: Colors.white,
           ),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const CreatePostPage()),
+            showDialog(
+              context: context,
+              builder: (context) => CreatePostDialog(
+                onPostCreated: (newPost) {
+                  setState(() {
+                    Post.samplePosts
+                        .insert(0, newPost); // Add new post at the top
+                  });
+                },
+              ),
             );
           },
           child: const Text("+ Create Post"),
@@ -110,7 +119,7 @@ class _FeedScreenState extends State<AdminFeedPage> {
     );
   }
 
-  Widget _buildPostCard() {
+  Widget _buildPostCard(Post post, BuildContext context) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
       padding: const EdgeInsets.all(16),
@@ -130,25 +139,24 @@ class _FeedScreenState extends State<AdminFeedPage> {
               const SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   Text(
-                    "Name",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                    post.name,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   Text(
-                    "2 Days ago • DD/month Time",
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                    post.dateTime,
+                    style: const TextStyle(fontSize: 14, color: Colors.black),
                   ),
                 ],
               ),
             ],
           ),
           const SizedBox(height: 10),
-          const Text(
-            "Lorem ipsum dolor sit amet et delectus accommodare "
-            "his consul copiosae legendos at vix ad putent delectus "
-            "delicata usu.",
-            style: TextStyle(fontSize: 14),
+          Text(
+            post.description,
+            style: const TextStyle(fontSize: 17),
           ),
           const SizedBox(height: 10),
           Row(
@@ -169,7 +177,7 @@ class _FeedScreenState extends State<AdminFeedPage> {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) =>  EditPostPage()),
+                    MaterialPageRoute(builder: (context) => EditPostPage()),
                   );
                 },
                 backgroundColor: Colors.purple,
@@ -192,8 +200,8 @@ class CreatePostPage extends StatelessWidget {
       home: Scaffold(
         body: Center(
           child: Container(
-            width: MediaQuery.of(context).size.width * 0.8, 
-            height: MediaQuery.of(context).size.height * 0.5, 
+            width: MediaQuery.of(context).size.width * 0.8,
+            height: MediaQuery.of(context).size.height * 0.5,
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(color: Colors.purple, width: 2),
@@ -217,14 +225,19 @@ class CreatePostPage extends StatelessWidget {
                   ),
                 ),
                 ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.purple),
+                  style:
+                      ElevatedButton.styleFrom(backgroundColor: Colors.purple),
                   onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => AdminFeedPage()),
+                    );
                   },
-                  child: Text('Post',
+                  child: Text(
+                    'Post',
                     style: TextStyle(color: Colors.white),
-                ),  
-              ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -241,8 +254,8 @@ class EditPostPage extends StatelessWidget {
       home: Scaffold(
         body: Center(
           child: Container(
-            width: MediaQuery.of(context).size.width * 0.8, 
-            height: MediaQuery.of(context).size.height * 0.5, 
+            width: MediaQuery.of(context).size.width * 0.8,
+            height: MediaQuery.of(context).size.height * 0.5,
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border.all(color: Colors.purple, width: 2),
@@ -266,15 +279,15 @@ class EditPostPage extends StatelessWidget {
                   ),
                 ),
                 ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.purple),
-                  onPressed: () {
-                  },
-                  child: Text('Save',
+                  style:
+                      ElevatedButton.styleFrom(backgroundColor: Colors.purple),
+                  onPressed: () {},
+                  child: Text(
+                    'Save',
                     style: TextStyle(color: Colors.white),
-                ),  
-              ),
-            ],
+                  ),
+                ),
+              ],
             ),
           ),
         ),

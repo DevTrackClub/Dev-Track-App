@@ -1,4 +1,4 @@
-import 'package:dev_track_app/pages/common_pages/login_page.dart';
+import 'package:dev_track_app/pages/admin_pages/admin_feed_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -25,12 +25,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Dev Track App',
-      theme: ThemeData(
-        primarySwatch: Colors.green,
-      ),
-      debugShowCheckedModeBanner: false,
-      home: LoginPage(),
-    );
+        title: 'Dev Track App',
+        theme: ThemeData(
+          primarySwatch: Colors.green,
+        ),
+        debugShowCheckedModeBanner: false,
+        home: AdminFeedPage());
   }
 }

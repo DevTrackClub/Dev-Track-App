@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import '../models/user_model.dart';
-// static const String baseUrl = "https://dev-track-app.onrender.com";
+// static const String baseUrl = "https://dev-track-app.onrender.com/api/user/user";
 // static const String loginEndpoint = "$baseUrl/user/login";
 
 class AuthService {

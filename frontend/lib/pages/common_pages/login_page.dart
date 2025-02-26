@@ -1,6 +1,6 @@
-import 'package:dev_track_app/pages/admin_pages/admin_dummy_home.dart';
+import 'package:dev_track_app/pages/admin_pages/admin_feed_page.dart';
 import 'package:dev_track_app/pages/common_pages/register_page.dart';
-import 'package:dev_track_app/pages/user_pages/user_dummy_home.dart';
+import 'package:dev_track_app/pages/user_pages/user_feed_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -112,8 +112,8 @@ class LoginPage extends StatelessWidget {
                               MaterialPageRoute(
                                 builder: (context) =>
                                     loginViewModel.user!.role == 'admin'
-                                        ? AdminDummyHome()
-                                        : UserDummyHome(),
+                                        ? AdminFeedPage()
+                                        : UserFeedPage(),
                               ),
                             );
                           }
