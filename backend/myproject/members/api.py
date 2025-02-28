@@ -18,8 +18,8 @@ class UserAuthAPI(ControllerBase):
 
     # API call for user to login by giving username and password.
     @route.post("/login", url_name="User login", auth=None, response=schemas.LoginResponseSchema)
-    def login_view(self, request, payload: schemas.SignInSchema):
-        result = self.auth_service.login_user(request, payload.email, payload.password)
+    def login_view(self, request, data: schemas.SignInSchema):
+        result = self.auth_service.login_user(request, data.email, data.password)
         if result:
             return result
         return JsonResponse({"detail": "Invalid credentials"}, status=401)
