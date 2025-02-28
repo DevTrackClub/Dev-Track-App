@@ -4,8 +4,7 @@ import 'package:dev_track_app/pages/user_pages/user_dummy_home.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../../models/login_view_model.dart';
+import '../../view_models/login_view_model.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
