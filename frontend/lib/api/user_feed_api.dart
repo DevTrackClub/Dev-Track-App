@@ -27,16 +27,6 @@ class UserFeedApi {
     print('Making GET request to $feedUrl');
     print('Request headers: $headers');
 
-
-
-    // // If your Django backend expects the CSRF token in a header like "X-CSRFToken":
-    // final response = await http.get(
-    //   Uri.parse(feedUrl),
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'X-CSRFToken': csrfToken ?? '',
-    //   },
-    // );
  try {
       // 3. Make the GET request
       final response = await http.get(Uri.parse(feedUrl), headers: headers);
@@ -63,11 +53,3 @@ class UserFeedApi {
   }
 }
 
-//     if (response.statusCode == 200) {
-//       final List<dynamic> data = json.decode(response.body);
-//       return data.map((jsonItem) => UserFeedModel.fromJson(jsonItem)).toList();
-//     } else {
-//       throw Exception('Failed to load feed: ${response.body}');
-//     }
-//   }
-// }
