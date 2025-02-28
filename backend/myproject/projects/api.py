@@ -45,7 +45,7 @@ class ProjectsAPI(ControllerBase):
     #API call to create a new project cycle.
     @route.post("/cycle/create", url_name="Create project cycle")
     def create_project_cycle(self, request, payload:schemas.CreateProjectCycleSchema):
-        return self.project_service.create_project_cycle(request, payload)
+        return self.project_service.create_project_cycle(payload)
 
 
     # #API call to create a new project
