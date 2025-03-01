@@ -42,12 +42,11 @@ class LoginPage extends StatelessWidget {
                       backgroundColor: Colors.white,
                       child: CircleAvatar(
                         radius: 45,
-                        // backgroundImage: NetworkImage(
-                        //   'https://storage.googleapis.com/a1aa/image/FMzESL12uGqBDRIcbgyzHWSJA_eagcTLOcV2KYexVXY.jpg',
-                        // ),
+                        //       backgroundImage: AssetImage(
+                        //           "frontend/assets/images/dev_track_logo.jpg")
                       ),
                     ),
-                  ),
+                  )
                 ],
               ),
               const SizedBox(height: 60),

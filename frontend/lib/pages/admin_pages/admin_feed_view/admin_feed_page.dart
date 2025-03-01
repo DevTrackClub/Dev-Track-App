@@ -105,9 +105,10 @@ class _FeedScreenState extends State<AdminFeedPage> {
           Row(
             children: [
               const CircleAvatar(
-                backgroundColor: Colors.grey,
-                radius: 20,
-              ),
+                  backgroundColor: Colors.grey,
+                  radius: 20,
+                  backgroundImage:
+                      AssetImage("assets/images/dev_track_logo.jpg")),
               const SizedBox(width: 10),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
