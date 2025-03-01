@@ -60,6 +60,11 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend", 
 ]
 
+NINJA_AUTHENTICATION = [  
+    "members.services.CustomSessionAuth"  
+]
+
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
