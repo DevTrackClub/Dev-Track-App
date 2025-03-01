@@ -1,7 +1,8 @@
-import 'package:dev_track_app/pages/admin_pages/admin_feed_page.dart';
+import 'package:dev_track_app/pages/common_pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'models/admin_post_view_model.dart';
 import 'models/login_view_model.dart';
 
 // void main() {
@@ -13,6 +14,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => LoginViewModel()),
+        ChangeNotifierProvider(create: (_) => PostViewModel()),
       ],
       child: const MyApp(),
     ),
@@ -30,6 +32,6 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.green,
         ),
         debugShowCheckedModeBanner: false,
-        home: AdminFeedPage());
+        home: LoginPage());
   }
 }

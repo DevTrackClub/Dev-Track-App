@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
-import '../../models/admin_post_model.dart';
+import '../../../models/admin_post_view_model.dart';
 
 class EditPostDialog extends StatefulWidget {
   final int index;
-  final Function(Post) onPostUpdated;
-  final Function() onPostDeleted;
+  final int postId;
+  final String currentTitle;
+  final String currentDescription;
 
   const EditPostDialog({
     Key? key,
     required this.index,
-    required this.onPostUpdated,
-    required this.onPostDeleted,
+    required this.postId,
+    required this.currentTitle,
+    required this.currentDescription,
   }) : super(key: key);
 
   @override
@@ -20,17 +22,20 @@ class EditPostDialog extends StatefulWidget {
 }
 
 class _EditPostDialogState extends State<EditPostDialog> {
-  late TextEditingController _postController;
+  late TextEditingController _titleController;
+  late TextEditingController _descController;
 
   @override
   void initState() {
     super.initState();
-    _postController =
-        TextEditingController(text: Post.samplePosts[widget.index].description);
+    _titleController = TextEditingController(text: widget.currentTitle);
+    _descController = TextEditingController(text: widget.currentDescription);
   }
 
   @override
   Widget build(BuildContext context) {
+    final postViewModel = Provider.of<PostViewModel>(context);
+
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
@@ -38,15 +43,23 @@ class _EditPostDialogState extends State<EditPostDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
+            const Text(
               'Edit Post',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             TextField(
-              controller: _postController,
+              controller: _titleController,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Edit your title',
+              ),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _descController,
               maxLines: 4,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Edit your message',
               ),
@@ -55,38 +68,25 @@ class _EditPostDialogState extends State<EditPostDialog> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // DELETE BUTTON
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red,
-                  ),
-                  onPressed: () {
-                    widget.onPostDeleted(); // Remove post
-                    Navigator.pop(context);
-                  },
-                  child: Text('Delete', style: TextStyle(color: Colors.white)),
-                ),
-
-                // SAVE BUTTON
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple,
                   ),
-                  onPressed: () {
-                    if (_postController.text.isNotEmpty) {
-                      String updatedTime =
-                          DateFormat("d/MMM hh:mm a").format(DateTime.now());
-                      Post updatedPost = Post(
-                        name: Post.samplePosts[widget.index].name,
-                        dateTime: "Edited • $updatedTime", // Mark as edited
-                        description: _postController.text,
+                  onPressed: () async {
+                    if (_titleController.text.isNotEmpty &&
+                        _descController.text.isNotEmpty) {
+                      await postViewModel.editPost(
+                        widget.postId,
+                        _titleController.text,
+                        _descController.text,
                       );
-
-                      widget.onPostUpdated(updatedPost);
                       Navigator.pop(context);
                     }
                   },
-                  child: Text('Save', style: TextStyle(color: Colors.white)),
+                  child: postViewModel.isLoading
+                      ? CircularProgressIndicator()
+                      : const Text('Save',
+                          style: TextStyle(color: Colors.white)),
                 ),
               ],
             ),

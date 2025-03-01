@@ -1,8 +1,10 @@
-import 'package:dev_track_app/pages/admin_pages/edit_post_dialog.dart';
+import 'package:dev_track_app/pages/admin_pages/admin_feed_view/edit_post_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../models/admin_post_model.dart';
-import 'create_post_dialog.dart';
+import '../../../models/admin_post_model.dart';
+import '../../../models/admin_post_view_model.dart';
+import '../admin_feed_view/create_post_dialog.dart';
 
 class AdminFeedPage extends StatefulWidget {
   const AdminFeedPage({super.key});
@@ -13,7 +15,13 @@ class AdminFeedPage extends StatefulWidget {
 
 class _FeedScreenState extends State<AdminFeedPage> {
   @override
+  void initState() {
+    super.initState();
+    Provider.of<PostViewModel>(context, listen: false).fetchPosts();
+  }
+
   Widget build(BuildContext context) {
+    final postViewModel = Provider.of<PostViewModel>(context);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -27,12 +35,23 @@ class _FeedScreenState extends State<AdminFeedPage> {
               _buildHeader(),
               const SizedBox(height: 10),
               const SizedBox(height: 10),
+              // Expanded(
+              //   child: ListView.builder(
+              //     itemCount: Post.samplePosts.length,
+              //     itemBuilder: (context, index) =>
+              //         _buildPostCard(Post.samplePosts[index], context, index),
+              //   ),
+              // ),
               Expanded(
-                child: ListView.builder(
-                  itemCount: Post.samplePosts.length,
-                  itemBuilder: (context, index) =>
-                      _buildPostCard(Post.samplePosts[index], context, index),
-                ),
+                child: postViewModel.isLoading
+                    ? Center(child: CircularProgressIndicator())
+                    : ListView.builder(
+                        itemCount: postViewModel.posts.length,
+                        itemBuilder: (context, index) {
+                          return _buildPostCard(
+                              postViewModel.posts[index], context, index);
+                        },
+                      ),
               ),
             ],
           ),
@@ -71,17 +90,7 @@ class _FeedScreenState extends State<AdminFeedPage> {
             foregroundColor: Colors.white,
           ),
           onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) => CreatePostDialog(
-                onPostCreated: (newPost) {
-                  setState(() {
-                    Post.samplePosts
-                        .insert(0, newPost); // Add new post at the top
-                  });
-                },
-              ),
-            );
+            showDialog(context: context, builder: (_) => CreatePostDialog());
           },
           child: const Text("+ Create Post"),
         ),
@@ -111,12 +120,12 @@ class _FeedScreenState extends State<AdminFeedPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    post.name,
+                    post.title,
                     style: const TextStyle(
                         fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   Text(
-                    post.dateTime,
+                    post.createdAt,
                     style: const TextStyle(fontSize: 14, color: Colors.black),
                   ),
                 ],
@@ -149,16 +158,10 @@ class _FeedScreenState extends State<AdminFeedPage> {
                     context: context,
                     builder: (context) => EditPostDialog(
                       index: index,
-                      onPostUpdated: (updatedPost) {
-                        setState(() {
-                          Post.samplePosts[index] = updatedPost;
-                        });
-                      },
-                      onPostDeleted: () {
-                        setState(() {
-                          Post.samplePosts.removeAt(index);
-                        });
-                      },
+                      postId: post.id, // ✅ Pass post ID for API call
+                      currentTitle: post.title, // ✅ Pass current title
+                      currentDescription:
+                          post.description, // ✅ Pass current description
                     ),
                   );
                 },

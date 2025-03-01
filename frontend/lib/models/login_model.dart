@@ -1,13 +1,13 @@
-class UserModel {
+class LoginModel {
   final String message;
   final String role;
   final String csrfToken;
 
-  UserModel(
+  LoginModel(
       {required this.message, required this.role, required this.csrfToken});
 
-  factory UserModel.fromJson(Map<String, dynamic> json) {
-    return UserModel(
+  factory LoginModel.fromJson(Map<String, dynamic> json) {
+    return LoginModel(
       message: json['message'],
       role: json['role'],
       csrfToken: json['csrf_token'],

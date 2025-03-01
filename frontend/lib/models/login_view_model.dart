@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../api/login_api.dart';
-import '../models/user_model.dart';
+import '../models/login_model.dart';
 
 class LoginViewModel extends ChangeNotifier {
   final AuthService _authService = AuthService();
 
   bool isLoading = false;
   String? errorMessage;
-  UserModel? user;
+  LoginModel? user;
 
   Future<void> login(String email, String password) async {
     isLoading = true;
@@ -18,10 +18,6 @@ class LoginViewModel extends ChangeNotifier {
 
     try {
       user = await _authService.login(email, password);
-
-      final prefs = await SharedPreferences.getInstance();
-      await prefs.setString('role', user!.role);
-      await prefs.setString('csrf_token', user!.csrfToken);
     } catch (e) {
       errorMessage = 'Login failed. Please check your credentials.';
     }
@@ -33,5 +29,15 @@ class LoginViewModel extends ChangeNotifier {
   Future<String?> getUserRole() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('role');
+  }
+
+  Future<String?> getCsrfToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('csrf_token');
+  }
+
+  Future<String?> getSessionCookie() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString('session_cookie');
   }
 }

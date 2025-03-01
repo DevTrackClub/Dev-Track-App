@@ -1,4 +1,4 @@
-import 'package:dev_track_app/pages/admin_pages/admin_feed_page.dart';
+import 'package:dev_track_app/pages/admin_pages/admin_feed_view/admin_feed_page.dart';
 import 'package:dev_track_app/pages/common_pages/register_page.dart';
 import 'package:dev_track_app/pages/user_pages/user_feed_page.dart';
 import 'package:flutter/gestures.dart';
@@ -42,9 +42,9 @@ class LoginPage extends StatelessWidget {
                       backgroundColor: Colors.white,
                       child: CircleAvatar(
                         radius: 45,
-                        backgroundImage: NetworkImage(
-                          'https://storage.googleapis.com/a1aa/image/FMzESL12uGqBDRIcbgyzHWSJA_eagcTLOcV2KYexVXY.jpg',
-                        ),
+                        // backgroundImage: NetworkImage(
+                        //   'https://storage.googleapis.com/a1aa/image/FMzESL12uGqBDRIcbgyzHWSJA_eagcTLOcV2KYexVXY.jpg',
+                        // ),
                       ),
                     ),
                   ),
@@ -157,9 +157,7 @@ class LoginPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(25, 15, 25, 10),
                 child: ElevatedButton(
-                  onPressed: () {
-                    // Add your login logic here
-                  },
+                  onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     side: BorderSide(color: Color(0xFF5e00b0)),
