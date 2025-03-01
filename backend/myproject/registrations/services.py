@@ -1,7 +1,9 @@
 from django.shortcuts import get_object_or_404
 from projects.models import DomainModel, ProjectCycleModel
 from .models import ProjectApplicationModel
-from ninja.errors import HttpError
+from ninja.errors import HttpError, AuthenticationError
+from ninja.security import HttpBearer
+
 
 class ProjectApplicationService:
     def enroll_user(self, request, payload):
@@ -42,3 +44,11 @@ class ProjectApplicationService:
             return {"message": "You have already applied for this cycle."}
 
         return {"message": "Application submitted successfully, hang tight!"}
+    
+    
+class CustomSessionAuth(HttpBearer):
+    def authenticate(self, request, token=None):
+        print(f"Session Key: {request.session.session_key}")  # Debugging
+        if request.user.is_authenticated:
+            return request.user
+        raise AuthenticationError("Session authentication failed")
