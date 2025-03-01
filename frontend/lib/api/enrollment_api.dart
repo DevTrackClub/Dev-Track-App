@@ -20,14 +20,24 @@ class EnrollmentApi {
   // Get session cookie from SharedPreferences
   Future<String?> _getSessionCookie() async {
     final prefs = await SharedPreferences.getInstance();
+
+    // First try to get the session cookie stored by AuthService
+    final sessionCookie = prefs.getString('session_cookie');
+    if (sessionCookie != null && sessionCookie.isNotEmpty) {
+      print('✅ Using session cookie from AuthService');
+      return sessionCookie;
+    }
+
+    // Fallback to checking for specific keys
     final possibleKeys = ['sessionid', 'session'];
     for (var key in possibleKeys) {
-      final sessionCookie = prefs.getString(key);
-      if (sessionCookie != null && sessionCookie.isNotEmpty) {
+      final cookie = prefs.getString(key);
+      if (cookie != null && cookie.isNotEmpty) {
         print('✅ Using session cookie key: $key');
-        return sessionCookie;
+        return cookie;
       }
     }
+
     print('⚠️ No valid session cookie found.');
     return null;
   }
@@ -43,10 +53,38 @@ class EnrollmentApi {
     };
 
     if (sessionCookie != null && sessionCookie.isNotEmpty) {
-      headers['Cookie'] = 'sessionid=$sessionCookie';
+      // Use the full cookie string as it's stored by AuthService
+      headers['Cookie'] = sessionCookie;
+      print('✅ Added session cookie to headers');
     }
 
     return headers;
+  }
+
+  // Debug authentication state
+  Future<void> debugAuthState() async {
+    final prefs = await SharedPreferences.getInstance();
+    final allKeys = prefs.getKeys();
+    print('--- Auth Debug Information ---');
+    print('Available SharedPreferences keys: $allKeys');
+
+    final keysToCheck = [
+      'csrf_token',
+      'sessionid',
+      'session',
+      'session_cookie'
+    ];
+    for (var key in keysToCheck) {
+      if (prefs.containsKey(key)) {
+        final value = prefs.getString(key);
+        final maskedValue =
+            value != null ? '${value.substring(0, 4)}...[masked]' : 'null';
+        print('$key: $maskedValue');
+      } else {
+        print('$key: not found');
+      }
+    }
+    print('-------------------------------');
   }
 
   // Fetch available domains
@@ -54,6 +92,7 @@ class EnrollmentApi {
     print('EnrollmentApi: getDomains() called');
 
     try {
+      await debugAuthState(); // Debug auth state before making request
       final headers = await _getHeaders();
       print('Making GET request to $domainListUrl');
       print('Request headers: $headers');
@@ -82,6 +121,7 @@ class EnrollmentApi {
     print('EnrollmentApi: submitEnrollment() called');
 
     try {
+      await debugAuthState(); // Debug auth state before making request
       final headers = await _getHeaders();
       final requestBody = jsonEncode(request.toJson());
 
@@ -115,26 +155,5 @@ class EnrollmentApi {
       print('Exception in submitEnrollment: $e');
       rethrow;
     }
-  }
-
-  // Debug authentication state
-  Future<void> debugAuthState() async {
-    final prefs = await SharedPreferences.getInstance();
-    final allKeys = prefs.getKeys();
-    print('--- Auth Debug Information ---');
-    print('Available SharedPreferences keys: $allKeys');
-
-    final keysToCheck = ['csrf_token', 'sessionid', 'session'];
-    for (var key in keysToCheck) {
-      if (prefs.containsKey(key)) {
-        final value = prefs.getString(key);
-        final maskedValue =
-            value != null ? '${value.substring(0, 4)}...[masked]' : 'null';
-        print('$key: $maskedValue');
-      } else {
-        print('$key: not found');
-      }
-    }
-    print('-------------------------------');
   }
 }
