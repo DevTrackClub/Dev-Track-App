@@ -35,13 +35,6 @@ class _FeedScreenState extends State<AdminFeedPage> {
               _buildHeader(),
               const SizedBox(height: 10),
               const SizedBox(height: 10),
-              // Expanded(
-              //   child: ListView.builder(
-              //     itemCount: Post.samplePosts.length,
-              //     itemBuilder: (context, index) =>
-              //         _buildPostCard(Post.samplePosts[index], context, index),
-              //   ),
-              // ),
               Expanded(
                 child: postViewModel.isLoading
                     ? Center(child: CircularProgressIndicator())
@@ -152,22 +145,63 @@ class _FeedScreenState extends State<AdminFeedPage> {
                   ),
                 ),
               ),
-              FloatingActionButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (context) => EditPostDialog(
-                      index: index,
-                      postId: post.id, // ✅ Pass post ID for API call
-                      currentTitle: post.title, // ✅ Pass current title
-                      currentDescription:
-                          post.description, // ✅ Pass current description
-                    ),
-                  );
-                },
-                backgroundColor: Colors.purple,
-                mini: true,
-                child: const Icon(Icons.edit, color: Colors.white, size: 18),
+              Row(
+                children: [
+                  FloatingActionButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) => EditPostDialog(
+                          index: index,
+                          postId: post.id,
+                          currentTitle: post.title,
+                          currentDescription: post.description,
+                        ),
+                      );
+                    },
+                    backgroundColor: Colors.purple,
+                    mini: true,
+                    child:
+                        const Icon(Icons.edit, color: Colors.white, size: 18),
+                  ),
+                  FloatingActionButton(
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text("Delete Post"),
+                            content: const Text(
+                                "Are you sure you want to delete this post?"),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text("Cancel"),
+                              ),
+                              TextButton(
+                                onPressed: () async {
+                                  final postViewModel =
+                                      Provider.of<PostViewModel>(context,
+                                          listen: false);
+                                  await postViewModel.deletePost(post.id);
+                                  Navigator.pop(context);
+                                },
+                                child: const Text("Delete",
+                                    style: TextStyle(color: Colors.red)),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                    backgroundColor: Colors.purple,
+                    mini: true,
+                    child: const Icon(Icons.delete_forever,
+                        color: Colors.white, size: 18),
+                  ),
+                ],
               ),
             ],
           ),

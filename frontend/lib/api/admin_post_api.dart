@@ -92,4 +92,32 @@ class PostService {
       throw Exception("Failed to edit post");
     }
   }
+
+  //TRASH POST
+  Future<bool> deletePost(int postId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? sessionCookie = prefs.getString('session_cookie');
+    String? csrfToken = prefs.getString('csrf_token');
+
+    print("Deleting Post ID: $postId");
+    print("Stored Session Cookie: $sessionCookie");
+
+    final response = await http.delete(
+      Uri.parse('$baseUrl/$postId'),
+      headers: {
+        "Content-Type": "application/json",
+        "Cookie": sessionCookie ?? "",
+        "X-CSRFToken": csrfToken ?? "",
+      },
+    );
+
+    print("Response Status Code: ${response.statusCode}");
+    print("Response Body: ${response.body}");
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 }

@@ -66,4 +66,16 @@ class PostViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> deletePost(int postId) async {
+    bool success = await _postService.deletePost(postId);
+
+    if (success) {
+      posts.removeWhere((post) => post.id == postId);
+      notifyListeners();
+      print("Post deleted successfully");
+    } else {
+      print("Failed to delete post");
+    }
+  }
 }
