@@ -7,6 +7,7 @@ class AppColors {
   static const Color backgroundLight = Color.fromARGB(255, 255, 255, 255);
   static const Color textPrimaryLight = Color.fromARGB(255, 255, 255, 255);
   static const Color textSecondaryLight = Color(0xFF757575);
+  static const Color textTernaryLight = Color.fromARGB(255, 0, 0, 0);
   static const Color accentLight = Color(0xFFFFC107);
   static const Color neutralLight = Color(0xFF666666);
 

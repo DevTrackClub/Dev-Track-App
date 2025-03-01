@@ -1,9 +1,9 @@
 import 'package:dev_track_app/pages/common_pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:dev_track_app/pages/user_pages/enroll_pages/enroll_page.dart';
 import 'models/login_view_model.dart';
-
+import 'view_models/enrollment_view_model.dart';
 // void main() {
 //   runApp(const MyApp());
 // }
@@ -13,6 +13,7 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => LoginViewModel()),
+        ChangeNotifierProvider(create: (_) => EnrollmentViewModel()),
       ],
       child: const MyApp(),
     ),
