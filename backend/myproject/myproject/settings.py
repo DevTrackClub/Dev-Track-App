@@ -60,6 +60,11 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend", 
 ]
 
+NINJA_AUTHENTICATION = [  
+    "members.services.CustomSessionAuth"  
+]
+
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.SessionAuthentication',
@@ -103,29 +108,29 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
-if os.getenv('DJANGO_ENV') == 'production':
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.getenv('DB_NAME', 'postgres'),
-            'USER': os.getenv('DB_USER', 'postgres'),
-            'PASSWORD': os.getenv('DB_PASSWORD', ''),
-            'HOST': os.getenv('DB_HOST', 'localhost'),
-            'PORT': int(os.getenv('DB_PORT', 6543)),  # Cast to integer
-            'OPTIONS': {'sslmode': 'require'},
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',  # Use Pathlib for cross-platform support
-        }
-    }
-
+import os
 import dj_database_url
-if os.getenv('DJANGO_ENV') == 'production' and 'DATABASE_URL' in os.environ:
-    DATABASES['default'] = dj_database_url.config(default=os.environ['DATABASE_URL'])
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Default: Use SQLite in development
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
+}
+
+# Use PostgreSQL in production
+if os.getenv("DJANGO_ENV") == "production":
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=os.getenv("DATABASE_URL"),  # Use Render's environment variable
+            conn_max_age=600,
+            ssl_require=True
+        )
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -174,8 +179,10 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_NAME = "csrftoken"
+CSRF_COOKIE_HTTPONLY = False
 CORS_ALLOWED_ORIGINS = ["http://localhost:8000"] 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8000']
+CSRF_TRUSTED_ORIGINS = ["https://dev-track-app.onrender.com/", 'http://localhost:8000']
 CSRF_USE_SESSIONS = True
 
 AUTH_USER_MODEL = 'members.CustomUser'

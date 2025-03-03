@@ -1,11 +1,11 @@
 import 'package:dev_track_app/pages/admin_pages/admin_feed_view/admin_feed_page.dart';
+import 'package:dev_track_app/pages/common_pages/general_feed_page.dart';
 import 'package:dev_track_app/pages/common_pages/register_page.dart';
 import 'package:dev_track_app/pages/user_pages/user_feed_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../../models/login_view_model.dart';
+import '../../view_models/login_view_model.dart';
 
 class LoginPage extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -156,7 +156,13 @@ class LoginPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(25, 15, 25, 10),
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const GeneralFeedPage()),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
                     side: BorderSide(color: Color(0xFF5e00b0)),
