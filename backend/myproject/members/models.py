@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from pydantic import ValidationError
 from .managers import CustomUserManager
+from django.core.validators import MinValueValidator
 
 
 from django.core.exceptions import ValidationError
@@ -22,7 +23,7 @@ class CustomUser(AbstractUser):
     phone = models.CharField(max_length=10)
     srn = models.CharField(max_length=8)
     branch = models.CharField(max_length=50)
-    semester = models.CharField(max_length=2, default='1')
+    passout_year = models.PositiveIntegerField(validators=[MinValueValidator(2025)], default=2025)    
     github = models.URLField(default='', blank=True)
     linkedin = models.URLField(default='', blank=True)
     is_active = models.BooleanField(default=True)
