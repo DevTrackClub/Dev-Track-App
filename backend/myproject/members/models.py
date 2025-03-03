@@ -40,7 +40,7 @@ class CustomUser(AbstractUser):
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'first_name', 'last_name', 'phone', 'srn', 'branch', 'semester']
+    REQUIRED_FIELDS = ['username', 'first_name', 'last_name', 'phone', 'srn', 'branch', 'passout_year']
 
     def __str__(self):
         return self.email
