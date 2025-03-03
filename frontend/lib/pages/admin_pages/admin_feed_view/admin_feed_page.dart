@@ -1,5 +1,6 @@
 import 'package:dev_track_app/pages/admin_pages/admin_feed_view/edit_post_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/admin_post_model.dart';
@@ -14,6 +15,22 @@ class AdminFeedPage extends StatefulWidget {
 }
 
 class _FeedScreenState extends State<AdminFeedPage> {
+  String formatDate(String createdAt) {
+    DateTime postDate = DateTime.parse(createdAt).toLocal();
+    DateTime now = DateTime.now();
+
+    String formattedDate = DateFormat("dd/MMM hh:mm a").format(postDate);
+    int difference = now.difference(postDate).inDays;
+
+    String daysAgo = (difference == 0)
+        ? "Today"
+        : (difference == 1)
+            ? "Yesterday"
+            : "$difference Days ago";
+
+    return "$daysAgo • $formattedDate";
+  }
+
   @override
   void initState() {
     super.initState();
@@ -119,7 +136,7 @@ class _FeedScreenState extends State<AdminFeedPage> {
                         fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   Text(
-                    post.createdAt,
+                    formatDate(post.createdAt),
                     style: const TextStyle(fontSize: 14, color: Colors.black),
                   ),
                 ],
