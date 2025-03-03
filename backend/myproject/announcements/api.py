@@ -1,11 +1,12 @@
 from django.shortcuts import get_object_or_404
-from django.http import JsonResponse
+from django.middleware.csrf import get_token
 from ninja_extra import NinjaExtraAPI, ControllerBase, api_controller, route
 from django.middleware.csrf import get_token
 from django.core.paginator import Paginator
 from .models import PostModel, NotificationModel
 from . import schemas
 from .schemas import PostSchema
+from .services import AnnouncementService
 
 @api_controller("/posts", tags="Posts")
 class PostAPIController(ControllerBase):
@@ -24,15 +25,11 @@ class PostAPIController(ControllerBase):
     # API endpoint to create a new post (admin only).
     @route.post("/add", url_name="Add Post")
     def create_post(self, request, payload: schemas.PostCreateSchema):
-        admin_check = self._check_admin(request)
+        admin_check = self.post_service._check_admin(request)
         if admin_check:
             return admin_check
-        
-        post = PostModel.objects.create(
-            title=payload.title,
-            description=payload.description,
-            created_by=request.user
-        )
+
+        post = self.post_service.create_post(request, payload)
         return {
             "message": "Post created successfully",
             "post_id": post.id,
@@ -93,30 +90,20 @@ class PostAPIController(ControllerBase):
             
     @route.put("/{post_id}", url_name="Update Post", response=PostSchema)
     def update_post(self, request, post_id: int, payload: schemas.PostUpdateSchema):
-        admin_check = self._check_admin(request)
-        if admin_check:
-            return admin_check
-
+        self.post_service._check_admin(request)
         post = get_object_or_404(PostModel, id=post_id)
-        if payload.title is not None:
-            post.title = payload.title
-        if payload.description is not None:
-            post.description = payload.description
-        post.save()
-        # Convert to schema:
+        post = self.post_service.update_post(post, payload)
         return schemas.PostSchema.from_orm(post)
-
 
     # API endpoint to delete a post (admin only).
     @route.delete("/{post_id}", url_name="Delete Post")
     def delete_post(self, request, post_id: int):
-        admin_check = self._check_admin(request)
+        admin_check = self.post_service._check_admin(request)
         if admin_check:
             return admin_check
-        
+
         post = get_object_or_404(PostModel, id=post_id)
-        
-        post.delete()
+        self.post_service.delete_post(post)
         return {"message": "Post deleted successfully"}
 
 # Register the PostAPIController with your NinjaExtraAPI instance.

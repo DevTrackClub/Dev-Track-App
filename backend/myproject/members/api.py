@@ -1,115 +1,58 @@
-import os
-from django.contrib.auth import authenticate, logout, login
-from .models import CustomUser as User
-from django.core.management import call_command
-from . import schemas
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
-from ninja_extra import NinjaExtraAPI, ControllerBase, api_controller, route 
-from django.middleware.csrf import get_token
+from ninja_extra import NinjaExtraAPI, ControllerBase, api_controller, route
 from ninja import UploadedFile
-from django.core.files.base import ContentFile
-from django.core.files.storage import default_storage
+from django.shortcuts import get_object_or_404
+from django.middleware.csrf import get_token
 
-
-
+from . import schemas
+from .models import CustomUser as User
+from .services import UserAuthService
 from projects.api import ProjectsAPI
-from announcements.api import PostAPIController 
-
-
+from announcements.api import PostAPIController
+from registrations.api import ProjectApplicationAPI 
 
 @api_controller("/user", tags="User Authentication")
 class UserAuthAPI(ControllerBase):
+    def __init__(self) -> None:
+        self.auth_service = UserAuthService()
 
-    #API call for user to login by giving username and password.
-    @route.post("/login", url_name="User login", auth=None)
-    def login_view(self, request, payload: schemas.SignInSchema):
-        user = authenticate(request, username=payload.email, password=payload.password)
-        if user is not None:
-            login(request, user)  
-            return {
-                "message": "Login successful",
-                "role": user.role,
-                "csrf_token": get_token(request)  # Provide CSRF token for frontend
-            }
+    # API call for user to login by giving username and password.
+    @route.post("/login", url_name="User login", auth=None, response=schemas.LoginResponseSchema)
+    def login_view(self, request, data: schemas.SignInSchema):
+        result = self.auth_service.login_user(request, data.email, data.password)
+        if result:
+            return result
         return JsonResponse({"detail": "Invalid credentials"}, status=401)
 
-
-    #API call made by a user to logout.
+    # API call made by a user to logout.
     @route.post("/logout")
     def logout_view(self, request):
-        logout(request)
-        return {"message": "Logged out successfully"}
+        return self.auth_service.logout_user(request)
 
-
-    #API call made by user to view their profile. 
-    @route.get("/user")
+    # API call made by user to view their profile.
+    @route.get("/user", response=schemas.UserProfileResponseSchema)
     def user_profile(self, request):
-        if request.user.is_authenticated:
-            return {
-                "username": request.user.username,
-                "email": request.user.email,
-                "github": request.user.github,
-                "fname" : request.user.fname,
-            }
+        result = self.auth_service.get_user_profile(request)
+        if result:
+            return result
         return JsonResponse({"detail": "Not logged in"}, status=401)
 
-
-    @route.put("/edit",response=schemas.RegisterSchema)
-    def edit_profile(self, request, payload : schemas.RegisterSchema):
+    # API call made by user to edit their profile.
+    @route.put("/edit", response=schemas.RegisterSchema)
+    def edit_profile(self, request, payload: schemas.RegisterSchema):
         if not request.user.is_authenticated:
             return JsonResponse({"detail": "Authentication required"}, status=401)
-
-        user = get_object_or_404(User, srn=request.user.srn)
-        for attr, value in payload.dict().items():
-            setattr(user, attr, value)
-        user.save()
+        user = self.auth_service.edit_user_profile(request, payload)
         return user
-    
 
+    # API call to import users using the management command.
     @route.post("/import-users/", url_name="Import Users")
     def import_users(self, request, file: UploadedFile):
-        """API endpoint to import users using the management command"""
-        file_path = default_storage.save(f"temp/{file.name}", ContentFile(file.read()))
-    
-        try:
-            # Call the management command
-            call_command("import_users", default_storage.path(file_path))
-        except Exception as e:
-            return {"error": str(e)}
-        finally:
-            # Ensure file deletion after processing
-            if os.path.exists(default_storage.path(file_path)):
-                os.remove(default_storage.path(file_path))
-    
-        return {"message": "User import initiated successfully!"}
+        return self.auth_service.import_users_from_file(file)
 
-
-
-
+# Register controllers with the NinjaExtraAPI instance.
 api = NinjaExtraAPI(csrf=False)
 api.register_controllers(UserAuthAPI)
 api.register_controllers(PostAPIController)
 api.register_controllers(ProjectsAPI)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-    
-
+api.register_controllers(ProjectApplicationAPI)
