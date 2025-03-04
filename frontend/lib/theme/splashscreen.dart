@@ -1,4 +1,3 @@
-import 'package:dev_track_app/pages/home.dart';
 import 'package:flutter/material.dart';
 
 class Splash extends StatefulWidget {
@@ -30,10 +29,6 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
 
   Future<void> _navigateToHome() async {
     await Future.delayed(Duration(milliseconds: 2000));
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => HomePag()),
-    );
   }
 
   @override
