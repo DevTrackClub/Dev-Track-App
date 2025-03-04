@@ -17,7 +17,7 @@ class AnnouncementService:
         return post
 
     def list_posts(self):
-        posts = PostModel.objects.all().order_by("created_at")
+        posts = PostModel.objects.all().order_by("-created_at")
         result = [
             {
                 "id": post.id,
