@@ -33,6 +33,7 @@ class TeamModel(models.Model):
     name = models.CharField(max_length=50)
     members = models.ManyToManyField(CustomUser)
     team_lead = models.ForeignKey(CustomUser, related_name='team_lead', on_delete=models.SET_NULL, null=True)
+    domain = models.ForeignKey(DomainModel, on_delete=models.CASCADE) 
 
 
 class TeamMembership(models.Model):

@@ -179,7 +179,8 @@ class TeamFormationService:
                     for members in team_list:
                         if len(members) >= 3:
                             team = TeamModel.objects.create(
-                                team_domain=domain,
+                                name=f"Team {domain.name}",  # Naming teams based on domain
+                                domain=domain  # Now teams will belong to a domain
                             )
                             team.members.set(members)
                             assigned_teams.append(team)

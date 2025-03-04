@@ -1,6 +1,6 @@
 # Variables
 MODE ?= local
-
+path = "C:\Users\bhara\Desktop\Dev-Track-App\backend\myproject"
 
 export DJANGO_ENV
 
@@ -40,8 +40,8 @@ su:
 # 	APP_MODE=$(MODE) python manage.py collectstatic
 
 clear_db:
-	find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
-	find . -path "*/migrations/*.pyc" -delete
+	python -c "import os, glob; [os.remove(f) for f in glob.glob('**/migrations/*.py', recursive=True) if '__init__.py' not in f]"
+	python -c "import os, glob; [os.remove(f) for f in glob.glob('**/migrations/*.pyc', recursive=True)]"
 
 freeze:
 	pip freeze > requirements.txt
