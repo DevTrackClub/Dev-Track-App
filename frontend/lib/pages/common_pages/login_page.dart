@@ -1,7 +1,7 @@
-import 'package:dev_track_app/pages/admin_pages/admin_dummy_home.dart';
+import 'package:dev_track_app/pages/admin_pages/admin_feed_view/admin_feed_page.dart';
 import 'package:dev_track_app/pages/common_pages/general_feed_page.dart';
 import 'package:dev_track_app/pages/common_pages/register_page.dart';
-import 'package:dev_track_app/pages/user_pages/user_dummy_home.dart';
+import 'package:dev_track_app/pages/user_pages/user_feed_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -42,12 +42,11 @@ class LoginPage extends StatelessWidget {
                       backgroundColor: Colors.white,
                       child: CircleAvatar(
                         radius: 45,
-                        backgroundImage: NetworkImage(
-                          'https://storage.googleapis.com/a1aa/image/FMzESL12uGqBDRIcbgyzHWSJA_eagcTLOcV2KYexVXY.jpg',
-                        ),
+                        //       backgroundImage: AssetImage(
+                        //           "frontend/assets/images/dev_track_logo.jpg")
                       ),
                     ),
-                  ),
+                  )
                 ],
               ),
               const SizedBox(height: 60),
@@ -112,8 +111,8 @@ class LoginPage extends StatelessWidget {
                               MaterialPageRoute(
                                 builder: (context) =>
                                     loginViewModel.user!.role == 'admin'
-                                        ? AdminDummyHome()
-                                        : UserDummyHome(),
+                                        ? AdminFeedPage()
+                                        : UserFeedPage(),
                               ),
                             );
                           }
@@ -159,10 +158,10 @@ class LoginPage extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const GeneralFeedPage()),
-                          );
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const GeneralFeedPage()),
+                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.white,
