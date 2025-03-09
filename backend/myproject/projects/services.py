@@ -74,8 +74,6 @@ class DomainService:
             return {"error": str(e)}
         
 
-
-
 class TeamFormationService:
     @staticmethod
     def assign_teams():
@@ -122,6 +120,7 @@ class TeamFormationService:
                     remaining_users[domain_id] = unplaced_users
 
                 # **Step 3: Assigning Second Preference**
+                temp_remaining_users = defaultdict(list)
                 for domain_id, unplaced_users in list(remaining_users.items()):
                     for user in unplaced_users:
                         user_application = next(app for app in users if app.user == user)
@@ -135,54 +134,97 @@ class TeamFormationService:
                                 break
 
                         if not placed:
-                            remaining_users[second_pref_id].append(user)
+                            temp_remaining_users[second_pref_id].append(user)
+
+                remaining_users = temp_remaining_users  # Update remaining users
 
                 # **Step 4: Adjusting Team Sizes**
                 for domain_id, team_list in teams.items():
                     for team in team_list:
-                        while len(team) > 5:  # Handling overflows
+                        while len(team) > 5:  # Overflow case
                             extra_user = team.pop()
                             remaining_users[domain_id].append(extra_user)
+                        
+                        while len(team) < 5 and remaining_users[domain_id]:  # Fill up to 5 if possible
+                            team.append(remaining_users[domain_id].pop(0))
 
-                        if len(team) < 3:  # Handling undersized teams
-                            merged = False
-                            for other_team in team_list:
-                                if other_team != team and len(other_team) < 4:
-                                    other_team.extend(team)
-                                    team_list.remove(team)
-                                    merged = True
-                                    break
-
-                            if not merged:
-                                remaining_users[domain_id].extend(team)
-                                team_list.remove(team)
-
-                # **Step 5: Final Allocation**
+                # **Step 5: Ensure Users Return to First Preference if Second Preference Fails**
+                temp_remaining_users = defaultdict(list)
                 for domain_id, unplaced_users in list(remaining_users.items()):
                     for user in unplaced_users:
                         user_application = next(app for app in users if app.user == user)
+                        first_pref_id = user_application.first_preference.id
                         second_pref_id = user_application.second_preference.id
 
-                        for team in teams[second_pref_id]:
+                        placed = False
+                        for team in teams[first_pref_id]:  # Try first preference again
                             if len(team) < 4:
                                 team.append(user)
+                                placed = True
                                 break
-                        else:
-                            for team in teams[domain_id]:
-                                if len(team) < 4:
+
+                        # **Newly added logic: Allow a single team to go up to 5 members if no space is found**
+                        if not placed:
+                            for team in teams[first_pref_id]: 
+                                if len(team) == 4:      # Allow one team to expand to 5 members
                                     team.append(user)
+                                    placed = True
                                     break
+                                
+                        # **If no space in first preference, try second preference again**
+                        if not placed:
+                            for team in teams[second_pref_id]: 
+                                if len(team) < 4:      # Allow one team to expand to 5 members
+                                    team.append(user)
+                                    placed = True
+                                    break
+
+
+                        if not placed:
+                            temp_remaining_users[first_pref_id].append(user)  # Keep in first preference pool
+
+                remaining_users = temp_remaining_users  # Update unplaced users
 
                 # **Step 6: Creating Teams in Database**
                 for domain_id, team_list in teams.items():
                     domain = get_object_or_404(DomainModel, id=domain_id)
-                    for members in team_list:
+                    team_count = TeamModel.objects.filter(domain=domain).count()
+                    for index, members in enumerate(team_list, start=1):
                         if len(members) >= 3:
+                            team_name = f"Team {domain.name} {team_count + index}"  
                             team = TeamModel.objects.create(
-                                name=f"Team {domain.name}",  # Naming teams based on domain
-                                domain=domain  # Now teams will belong to a domain
+                                name=team_name,
+                                domain=domain
                             )
                             team.members.set(members)
                             assigned_teams.append(team)
 
+
+                            # **Step 7: Handling Completely Unplaced Users**
+                            for domain_id, unplaced_users in remaining_users.items():
+                                domain = get_object_or_404(DomainModel, id=domain_id)
+                                team_count = TeamModel.objects.filter(domain=domain).count()
+
+                                while len(unplaced_users) >= 3:  # Form new teams if possible
+                                    team_name = f"Leftover Team {domain.name} {team_count + 1}"
+                                    team = TeamModel.objects.create(
+                                        name=team_name,
+                                        domain=domain
+                                    )
+                                    team.members.set(unplaced_users[:3])  # Assign first 3 users
+                                    assigned_teams.append(team)
+                                    unplaced_users = unplaced_users[3:]  # Remove placed users
+
+                                # If there are still 1 or 2 users left, try to place them in teams with <5 members
+                                for team in TeamModel.objects.filter(domain=domain):
+                                    while len(unplaced_users) > 0 and team.members.count() < 5:
+                                        user = unplaced_users.pop(0)
+                                        team.members.add(user)
+
+                            # If users are still unplaced, log them or handle manually
+                            if any(remaining_users.values()):
+                                unplaced_user_list = [user.email for users in remaining_users.values() for user in users]
+                                print(f"Warning: The following users could not be placed in a team: {unplaced_user_list}")
+
+            
             return {"message": "Teams assigned successfully", "teams": assigned_teams}

@@ -40,7 +40,7 @@ class TeamFormationTestCase(TestCase):
         """Test that teams are formed using first preference when available."""
         mock_get_object.return_value = self.domain1
         
-        #Create a project before assigning teams
+        # Create a project before assigning teams
         project = ProjectModel.objects.create(
             name="Sample Project",
             description="Test Project",
@@ -48,8 +48,8 @@ class TeamFormationTestCase(TestCase):
             domain=self.domain1
         )
 
-        # ✅ Create a team and associate it with the project
-        team = TeamModel.objects.create(name="Sample Team")
+        # ✅ Create a team with a valid domain
+        team = TeamModel.objects.create(name="Sample Team", domain=self.domain1)
         TeamMembership.objects.create(project=project, team=team)
 
         result = TeamFormationService.assign_teams()
@@ -68,7 +68,7 @@ class TeamFormationTestCase(TestCase):
             domain=self.domain1
         )
 
-        team = TeamModel.objects.create(name="Sample Team")
+        team = TeamModel.objects.create(name="Sample Team", domain=self.domain1)
         TeamMembership.objects.create(project=project, team=team)
 
         result = TeamFormationService.assign_teams()
@@ -97,10 +97,18 @@ class TeamFormationTestCase(TestCase):
             domain=self.domain1
         )
 
-        team = TeamModel.objects.create(name="Sample Team")
+        team = TeamModel.objects.create(name="Sample Team", domain=self.domain1)
         TeamMembership.objects.create(project=project, team=team)
 
+        # Create additional teams to fill up the preferences
+        for i in range(2):
+            TeamModel.objects.create(name=f"Team {i}", domain=self.domain1)
+            TeamModel.objects.create(name=f"Team {i+2}", domain=self.domain2)
+
         result = TeamFormationService.assign_teams()
+        for i, team in enumerate(result["teams"]):
+            print(f"Team {i} has {len(team.members.all())} members")
+
         self.assertEqual(len(result["teams"][-1].members.all()), 5)
 
     def test_creating_5_member_team_when_necessary(self):
@@ -113,7 +121,7 @@ class TeamFormationTestCase(TestCase):
         )
 
         for i in range(8):
-            team = TeamModel.objects.create(name=f"Team {i}")
+            team = TeamModel.objects.create(name=f"Team {i}", domain=self.domain1)
             TeamMembership.objects.create(project=project, team=team)
 
         result = TeamFormationService.assign_teams()
@@ -129,7 +137,7 @@ class TeamFormationTestCase(TestCase):
         )
 
         for i in range(7):
-            team = TeamModel.objects.create(name=f"Team {i}")
+            team = TeamModel.objects.create(name=f"Team {i}", domain=self.domain1)
             TeamMembership.objects.create(project=project, team=team)
 
         result = TeamFormationService.assign_teams()
@@ -144,7 +152,7 @@ class TeamFormationTestCase(TestCase):
             domain=self.domain1
         )
 
-        team = TeamModel.objects.create(name="Balanced Team")
+        team = TeamModel.objects.create(name="Balanced Team", domain=self.domain1)  # ✅ Fixed domain assignment
         TeamMembership.objects.create(project=project, team=team)
 
         result = TeamFormationService.assign_teams()
