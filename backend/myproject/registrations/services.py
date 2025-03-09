@@ -3,6 +3,7 @@ from projects.models import DomainModel, ProjectCycleModel
 from .models import ProjectApplicationModel
 from ninja.errors import HttpError, AuthenticationError
 from ninja.security import HttpBearer
+from django.utils import timezone
 
 
 class ProjectApplicationService:
@@ -17,6 +18,10 @@ class ProjectApplicationService:
         cycle = ProjectCycleModel.objects.filter(is_active=True).first()
         if not cycle:
             raise HttpError(400, "No active project cycle found.")
+        
+        current_time = timezone.now()
+        if not (cycle.application_start_time <= current_time <= cycle.application_end_time):
+            raise HttpError(400, "Applications are closed for this cycle.")
         
         if payload.first_preference_id == payload.second_preference_id:
             raise HttpError(400, "First and second preference cannot be the same.")
@@ -36,7 +41,6 @@ class ProjectApplicationService:
             defaults={
                 "first_preference": first_pref,
                 "second_preference": second_pref,
-                "is_selected": False
             }
         )
 
@@ -44,6 +48,19 @@ class ProjectApplicationService:
             return {"message": "You have already applied for this cycle."}
 
         return {"message": "Application submitted successfully, hang tight!"}
+    
+
+    def get_application_dates(self):
+        # Get the active project cycle
+        cycle = ProjectCycleModel.objects.filter(is_active=True).first()
+        if not cycle:
+            return {"message": "No active project cycle found."}
+
+        return {
+            "application_start_date": cycle.application_start_time.strftime("%Y-%m-%d %H:%M:%S"),
+            "application_end_date": cycle.application_end_time.strftime("%Y-%m-%d %H:%M:%S"),
+        }
+
     
     
 class CustomSessionAuth(HttpBearer):

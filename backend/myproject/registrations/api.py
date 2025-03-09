@@ -17,3 +17,9 @@ class ProjectApplicationAPI(ControllerBase):
     def enroll_now(self, request, payload: ProjectApplicationSchema):
         response = self.application_service.enroll_user(request, payload)
         return response
+    
+
+    @route.get("/dates", url_name="Application Dates")
+    def application_dates(self, request):
+        response = self.application_service.get_application_dates()
+        return response

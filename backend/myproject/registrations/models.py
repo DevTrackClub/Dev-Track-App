@@ -11,7 +11,6 @@ class ProjectApplicationModel(models.Model):
     first_preference = models.ForeignKey(DomainModel, related_name="first_pref", on_delete=models.CASCADE)
     second_preference = models.ForeignKey(DomainModel, related_name="second_pref", on_delete=models.CASCADE)
     application_date = models.DateTimeField(auto_now_add=True)
-    is_selected = models.BooleanField()
     selected_team = models.ForeignKey(TeamModel, on_delete=models.SET_NULL, null=True, blank=True)
 
 

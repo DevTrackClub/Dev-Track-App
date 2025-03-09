@@ -61,6 +61,8 @@ class ProjectCycleModel(models.Model):
     cycle_name = models.CharField(max_length=256)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
+    application_start_time = models.DateTimeField()  
+    application_end_time = models.DateTimeField()
     is_active = models.BooleanField()
 
 
