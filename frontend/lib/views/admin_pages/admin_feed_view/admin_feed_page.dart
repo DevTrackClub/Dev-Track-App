@@ -1,10 +1,12 @@
 import 'package:dev_track_app/views/admin_pages/admin_feed_view/edit_post_dialog.dart';
+import 'package:dev_track_app/views/common_pages/login_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/admin_post_model.dart';
 import '../../../view_models/admin_post_view_model.dart';
+import '../../../view_models/login_view_model.dart';
 import '../admin_feed_view/create_post_dialog.dart';
 
 class AdminFeedPage extends StatefulWidget {
@@ -81,6 +83,20 @@ class _FeedScreenState extends State<AdminFeedPage> {
         IconButton(
           icon: const Icon(Icons.notifications, color: Colors.black),
           onPressed: () {},
+        ),
+        ElevatedButton(
+          onPressed: () async {
+            final loginViewModel =
+                Provider.of<LoginViewModel>(context, listen: false);
+            await loginViewModel.logout();
+
+            // Navigate back to login screen
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => LoginPage()),
+            );
+          },
+          child: Text("Logout"),
         ),
       ],
     );
