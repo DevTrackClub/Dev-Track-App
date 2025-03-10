@@ -1,7 +1,5 @@
-import 'package:dev_track_app/pages/common_pages/login_page.dart';
+import 'package:dev_track_app/views/common_pages/login_page.dart';
 import 'package:flutter/material.dart';
-
-
 
 class GeneralFeedPage extends StatefulWidget {
   const GeneralFeedPage({super.key});
@@ -16,15 +14,12 @@ class Post {
   Post({required this.details});
 }
 
-
-
 class _GeneralFeedPageState extends State<GeneralFeedPage> {
   final List<Post> posts = [
     Post(details: "Post 1 details"),
     Post(details: 'Post 2 details'),
     Post(details: 'Post 3 details'),
   ];
-  
 
   @override
   Widget build(BuildContext context) {
@@ -65,33 +60,32 @@ class _GeneralFeedPageState extends State<GeneralFeedPage> {
         IconButton(
           icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () {
-            Navigator.pop(context);          },
+            Navigator.pop(context);
+          },
         ),
         Padding(
-                padding: const EdgeInsets.fromLTRB(25, 15, 25, 10),
-                child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>  LoginPage()),
-                          );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.purple,
-                    side: BorderSide(color: Color.fromARGB(255, 253, 253, 253)),
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    textStyle: TextStyle(fontSize: 18, color: Colors.grey),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                  ),
-                  child: Center(
-                    child: Text('login',
-                        style: TextStyle(color: Colors.white)),
-                  ),
-                ),
+          padding: const EdgeInsets.fromLTRB(25, 15, 25, 10),
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginPage()),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.purple,
+              side: BorderSide(color: Color.fromARGB(255, 253, 253, 253)),
+              padding: EdgeInsets.symmetric(vertical: 10),
+              textStyle: TextStyle(fontSize: 18, color: Colors.grey),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
               ),
+            ),
+            child: Center(
+              child: Text('login', style: TextStyle(color: Colors.white)),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -105,7 +99,7 @@ class _GeneralFeedPageState extends State<GeneralFeedPage> {
           content: Text(post.details), // fetchhh post details.....
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(context).pop(), 
+              onPressed: () => Navigator.of(context).pop(),
               child: const Text("Close"),
             ),
           ],
@@ -158,8 +152,6 @@ class _GeneralFeedPageState extends State<GeneralFeedPage> {
     );
   }
 }
-
-
 
 class PostCard extends StatelessWidget {
   final Post post;
@@ -226,7 +218,8 @@ class PostCard extends StatelessWidget {
                 onPressed: onViewMore,
                 backgroundColor: Colors.purple,
                 mini: true,
-                child: const Icon(Icons.arrow_forward, color: Colors.white, size: 18),
+                child: const Icon(Icons.arrow_forward,
+                    color: Colors.white, size: 18),
               ),
             ],
           ),

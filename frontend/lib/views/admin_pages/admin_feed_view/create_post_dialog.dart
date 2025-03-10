@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../models/admin_post_model.dart';
-import '../../../models/admin_post_view_model.dart';
+import '../../../view_models/admin_post_view_model.dart';
 
 class CreatePostDialog extends StatefulWidget {
   const CreatePostDialog({Key? key}) : super(key: key);
