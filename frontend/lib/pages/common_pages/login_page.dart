@@ -1,6 +1,6 @@
 import 'package:dev_track_app/pages/admin_pages/admin_feed_view/admin_feed_page.dart';
 import 'package:dev_track_app/pages/common_pages/general_feed_page.dart';
-import 'package:dev_track_app/pages/common_pages/register_page.dart';
+import 'package:dev_track_app/To-Be-Discarded/register_page.dart';
 import 'package:dev_track_app/pages/user_pages/user_feed_page.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';

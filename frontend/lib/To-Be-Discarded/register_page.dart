@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'confirm_page.dart'; // Ensure this import is correct
+import '../pages/common_pages/confirm_page.dart'; // Ensure this import is correct
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});

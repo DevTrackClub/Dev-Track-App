@@ -1,6 +1,6 @@
 import 'package:dev_track_app/pages/common_pages/login_page.dart';
-import 'package:dev_track_app/pages/common_pages/register_page.dart';
-import 'package:dev_track_app/utils/bottom_nav_bar.dart';
+import 'package:dev_track_app/To-Be-Discarded/register_page.dart';
+import 'package:dev_track_app/To-Be-Discarded/bottom_nav_bar.dart';
 import 'package:dev_track_app/utils/custom_button.dart';
 import 'package:flutter/material.dart';
 

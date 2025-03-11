@@ -1,4 +1,5 @@
 import 'package:dev_track_app/pages/common_pages/login_page.dart';
+import 'package:dev_track_app/utils/bottomnavbar.dart';
 import 'package:flutter/material.dart';
 
 
@@ -19,6 +20,37 @@ class Post {
 
 
 class _GeneralFeedPageState extends State<GeneralFeedPage> {
+
+
+  //bottomnavbar index
+  int _selectedIndex = 0;
+
+
+void _onNavBarTapped(int index) {
+
+  print("Tapped index: $index"); // Debugging print statement
+
+  setState(() {
+    _selectedIndex = index;
+  });
+
+  switch (index) {
+      case 0:
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const GeneralFeedPage()),
+        );
+        break;
+      // case 1:
+      //   Navigator.pushReplacement(
+      //     context,
+      //     MaterialPageRoute(builder: (context) => const PreviousProjects()),
+      //   );
+      //   break;
+  }
+}
+
+
   final List<Post> posts = [
     Post(details: "Post 1 details"),
     Post(details: 'Post 2 details'),
@@ -53,6 +85,10 @@ class _GeneralFeedPageState extends State<GeneralFeedPage> {
               ),
             ],
           ),
+        ),
+                bottomNavigationBar: BottomNavBar(
+          currentIndex: _selectedIndex,
+          onTap: _onNavBarTapped,
         ),
       ),
     );
