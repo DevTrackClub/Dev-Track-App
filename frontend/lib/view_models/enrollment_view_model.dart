@@ -32,9 +32,16 @@ class EnrollmentViewModel extends ChangeNotifier {
   User? get user => _user;
   bool get isLoading => _isLoading;
 
+  //for cycle active staus
+  bool _isActiveCycle = false;
+  bool get isActiveCycle => _isActiveCycle;
+
   // Initialize and fetch domains
   Future<void> initialize() async {
-    await fetchDomains();
+    await Future.wait([
+      fetchDomains(),
+      checkActiveCycle(),
+    ]);
   }
 
   Future<void> fetchUser() async {
@@ -137,5 +144,17 @@ class EnrollmentViewModel extends ChangeNotifier {
     _errorMessage = null;
     _successMessage = null;
     notifyListeners();
+  }
+
+  Future<void> checkActiveCycle() async {
+    try {
+      _isActiveCycle = await _api.isActiveCycleRunning();
+      notifyListeners();
+    } catch (e) {
+      print('Error checking active cycle: $e');
+      // Default to false if there's an error
+      _isActiveCycle = false;
+      notifyListeners();
+    }
   }
 }

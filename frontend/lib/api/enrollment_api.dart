@@ -125,9 +125,9 @@ class EnrollmentApi {
       final headers = await _getHeaders();
       final requestBody = jsonEncode(request.toJson());
 
-      print('Making POST request to $enrollUrl');
-      print('Request headers: $headers');
-      print('Request body: $requestBody');
+      // print('Making POST request to $enrollUrl');
+      // print('Request headers: $headers');
+      // print('Request body: $requestBody');
 
       final response = await http.post(
         Uri.parse(enrollUrl),
@@ -154,6 +154,40 @@ class EnrollmentApi {
     } catch (e) {
       print('Exception in submitEnrollment: $e');
       rethrow;
+    }
+  }
+
+  Future<bool> isActiveCycleRunning() async {
+    print('🔍 EnrollmentApi: isActiveCycleRunning() called');
+
+    try {
+      final headers = await _getHeaders();
+      print('🔑 Headers for cycle API request: $headers');
+
+      print('📡 Making GET request to check active cycle status');
+      final response = await http.get(
+        Uri.parse(
+            'https://dev-track-app.onrender.com/api/projects/cycle/create'),
+        headers: headers,
+      );
+
+      print('📊 Cycle check response status: ${response.statusCode}');
+      print('📄 Cycle check response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final cycleData = jsonDecode(response.body);
+        final isActive = cycleData['is_active'] ?? false;
+        print('🔄 Cycle active status: $isActive');
+        return isActive;
+      } else {
+        print(
+            '⚠️ Non-200 response when checking cycle status. Defaulting to inactive');
+        return false;
+      }
+    } catch (e) {
+      print('❌ Exception in isActiveCycleRunning: $e');
+      print('⚠️ Error occurred, defaulting to inactive cycle');
+      return false;
     }
   }
 }

@@ -11,7 +11,9 @@ class EnrollPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => EnrollmentViewModel()..fetchUser(),
+      create: (_) => EnrollmentViewModel()
+        ..initialize()
+        ..fetchUser(),
       child: Consumer<EnrollmentViewModel>(
         builder: (context, viewModel, child) {
           return Scaffold(
@@ -66,12 +68,16 @@ class EnrollPage extends StatelessWidget {
                   height: 56,
                   child: ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (context) => EnrollmentSelectPage(
-                              username: user?.username ?? ''),
-                        ),
-                      );
+                      if (viewModel.isActiveCycle) {
+                        _showActiveCycleWarning(context);
+                      } else {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => EnrollmentSelectPage(
+                                username: user?.username ?? ''),
+                          ),
+                        );
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primaryLight,
@@ -93,6 +99,32 @@ class EnrollPage extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+// Add this method to show the warning popup
+  void _showActiveCycleWarning(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Enrollment Not Available"),
+          content: const Text(
+            "Current cycle is ongoing. Please wait until the cycle ends to enroll in the next one.",
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("OK"),
+              style: TextButton.styleFrom(
+                foregroundColor: AppColors.primaryLight,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
