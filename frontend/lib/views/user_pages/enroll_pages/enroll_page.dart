@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:dev_track_app/utils/topnavbar.dart';
 import 'package:dev_track_app/theme/colors.dart';
-import 'package:dev_track_app/pages/user_pages/enroll_pages/enrollment_select.dart';
-import 'package:provider/provider.dart';
-import 'package:dev_track_app/models/enrollment_model.dart';
+import 'package:dev_track_app/utils/topnavbar.dart';
 import 'package:dev_track_app/view_models/enrollment_view_model.dart';
+import 'package:dev_track_app/views/user_pages/enroll_pages/enrollment_select.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class EnrollPage extends StatelessWidget {
   const EnrollPage({Key? key}) : super(key: key);

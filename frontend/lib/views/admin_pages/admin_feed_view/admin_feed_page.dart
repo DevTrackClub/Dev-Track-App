@@ -1,12 +1,12 @@
-import 'package:dev_track_app/pages/admin_pages/admin_feed_view/edit_post_dialog.dart';
-import 'package:dev_track_app/pages/admin_pages/mgmg_prev_projects.dart';
-import 'package:dev_track_app/pages/common_pages/domain_pages/domain.dart';
+
+import 'package:dev_track_app/views/admin_pages/admin_feed_view/edit_post_dialog.dart';
+import 'package:dev_track_app/views/common_pages/domain_pages/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:dev_track_app/utils/bottomnavbar.dart';
 import '../../../models/admin_post_model.dart';
-import '../../../models/admin_post_view_model.dart';
+import '../../../view_models/admin_post_view_model.dart';
 import '../admin_feed_view/create_post_dialog.dart';
 
 class AdminFeedPage extends StatefulWidget {
