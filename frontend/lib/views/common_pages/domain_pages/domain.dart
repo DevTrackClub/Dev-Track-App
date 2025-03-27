@@ -1,6 +1,7 @@
-import 'package:dev_track_app/pages/user_pages/user_feed_page.dart';
 import 'package:dev_track_app/utils/bottomnavbar.dart';
 import 'package:flutter/material.dart';
+
+import '../../user_pages/user_feed_page.dart';
 
 class DomainPage extends StatefulWidget {
   const DomainPage({super.key});
@@ -10,20 +11,17 @@ class DomainPage extends StatefulWidget {
 }
 
 class _DomainPageState extends State<DomainPage> {
-
   //bottomnavbar index
   int _selectedIndex = 1;
 
+  void _onNavBarTapped(int index) {
+    print("Tapped index: $index"); // Debugging print statement
 
-void _onNavBarTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
 
-  print("Tapped index: $index"); // Debugging print statement
-
-  setState(() {
-    _selectedIndex = index;
-  });
-
-  switch (index) {
+    switch (index) {
       case 0:
         Navigator.pushReplacement(
           context,
@@ -36,9 +34,8 @@ void _onNavBarTapped(int index) {
           MaterialPageRoute(builder: (context) => const DomainPage()),
         );
         break;
+    }
   }
-}
-
 
   final List<Map<String, String>> projects = List.generate(
     6,
@@ -70,7 +67,7 @@ void _onNavBarTapped(int index) {
             ),
           ],
         ),
-          bottomNavigationBar: BottomNavBar(
+        bottomNavigationBar: BottomNavBar(
           currentIndex: _selectedIndex,
           onTap: _onNavBarTapped,
         ),
