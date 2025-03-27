@@ -1,3 +1,5 @@
+import 'package:dev_track_app/pages/user_pages/user_feed_page.dart';
+import 'package:dev_track_app/utils/bottomnavbar.dart';
 import 'package:flutter/material.dart';
 import 'package:dev_track_app/utils/topnavbar.dart';
 import 'package:dev_track_app/routing/previous_projects_routing.dart';
@@ -12,6 +14,35 @@ class PreviousProjects extends StatefulWidget {
 }
 
 class _PreviousProjectsState extends State<PreviousProjects> {
+
+  //bottomnavbarindex index
+ int _selectedIndex = 1;
+
+
+void _onNavBarTapped(int index) {
+
+  print("Tapped index: $index"); // Debugging print statement
+
+  setState(() {
+    _selectedIndex = index;
+  });
+
+  switch (index) {
+      case 0:
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const UserFeedPage()),
+        );
+        break;
+      case 1:
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const PreviousProjects()),
+        );
+        break;
+  }
+}
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -41,6 +72,10 @@ class _PreviousProjectsState extends State<PreviousProjects> {
               ),
             ),
           ],
+        ),
+          bottomNavigationBar: BottomNavBar(
+          currentIndex: _selectedIndex,
+          onTap: _onNavBarTapped,
         ),
       ),
     );

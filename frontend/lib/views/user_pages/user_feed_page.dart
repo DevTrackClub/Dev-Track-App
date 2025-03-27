@@ -1,7 +1,9 @@
+import 'package:dev_track_app/pages/user_pages/project_pages/project_display/previous_projects.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:dev_track_app/models/user_feed_model.dart';
 import 'package:dev_track_app/view_models/user_feed_view_model.dart';
+import 'package:dev_track_app/utils/bottomnavbar.dart';
 
 class UserFeedPage extends StatefulWidget {
   const UserFeedPage({super.key});
@@ -10,28 +12,37 @@ class UserFeedPage extends StatefulWidget {
   State<UserFeedPage> createState() => _UserFeedPageState();
 }
 
-// class Post {
-//   final String details;
-
-//   Post({required this.details});
-// }
-
 class _UserFeedPageState extends State<UserFeedPage> {
-  
-  // final List<Post> posts = [
-  //   Post(details: "Post 1 details"),
-  //   Post(details: 'Post 2 details'),
-  //   Post(details: 'Post 3 details'),
-  // ];
+  int _selectedIndex = 0;
+
+
+void _onNavBarTapped(int index) {
+
+  print("Tapped index: $index"); // Debugging print statement
+
+  setState(() {
+    _selectedIndex = index;
+  });
+
+  switch (index) {
+      case 0:
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const UserFeedPage()),
+        );
+        break;
+      case 1:
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const PreviousProjects()),
+        );
+        break;
+  }
+}
+
 
   @override
-  // void initState() {
-  //   super.initState();
-  //   // Fetch feed data as soon as the screen is initialized
-  //   Provider.of<UserFeedViewModel>(context, listen: false).fetchUserFeed();
-  // }
-
-    void initState() {
+  void initState() {
     super.initState();
     Future.microtask(() {
       context.read<UserFeedViewModel>().fetchUserFeed();
@@ -52,10 +63,6 @@ class _UserFeedPageState extends State<UserFeedPage> {
               const SizedBox(height: 10),
               _buildHeader(),
               const SizedBox(height: 10),
-              // _buildTabBar(),
-              // const SizedBox(height: 10),
-
-              // Main Feed Area
               Expanded(
                 child: Consumer<UserFeedViewModel>(
                   builder: (context, feedVM, child) {
@@ -80,6 +87,10 @@ class _UserFeedPageState extends State<UserFeedPage> {
               ),
             ],
           ),
+        ),
+        bottomNavigationBar: BottomNavBar(
+          currentIndex: _selectedIndex,
+          onTap: _onNavBarTapped,
         ),
       ),
     );
@@ -107,7 +118,7 @@ class _UserFeedPageState extends State<UserFeedPage> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text(post.title),
-          content: Text(post.description), // fetchhh post details.....
+          content: Text(post.description),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -131,44 +142,13 @@ class _UserFeedPageState extends State<UserFeedPage> {
       ],
     );
   }
-
-  // Widget _buildTabBar() {
-  //   return Container(
-  //     decoration: BoxDecoration(
-  //       color: Colors.grey[200],
-  //       borderRadius: BorderRadius.circular(8),
-  //     ),
-  //     child: Row(
-  //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-  //       children: [
-  //         _buildTab("Primary", isSelected: true),
-  //         _buildTab("Secondary"),
-  //         _buildTab("Ternary"),
-  //       ],
-  //     ),
-  //   );
-  // }
-
-  Widget _buildTab(String title, {bool isSelected = false}) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-      child: Text(
-        title,
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-          color: isSelected ? Colors.purple : Colors.black,
-        ),
-      ),
-    );
-  }
 }
 
 class UserFeedCard extends StatelessWidget {
   final UserFeedModel post;
   final VoidCallback onViewMore;
 
-  const UserFeedCard({Key? key, required this.post, required this.onViewMore,}):super(key: key);
+  const UserFeedCard({Key? key, required this.post, required this.onViewMore}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -192,12 +172,10 @@ class UserFeedCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Name or "created_by_id" can be used if your API returns it
                   const Text(
                     "Name",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
-                  // Example: format from post.createdAt
                   Text(
                     "Posted on ${post.createdAt}",
                     style: const TextStyle(fontSize: 12, color: Colors.grey),
@@ -212,7 +190,6 @@ class UserFeedCard extends StatelessWidget {
             style: const TextStyle(fontSize: 14),
           ),
           const SizedBox(height: 10),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -232,8 +209,7 @@ class UserFeedCard extends StatelessWidget {
                 onPressed: onViewMore,
                 backgroundColor: Colors.purple,
                 mini: true,
-                child: const Icon(Icons.arrow_forward,
-                    color: Colors.white, size: 18),
+                child: const Icon(Icons.arrow_forward, color: Colors.white, size: 18),
               ),
             ],
           ),
@@ -242,3 +218,4 @@ class UserFeedCard extends StatelessWidget {
     );
   }
 }
+

@@ -1,3 +1,5 @@
+import 'package:dev_track_app/pages/user_pages/user_feed_page.dart';
+import 'package:dev_track_app/utils/bottomnavbar.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:dev_track_app/theme/colors.dart';
@@ -67,8 +69,43 @@ class TeamMemberCard extends StatelessWidget {
   }
 }
 
-class ProjectDetailPage extends StatelessWidget {
+class ProjectDetailPage extends StatefulWidget {
   const ProjectDetailPage({Key? key}) : super(key: key);
+
+  @override
+  State<ProjectDetailPage> createState() => _ProjectDetailPageState();
+}
+
+class _ProjectDetailPageState extends State<ProjectDetailPage> {
+
+ //bottomnavbarindex index
+ int _selectedIndex = 1;
+
+
+void _onNavBarTapped(int index) {
+
+  print("Tapped index: $index"); // Debugging print statement
+
+  setState(() {
+    _selectedIndex = index;
+  });
+
+  switch (index) {
+      case 0:
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const UserFeedPage()),
+        );
+        break;
+      case 1:
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const ProjectDetailPage()),
+        );
+        break;
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
@@ -213,6 +250,10 @@ class ProjectDetailPage extends StatelessWidget {
             const SizedBox(height: 24),
           ],
         ),
+      ),
+      bottomNavigationBar: BottomNavBar(
+        currentIndex: _selectedIndex,
+        onTap: _onNavBarTapped,
       ),
     );
   }

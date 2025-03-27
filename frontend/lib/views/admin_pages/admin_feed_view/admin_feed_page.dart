@@ -1,8 +1,10 @@
+
 import 'package:dev_track_app/views/admin_pages/admin_feed_view/edit_post_dialog.dart';
+import 'package:dev_track_app/views/common_pages/domain_pages/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
+import 'package:dev_track_app/utils/bottomnavbar.dart';
 import '../../../models/admin_post_model.dart';
 import '../../../view_models/admin_post_view_model.dart';
 import '../admin_feed_view/create_post_dialog.dart';
@@ -15,6 +17,34 @@ class AdminFeedPage extends StatefulWidget {
 }
 
 class _FeedScreenState extends State<AdminFeedPage> {
+
+  //bottomnavbar index
+    int _selectedIndex = 0;
+
+void _onNavBarTapped(int index) {
+
+  print("Tapped index: $index"); // Debugging print statement
+
+  setState(() {
+    _selectedIndex = index;
+  });
+
+  switch (index) {
+      case 0:
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const AdminFeedPage()),
+        );
+        break;
+      case 1:
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const DomainPage()),
+        );
+        break;
+  }
+}
+
   String formatDate(String createdAt) {
     DateTime postDate = DateTime.parse(createdAt).toLocal();
     DateTime now = DateTime.now();
@@ -65,6 +95,10 @@ class _FeedScreenState extends State<AdminFeedPage> {
               ),
             ],
           ),
+        ),
+        bottomNavigationBar: BottomNavBar(
+          currentIndex: _selectedIndex,
+          onTap: _onNavBarTapped,
         ),
       ),
     );
