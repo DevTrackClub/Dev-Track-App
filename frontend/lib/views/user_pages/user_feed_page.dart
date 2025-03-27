@@ -3,6 +3,7 @@ import 'package:dev_track_app/utils/bottomnavbar.dart';
 import 'package:dev_track_app/view_models/user_feed_view_model.dart';
 import 'package:dev_track_app/views/user_pages/project_pages/project_display/previous_projects.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class UserFeedPage extends StatefulWidget {
@@ -148,6 +149,22 @@ class UserFeedCard extends StatelessWidget {
   const UserFeedCard({Key? key, required this.post, required this.onViewMore})
       : super(key: key);
 
+  String formatDate(String createdAt) {
+    DateTime postDate = DateTime.parse(createdAt).toLocal();
+    DateTime now = DateTime.now();
+
+    String formattedDate = DateFormat("dd/MMM hh:mm a").format(postDate);
+    int difference = now.difference(postDate).inDays;
+
+    String daysAgo = (difference == 0)
+        ? "Today"
+        : (difference == 1)
+            ? "Yesterday"
+            : "$difference Days ago";
+
+    return "$daysAgo • $formattedDate";
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -175,8 +192,8 @@ class UserFeedCard extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   Text(
-                    "Posted on ${post.createdAt}",
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    "${post.createdAt}",
+                    style: TextStyle(fontSize: 12, color: Colors.grey[800]),
                   ),
                 ],
               ),

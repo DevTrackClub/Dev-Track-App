@@ -1,12 +1,14 @@
-
+import 'package:dev_track_app/utils/bottomnavbar.dart';
 import 'package:dev_track_app/views/admin_pages/admin_feed_view/edit_post_dialog.dart';
 import 'package:dev_track_app/views/common_pages/domain_pages/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:dev_track_app/utils/bottomnavbar.dart';
+
 import '../../../models/admin_post_model.dart';
 import '../../../view_models/admin_post_view_model.dart';
+import '../../../view_models/login_view_model.dart';
+import '../../common_pages/login_page.dart';
 import '../admin_feed_view/create_post_dialog.dart';
 
 class AdminFeedPage extends StatefulWidget {
@@ -17,19 +19,17 @@ class AdminFeedPage extends StatefulWidget {
 }
 
 class _FeedScreenState extends State<AdminFeedPage> {
-
   //bottomnavbar index
-    int _selectedIndex = 0;
+  int _selectedIndex = 0;
 
-void _onNavBarTapped(int index) {
+  void _onNavBarTapped(int index) {
+    print("Tapped index: $index"); // Debugging print statement
 
-  print("Tapped index: $index"); // Debugging print statement
+    setState(() {
+      _selectedIndex = index;
+    });
 
-  setState(() {
-    _selectedIndex = index;
-  });
-
-  switch (index) {
+    switch (index) {
       case 0:
         Navigator.pushReplacement(
           context,
@@ -42,8 +42,8 @@ void _onNavBarTapped(int index) {
           MaterialPageRoute(builder: (context) => const DomainPage()),
         );
         break;
+    }
   }
-}
 
   String formatDate(String createdAt) {
     DateTime postDate = DateTime.parse(createdAt).toLocal();
@@ -115,6 +115,20 @@ void _onNavBarTapped(int index) {
         IconButton(
           icon: const Icon(Icons.notifications, color: Colors.black),
           onPressed: () {},
+        ),
+        ElevatedButton(
+          onPressed: () async {
+            final loginViewModel =
+                Provider.of<LoginViewModel>(context, listen: false);
+            await loginViewModel.logout();
+
+            // Navigate back to login screen
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => LoginPage()),
+            );
+          },
+          child: Text("Logout"),
         ),
       ],
     );
