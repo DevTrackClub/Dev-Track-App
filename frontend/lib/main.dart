@@ -1,5 +1,9 @@
 import 'package:dev_track_app/view_models/user_feed_view_model.dart';
+import 'package:dev_track_app/views/admin_pages/admin_feed_view/admin_feed_page.dart';
+import 'package:dev_track_app/views/common_pages/domain_pages/domain.dart';
 import 'package:dev_track_app/views/common_pages/login_page.dart';
+import 'package:dev_track_app/views/user_pages/project_pages/project_display/previous_projects.dart';
+import 'package:dev_track_app/views/user_pages/user_feed_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -33,6 +37,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+        routes: {
+          '/userFeed': (context) => const UserFeedPage(),
+          '/userProjects': (context) => const PreviousProjects(),
+          '/adminFeed': (context) => const AdminFeedPage(),
+          '/adminDomain': (context) => const DomainPage(),
+        },
         title: 'Dev Track App',
         theme: ThemeData(
           primarySwatch: Colors.green,

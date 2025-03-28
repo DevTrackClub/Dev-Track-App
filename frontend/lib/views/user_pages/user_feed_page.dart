@@ -1,10 +1,11 @@
 import 'package:dev_track_app/models/user_feed_model.dart';
 import 'package:dev_track_app/utils/bottomnavbar.dart';
 import 'package:dev_track_app/view_models/user_feed_view_model.dart';
-import 'package:dev_track_app/views/user_pages/project_pages/project_display/previous_projects.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
+import '../../view_models/login_view_model.dart';
 
 class UserFeedPage extends StatefulWidget {
   const UserFeedPage({super.key});
@@ -16,26 +17,34 @@ class UserFeedPage extends StatefulWidget {
 class _UserFeedPageState extends State<UserFeedPage> {
   int _selectedIndex = 0;
 
-  void _onNavBarTapped(int index) {
-    print("Tapped index: $index"); // Debugging print statement
+  void _onNavBarTapped(int index) async {
+    final loginViewModel = Provider.of<LoginViewModel>(context, listen: false);
+    final user = loginViewModel.user;
 
-    setState(() {
-      _selectedIndex = index;
-    });
+    bool isAdmin = user?.role == 'admin';
 
-    switch (index) {
-      case 0:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const UserFeedPage()),
-        );
-        break;
-      case 1:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const PreviousProjects()),
-        );
-        break;
+    // Fetch role from SharedPreferences if user is null
+
+    print("DEBUG: Tapped index: $index");
+    print("DEBUG: Retrieved Role:$isAdmin ");
+
+    if (user == null) {
+      print("ERROR: Role is NULL. Defaulting to user feed.");
+      return;
+    }
+
+    print("DEBUG: isAdmin? $isAdmin");
+
+    // Determine navigation route
+    String route = isAdmin
+        ? (index == 0 ? '/adminFeed' : '/adminDomain')
+        : (index == 0 ? '/userFeed' : '/userProjects');
+
+    print("DEBUG: Navigating to: $route");
+
+    // Ensure navigation happens correctly
+    if (ModalRoute.of(context)?.settings.name != route) {
+      Navigator.pushReplacementNamed(context, route);
     }
   }
 
@@ -51,6 +60,8 @@ class _UserFeedPageState extends State<UserFeedPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        floatingActionButton:
+            null, // 👈 Prevents Flutter from expecting a FAB animation
         backgroundColor: Colors.white,
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -134,7 +145,7 @@ class _UserFeedPageState extends State<UserFeedPage> {
       children: [
         Text("WELCOME BACK"),
         Text(
-          "Bharathan",
+          "Retard",
           style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
         ),
       ],

@@ -1,6 +1,5 @@
 import 'package:dev_track_app/utils/bottomnavbar.dart';
 import 'package:dev_track_app/views/admin_pages/admin_feed_view/edit_post_dialog.dart';
-import 'package:dev_track_app/views/common_pages/domain_pages/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -23,26 +22,30 @@ class _FeedScreenState extends State<AdminFeedPage> {
   int _selectedIndex = 0;
 
   void _onNavBarTapped(int index) {
-    print("Tapped index: $index"); // Debugging print statement
+    final loginViewModel = Provider.of<LoginViewModel>(context, listen: false);
+    final user = loginViewModel.user; // Get user from ViewModel
+
+    if (user == null) return; // Prevent errors if user is null
+
+    bool isAdmin = user.role == 'admin'; // Directly check user role
+    print("Tapped index: $index");
 
     setState(() {
       _selectedIndex = index;
     });
 
+    String route = "";
+
     switch (index) {
       case 0:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const AdminFeedPage()),
-        );
+        route = isAdmin ? '/adminFeed' : '/userFeed';
         break;
       case 1:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const DomainPage()),
-        );
+        route = isAdmin ? '/adminDomain' : '/userProjects';
         break;
     }
+
+    Navigator.pushReplacementNamed(context, route);
   }
 
   String formatDate(String createdAt) {
@@ -71,6 +74,8 @@ class _FeedScreenState extends State<AdminFeedPage> {
     final postViewModel = Provider.of<PostViewModel>(context);
     return SafeArea(
       child: Scaffold(
+        floatingActionButton:
+            null, // 👈 Prevents Flutter from expecting a FAB animation
         backgroundColor: Colors.white,
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
