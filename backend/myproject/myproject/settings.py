@@ -11,6 +11,11 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
 from pathlib import Path
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
 # import django_heroku
 # import dj_database_url
 # import os
@@ -28,30 +33,14 @@ SECRET_KEY = 'django-insecure-kq3as+jr%-qb4eaw6!b51ca@2adbt4b^hdd-gap5dk*)&$wp!f
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
-
-from datetime import timedelta
-#Django-ninja jwt settings
-NINJA_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
-    'ROTATE_REFRESH_TOKENS': True,
-    'BLACKLIST_AFTER_ROTATION': True,
-    'ALGORITHM': 'HS256',
-    'SIGNING_KEY': SECRET_KEY,
-    'VERIFYING_KEY': None,
-    'AUTH_HEADER_TYPES': ('Bearer',),
-    'USER_ID_FIELD': 'id',
-    'USER_ID_CLAIM': 'user_id',
-}
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
 
 
 # Application definition
 
 INSTALLED_APPS = [
-    # 'django.contrib.admin',
+    'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -60,12 +49,27 @@ INSTALLED_APPS = [
     'members',
     'ninja',
     'corsheaders',
-    'ninja_jwt',
     'ninja_extra',
     'projects',
     'announcements',
     'registrations',
+    
 ]
+
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend", 
+]
+
+NINJA_AUTHENTICATION = [  
+    "members.services.CustomSessionAuth"  
+]
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
 
 MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -104,15 +108,29 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+import os
+import dj_database_url
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Default: Use SQLite in development
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
-# if 'DATABASE_URL' in os.environ:
-#     DATABASES['default'] = dj_database_url.config(default=os.environ['DATABASE_URL'])
+# Use PostgreSQL in production
+if os.getenv("DJANGO_ENV") == "production":
+    DATABASES = {
+        "default": dj_database_url.config(
+            default=os.getenv("DATABASE_URL"),  # Use Render's environment variable
+            conn_max_age=600,
+            ssl_require=True
+        )
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -161,11 +179,32 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 CORS_ALLOW_CREDENTIALS = True
+CSRF_COOKIE_NAME = "csrftoken"
+CSRF_COOKIE_HTTPONLY = False
 CORS_ALLOWED_ORIGINS = ["http://localhost:8000"] 
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8000']
+CSRF_TRUSTED_ORIGINS = ["https://dev-track-app.onrender.com/", 'http://localhost:8000']
+CSRF_USE_SESSIONS = True
 
 AUTH_USER_MODEL = 'members.CustomUser'
 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+
+
+# database-backed sessions
+SESSION_ENGINE = "django.contrib.sessions.backends.db"  
+
+# Name of the session cookie
+SESSION_COOKIE_NAME = "sessionid"  
+
+# Ensure the session expires when the browser is closed 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False  
+
+# Set session age (e.g., 2 weeks)
+SESSION_COOKIE_AGE = 1209600  # 2 weeks in seconds
+
+# Secure session settings for production
+SESSION_COOKIE_SECURE = False  # Set to True in production if using HTTPS
+SESSION_COOKIE_HTTPONLY = True  
+SESSION_COOKIE_SAMESITE = "Lax"  # Change to 'None' if working with cross-site requests

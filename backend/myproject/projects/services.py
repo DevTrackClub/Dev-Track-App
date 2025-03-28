@@ -3,7 +3,8 @@ from django.core.files.storage import default_storage
 from .models import ProjectModel
 from .schemas import CreateProjectSchema, ListProjectSchema, CreateDomainSchema, ListDomainSchema
 from members.models import FileModel
-from projects.models import DomainModel
+from projects.models import DomainModel, ProjectCycleModel
+from projects.schemas import CreateProjectCycleSchema, CreateDomainSchema
 
 
 class ProjectService:   
@@ -38,6 +39,19 @@ class ProjectService:
 
         except Exception as e:
                 return {"error": str(e)}
+        
+
+    def create_project_cycle(self, payload : CreateProjectCycleSchema):
+        try:
+            response = ProjectCycleModel.objects.create(
+                cycle_name = payload.cycle_name,
+                start_date = payload.start_date,    #Notes for frontend : Dates will be in the format :
+                end_date = payload.end_date,        #ISO 8601 format : YYYY-MM-DD 
+                is_active = payload.is_active
+            )
+            return {"Success":"Project cycle has been created"}
+        except Exception as e:
+            return {"error": str(e)}
         
 
 class DomainService:

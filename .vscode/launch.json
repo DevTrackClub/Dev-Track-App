@@ -16,7 +16,8 @@
             ],
             "django": true,
             "autoStartBrowser": false,
-            "program": "${workspaceFolder}\\manage.py"
+            "justMyCode": false,
+            "program": "${workspaceFolder}/backend/myproject/manage.py"
         }
     ]
 }
