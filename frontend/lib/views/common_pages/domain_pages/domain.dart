@@ -1,5 +1,5 @@
 import 'package:dev_track_app/utils/bottomnavbar.dart';
-import 'package:dev_track_app/views/user_pages/project_pages/project_display/previous_projects.dart';
+import 'package:dev_track_app/views/user_pages/enroll_pages/enroll_page.dart';
 import 'package:flutter/material.dart';
 
 class DomainPage extends StatefulWidget {
@@ -99,34 +99,35 @@ class _DomainPageState extends State<DomainPage> {
                 'VIEWER',
                 style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
               ),
-            ],
-          ),
-          SizedBox(height: 20), // Space between text and button
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => PreviousProjects()),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.pinkAccent, // Cute color
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20), // Rounded edges
-              ),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Previous Projects',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              SizedBox(width: 20), // Space between text and button
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => EnrollPage()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.purple[100], // Cute color
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20), // Rounded edges
+                  ),
                 ),
-                SizedBox(width: 8),
-                Icon(Icons.arrow_forward_ios, size: 20), // Arrow icon
-              ],
-            ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'My Projects',
+                      style:
+                          TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(width: 8),
+                    Icon(Icons.arrow_forward_ios, size: 20), // Arrow icon
+                  ],
+                ),
+              ),
+            ],
           ),
         ],
       ),

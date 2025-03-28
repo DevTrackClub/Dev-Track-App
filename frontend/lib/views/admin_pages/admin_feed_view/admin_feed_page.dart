@@ -47,8 +47,6 @@ class _FeedScreenState extends State<AdminFeedPage> {
     final postViewModel = Provider.of<PostViewModel>(context);
     return SafeArea(
       child: Scaffold(
-        floatingActionButton:
-            null, // 👈 Prevents Flutter from expecting a FAB animation
         backgroundColor: Colors.white,
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -86,9 +84,10 @@ class _FeedScreenState extends State<AdminFeedPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {},
-        ),
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
         IconButton(
           icon: const Icon(Icons.notifications, color: Colors.black),
           onPressed: () {},
@@ -99,7 +98,6 @@ class _FeedScreenState extends State<AdminFeedPage> {
                 Provider.of<LoginViewModel>(context, listen: false);
             await loginViewModel.logout();
 
-            // Navigate back to login screen
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => LoginPage()),
