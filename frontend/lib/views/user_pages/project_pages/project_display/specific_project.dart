@@ -250,7 +250,6 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
       ),
       bottomNavigationBar: BottomNavBar(
         currentIndex: _selectedIndex,
-        onTap: _onNavBarTapped,
       ),
     );
   }

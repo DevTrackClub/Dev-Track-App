@@ -16,21 +16,17 @@ class Post {
 }
 
 class _GeneralFeedPageState extends State<GeneralFeedPage> {
-
-
   //bottomnavbar index
   int _selectedIndex = 0;
 
+  void _onNavBarTapped(int index) {
+    print("Tapped index: $index"); // Debugging print statement
 
-void _onNavBarTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
 
-  print("Tapped index: $index"); // Debugging print statement
-
-  setState(() {
-    _selectedIndex = index;
-  });
-
-  switch (index) {
+    switch (index) {
       case 0:
         Navigator.pushReplacement(
           context,
@@ -43,9 +39,8 @@ void _onNavBarTapped(int index) {
       //     MaterialPageRoute(builder: (context) => const PreviousProjects()),
       //   );
       //   break;
+    }
   }
-}
-
 
   final List<Post> posts = [
     Post(details: "Post 1 details"),
@@ -81,9 +76,8 @@ void _onNavBarTapped(int index) {
             ],
           ),
         ),
-                bottomNavigationBar: BottomNavBar(
+        bottomNavigationBar: BottomNavBar(
           currentIndex: _selectedIndex,
-          onTap: _onNavBarTapped,
         ),
       ),
     );

@@ -21,33 +21,6 @@ class _FeedScreenState extends State<AdminFeedPage> {
   //bottomnavbar index
   int _selectedIndex = 0;
 
-  void _onNavBarTapped(int index) {
-    final loginViewModel = Provider.of<LoginViewModel>(context, listen: false);
-    final user = loginViewModel.user; // Get user from ViewModel
-
-    if (user == null) return; // Prevent errors if user is null
-
-    bool isAdmin = user.role == 'admin'; // Directly check user role
-    print("Tapped index: $index");
-
-    setState(() {
-      _selectedIndex = index;
-    });
-
-    String route = "";
-
-    switch (index) {
-      case 0:
-        route = isAdmin ? '/adminFeed' : '/userFeed';
-        break;
-      case 1:
-        route = isAdmin ? '/adminDomain' : '/userProjects';
-        break;
-    }
-
-    Navigator.pushReplacementNamed(context, route);
-  }
-
   String formatDate(String createdAt) {
     DateTime postDate = DateTime.parse(createdAt).toLocal();
     DateTime now = DateTime.now();
@@ -103,7 +76,6 @@ class _FeedScreenState extends State<AdminFeedPage> {
         ),
         bottomNavigationBar: BottomNavBar(
           currentIndex: _selectedIndex,
-          onTap: _onNavBarTapped,
         ),
       ),
     );
@@ -144,7 +116,7 @@ class _FeedScreenState extends State<AdminFeedPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const Text(
-          "Feed",
+          "Feeed",
           style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
         ),
         ElevatedButton(

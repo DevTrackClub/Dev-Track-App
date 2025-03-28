@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../view_models/login_view_model.dart';
-
 class UserFeedPage extends StatefulWidget {
   const UserFeedPage({super.key});
 
@@ -16,37 +14,6 @@ class UserFeedPage extends StatefulWidget {
 
 class _UserFeedPageState extends State<UserFeedPage> {
   int _selectedIndex = 0;
-
-  void _onNavBarTapped(int index) async {
-    final loginViewModel = Provider.of<LoginViewModel>(context, listen: false);
-    final user = loginViewModel.user;
-
-    bool isAdmin = user?.role == 'admin';
-
-    // Fetch role from SharedPreferences if user is null
-
-    print("DEBUG: Tapped index: $index");
-    print("DEBUG: Retrieved Role:$isAdmin ");
-
-    if (user == null) {
-      print("ERROR: Role is NULL. Defaulting to user feed.");
-      return;
-    }
-
-    print("DEBUG: isAdmin? $isAdmin");
-
-    // Determine navigation route
-    String route = isAdmin
-        ? (index == 0 ? '/adminFeed' : '/adminDomain')
-        : (index == 0 ? '/userFeed' : '/userProjects');
-
-    print("DEBUG: Navigating to: $route");
-
-    // Ensure navigation happens correctly
-    if (ModalRoute.of(context)?.settings.name != route) {
-      Navigator.pushReplacementNamed(context, route);
-    }
-  }
 
   @override
   void initState() {
@@ -99,7 +66,6 @@ class _UserFeedPageState extends State<UserFeedPage> {
         ),
         bottomNavigationBar: BottomNavBar(
           currentIndex: _selectedIndex,
-          onTap: _onNavBarTapped,
         ),
       ),
     );

@@ -19,31 +19,31 @@ class PostViewModel extends ChangeNotifier {
   Future<void> createPost(Post post) async {
     try {
       _isLoading = true;
-      notifyListeners();
+      Future.delayed(Duration.zero,
+          notifyListeners); // Avoid calling notifyListeners inside the build phase
 
       PostResponse response = await _postService.createPost(post);
       _message = response.message;
-      fetchPosts(); // Refresh the post list after creation
+      await fetchPosts(); // Refresh the post list after creation
     } catch (e) {
       _message = "Failed to create post";
     } finally {
       _isLoading = false;
-      notifyListeners();
+      Future.delayed(Duration.zero, notifyListeners);
     }
   }
 
   // Fetch all posts
   Future<void> fetchPosts() async {
-    try {
-      _isLoading = true;
-      notifyListeners();
+    _isLoading = true;
 
+    try {
       _posts = await _postService.getPosts();
     } catch (e) {
       _message = "Failed to fetch posts";
     } finally {
       _isLoading = false;
-      notifyListeners();
+      Future.delayed(Duration.zero, notifyListeners);
     }
   }
 

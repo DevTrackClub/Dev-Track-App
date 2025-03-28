@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../view_models/login_view_model.dart';
 
 class BottomNavBar extends StatelessWidget {
   final int currentIndex;
-  final Function(int) onTap;
 
-  const BottomNavBar({Key? key, required this.currentIndex, required this.onTap})
-      : super(key: key);
+  const BottomNavBar({Key? key, required this.currentIndex}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +27,9 @@ class BottomNavBar extends StatelessWidget {
         children: [
           BottomNavigationBar(
             currentIndex: currentIndex,
-            onTap: onTap,
             backgroundColor: Colors.transparent,
             elevation: 0,
+            onTap: (index) => _onNavBarTapped(context, index),
             showSelectedLabels: true,
             showUnselectedLabels: true,
             items: [
@@ -64,9 +65,38 @@ class BottomNavBar extends StatelessWidget {
     );
   }
 
-  BottomNavigationBarItem _buildNavItem(IconData icon, String label, int index) {
+  void _onNavBarTapped(BuildContext context, int index) {
+    final loginViewModel = Provider.of<LoginViewModel>(context, listen: false);
+    final user = loginViewModel.user;
+
+    if (user == null) return; // Prevents navigation if user is not logged in
+
+    bool isAdmin = user.role == 'admin';
+    print("Tapped index: $index");
+
+    String route = "";
+    switch (index) {
+      case 0:
+        route = isAdmin ? '/adminFeed' : '/userFeed';
+        break;
+      case 1:
+        route = isAdmin ? '/adminDomain' : '/userProjects';
+        break;
+      case 2:
+        route = isAdmin ? '/adminDomain' : '/userProjects';
+        break;
+    }
+
+    if (ModalRoute.of(context)?.settings.name != route) {
+      Navigator.pushReplacementNamed(context, route);
+    }
+  }
+
+  BottomNavigationBarItem _buildNavItem(
+      IconData icon, String label, int index) {
     return BottomNavigationBarItem(
-      icon: Icon(icon, color: index == currentIndex ? Colors.transparent : Colors.black54),
+      icon: Icon(icon,
+          color: index == currentIndex ? Colors.transparent : Colors.black54),
       label: label,
     );
   }
