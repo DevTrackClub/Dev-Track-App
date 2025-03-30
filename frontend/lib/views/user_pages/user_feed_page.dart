@@ -1,9 +1,13 @@
 import 'package:dev_track_app/models/user_feed_model.dart';
 import 'package:dev_track_app/utils/bottomnavbar.dart';
+import 'package:dev_track_app/utils/topnavbar.dart';
 import 'package:dev_track_app/view_models/user_feed_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
+import '../../view_models/login_view_model.dart';
+import '../common_pages/login_page.dart';
 
 class UserFeedPage extends StatefulWidget {
   const UserFeedPage({super.key});
@@ -27,15 +31,13 @@ class _UserFeedPageState extends State<UserFeedPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        floatingActionButton:
-            null, // 👈 Prevents Flutter from expecting a FAB animation
+        appBar: TopNavBar(onNotificationTap: () {}),
         backgroundColor: Colors.white,
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildTopBar(),
               const SizedBox(height: 10),
               _buildHeader(),
               const SizedBox(height: 10),
@@ -82,6 +84,19 @@ class _UserFeedPageState extends State<UserFeedPage> {
         IconButton(
           icon: const Icon(Icons.notifications, color: Colors.black),
           onPressed: () {},
+        ),
+        ElevatedButton(
+          onPressed: () async {
+            final loginViewModel =
+                Provider.of<LoginViewModel>(context, listen: false);
+            await loginViewModel.logout();
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => LoginPage()),
+            );
+          },
+          child: Text("Logout"),
         ),
       ],
     );

@@ -1,4 +1,5 @@
 import 'package:dev_track_app/utils/bottomnavbar.dart';
+import 'package:dev_track_app/utils/topnavbar.dart';
 import 'package:dev_track_app/views/admin_pages/admin_feed_view/edit_post_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -47,13 +48,13 @@ class _FeedScreenState extends State<AdminFeedPage> {
     final postViewModel = Provider.of<PostViewModel>(context);
     return SafeArea(
       child: Scaffold(
+        appBar: TopNavBar(onNotificationTap: () {}),
         backgroundColor: Colors.white,
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildTopBar(),
               const SizedBox(height: 10),
               _buildHeader(),
               const SizedBox(height: 10),

@@ -69,7 +69,7 @@ class BottomNavBar extends StatelessWidget {
     final loginViewModel = Provider.of<LoginViewModel>(context, listen: false);
     final user = loginViewModel.user;
 
-    if (user == null) return; // Prevents navigation if user is not logged in
+    if (user == null) return;
 
     bool isAdmin = user.role == 'admin';
     print("Tapped index: $index");

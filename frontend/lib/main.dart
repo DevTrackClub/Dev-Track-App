@@ -39,9 +39,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         routes: {
           '/userFeed': (context) => const UserFeedPage(),
-          '/userProjects': (context) => const PreviousProjects(),
+          '/userProjects': (context) => const DomainPage(),
           '/adminFeed': (context) => const AdminFeedPage(),
-          '/adminDomain': (context) => const DomainPage(),
+          '/adminDomain': (context) => const PreviousProjects(),
         },
         title: 'Dev Track App',
         theme: ThemeData(

@@ -1,4 +1,5 @@
 import 'package:dev_track_app/utils/bottomnavbar.dart';
+import 'package:dev_track_app/utils/topnavbar.dart';
 import 'package:dev_track_app/views/user_pages/enroll_pages/enroll_page.dart';
 import 'package:flutter/material.dart';
 
@@ -25,7 +26,7 @@ class _DomainPageState extends State<DomainPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: appBarCommon(),
+        appBar: TopNavBar(onNotificationTap: () {}),
         backgroundColor: Colors.white,
         body: Column(
           children: [
