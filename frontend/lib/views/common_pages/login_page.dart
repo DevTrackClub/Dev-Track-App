@@ -1,6 +1,5 @@
 import 'package:dev_track_app/views/admin_pages/admin_feed_view/admin_feed_page.dart';
 import 'package:dev_track_app/views/common_pages/general_feed_page.dart';
-import 'package:dev_track_app/views/user_pages/shuffle/team_shuffle.dart';
 import 'package:dev_track_app/views/user_pages/user_feed_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -111,7 +110,7 @@ class LoginPage extends StatelessWidget {
                               MaterialPageRoute(
                                 builder: (context) =>
                                     loginViewModel.user!.role == 'admin'
-                                        ? TeamShufflePage()
+                                        ? AdminFeedPage()
                                         : UserFeedPage(),
                               ),
                             );
