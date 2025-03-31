@@ -17,49 +17,22 @@ class BottomNavBar extends StatelessWidget {
         boxShadow: [
           BoxShadow(
             color: Colors.black12,
-            blurRadius: 12, // Increased for stronger shadow
+            blurRadius: 12, // Increased for st ronger shadow
             spreadRadius: 2, // Slightly wider shadow
           ),
         ],
       ),
-      child: Stack(
-        clipBehavior: Clip.none, // Allows elements to overflow
-        children: [
-          BottomNavigationBar(
-            currentIndex: currentIndex,
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            onTap: (index) => _onNavBarTapped(context, index),
-            showSelectedLabels: true,
-            showUnselectedLabels: true,
-            items: [
-              _buildNavItem(Icons.article, "Feed", 0), // Updated icon
-              _buildNavItem(Icons.image, "Projects", 1), // Updated icon
-              _buildNavItem(Icons.person_outline, "Profile", 2), // Updated icon
-            ],
-          ),
-          Positioned(
-            top: -22, // Adjusted slightly for better alignment
-            left: (MediaQuery.of(context).size.width / 3) * currentIndex +
-                (MediaQuery.of(context).size.width / 6) -
-                26, // Center it on the selected tab
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              child: Material(
-                elevation: 10, // Increased shadow depth
-                shadowColor: Colors.black54, // Darker shadow
-                shape: const CircleBorder(),
-                child: CircleAvatar(
-                  backgroundColor: Colors.purple,
-                  radius: 28, // Slightly bigger for emphasis
-                  child: Icon(
-                    _getIcon(currentIndex),
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ),
+      child: BottomNavigationBar(
+        currentIndex: currentIndex,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        onTap: (index) => _onNavBarTapped(context, index),
+        showSelectedLabels: true,
+        showUnselectedLabels: true,
+        items: [
+          _buildNavItem(Icons.article, "Feed", 0), // Updated icon
+          _buildNavItem(Icons.image, "Projects", 1), // Updated icon
+          _buildNavItem(Icons.person_outline, "Profile", 2), // Updated icon
         ],
       ),
     );
@@ -77,14 +50,13 @@ class BottomNavBar extends StatelessWidget {
     String route = "";
     switch (index) {
       case 0:
-        route = isAdmin ? '/adminFeed' : '/userFeed';
+        route = '/userFeed';
         break;
       case 1:
-        route = isAdmin ? '/adminDomain' : '/userProjects';
+        route = '/userProjects';
         break;
       case 2:
-        route = isAdmin ? '/adminDomain' : '/userProjects';
-        break;
+        return; // cus profile page not made yet
     }
 
     if (ModalRoute.of(context)?.settings.name != route) {
@@ -94,9 +66,10 @@ class BottomNavBar extends StatelessWidget {
 
   BottomNavigationBarItem _buildNavItem(
       IconData icon, String label, int index) {
+    // Change the color based on the selected index
+    Color iconColor = index == currentIndex ? Colors.purple : Colors.black54;
     return BottomNavigationBarItem(
-      icon: Icon(icon,
-          color: index == currentIndex ? Colors.transparent : Colors.black54),
+      icon: Icon(icon, color: iconColor),
       label: label,
     );
   }

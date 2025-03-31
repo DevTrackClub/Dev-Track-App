@@ -211,14 +211,26 @@ class UserFeedCard extends StatelessWidget {
                   ),
                 ),
               ),
-              FloatingActionButton(
-                tooltip: 'View More',
-                onPressed: onViewMore,
-                backgroundColor: Colors.purple,
-                mini: true,
-                child: const Icon(Icons.arrow_forward,
-                    color: Colors.white, size: 18),
-              ),
+              SizedBox(
+                width: 50,
+                child: ElevatedButton(
+                  onPressed: onViewMore,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.purple,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: EdgeInsets.zero,
+                  ),
+                  child: Center(
+                    child: const Icon(
+                      Icons.arrow_forward,
+                      color: Colors.white,
+                      size: 18,
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         ],

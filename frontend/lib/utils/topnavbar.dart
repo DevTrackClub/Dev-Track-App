@@ -24,7 +24,11 @@ class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
           color: Colors.black,
         ),
         onPressed: () {
-          Navigator.pop(context);
+          if (Navigator.canPop(context)) {
+            Navigator.pop(context);
+          } else {
+            print("cant pop");
+          }
         },
       ),
       actions: [
