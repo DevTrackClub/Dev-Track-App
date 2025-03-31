@@ -1,10 +1,11 @@
-import 'package:dev_track_app/pages/user_pages/user_feed_page.dart';
-import 'package:dev_track_app/utils/bottomnavbar.dart';
-import 'package:flutter/material.dart';
-import 'package:dev_track_app/utils/topnavbar.dart';
 import 'package:dev_track_app/routing/previous_projects_routing.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:dev_track_app/theme/colors.dart';
+import 'package:dev_track_app/utils/bottomnavbar.dart';
+import 'package:dev_track_app/utils/topnavbar.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import '../../user_feed_page.dart';
 
 class PreviousProjects extends StatefulWidget {
   const PreviousProjects({super.key});
@@ -14,20 +15,17 @@ class PreviousProjects extends StatefulWidget {
 }
 
 class _PreviousProjectsState extends State<PreviousProjects> {
-
   //bottomnavbarindex index
- int _selectedIndex = 1;
+  int _selectedIndex = 1;
 
+  void _onNavBarTapped(int index) {
+    print("Tapped index: $index"); // Debugging print statement
 
-void _onNavBarTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
 
-  print("Tapped index: $index"); // Debugging print statement
-
-  setState(() {
-    _selectedIndex = index;
-  });
-
-  switch (index) {
+    switch (index) {
       case 0:
         Navigator.pushReplacement(
           context,
@@ -40,8 +38,8 @@ void _onNavBarTapped(int index) {
           MaterialPageRoute(builder: (context) => const PreviousProjects()),
         );
         break;
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -73,9 +71,8 @@ void _onNavBarTapped(int index) {
             ),
           ],
         ),
-          bottomNavigationBar: BottomNavBar(
+        bottomNavigationBar: BottomNavBar(
           currentIndex: _selectedIndex,
-          onTap: _onNavBarTapped,
         ),
       ),
     );
@@ -128,25 +125,25 @@ void _onNavBarTapped(int index) {
       "title": "Dev Track",
       "subtitle": "Project management tool",
       "description": "A tool to track developer progress in real-time.",
-      "image": "assets/images/devtrack.png"
+      "image": "assets/images/dev_track_logo.jpg"
     },
     {
       "title": "E-commerce App",
       "subtitle": "Shopping made easy",
       "description": "An intuitive mobile shopping experience.",
-      "image": "assets/images/ecommerce.png"
+      "image": "assets/images/user.png"
     },
     {
       "title": "E-commerce App",
       "subtitle": "Shopping made easy",
       "description": "An intuitive mobile shopping experience.",
-      "image": "assets/images/ecommerce.png"
+      "image": "assets/images/game.png"
     },
     {
       "title": "E-commerce App",
       "subtitle": "Shopping made easy",
       "description": "An intuitive mobile shopping experience.",
-      "image": "assets/images/ecommerce.png"
+      "image": "assets/images/hitler.png"
     },
   ];
 

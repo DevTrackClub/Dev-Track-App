@@ -1,6 +1,9 @@
-import 'package:flutter/material.dart';
-import "package:dev_track_app/theme/theme.dart";
 import 'package:dev_track_app/theme/colors.dart';
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../view_models/login_view_model.dart';
+import '../views/common_pages/login_page.dart';
 
 class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
   const TopNavBar({
@@ -21,8 +24,11 @@ class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
           color: Colors.black,
         ),
         onPressed: () {
-          // This will automatically handle the navigation stack
-          Navigator.pop(context);
+          if (Navigator.canPop(context)) {
+            Navigator.pop(context);
+          } else {
+            print("cant pop");
+          }
         },
       ),
       actions: [
@@ -33,7 +39,20 @@ class TopNavBar extends StatelessWidget implements PreferredSizeWidget {
           ),
           onPressed: onNotificationTap,
         ),
-        const SizedBox(width: 8), // Adds some padding to the right
+        const SizedBox(width: 8),
+        ElevatedButton(
+          onPressed: () async {
+            final loginViewModel =
+                Provider.of<LoginViewModel>(context, listen: false);
+            await loginViewModel.logout();
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => LoginPage()),
+            );
+          },
+          child: Text("Logout"),
+        ), // Adds some padding to the right
       ],
     );
   }
