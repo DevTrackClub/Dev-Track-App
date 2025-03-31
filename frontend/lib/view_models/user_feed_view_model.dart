@@ -1,6 +1,8 @@
 import 'dart:async';
+
 import 'package:dev_track_app/api/user_feed_api.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+
 import '../models/user_feed_model.dart';
 
 class UserFeedViewModel extends ChangeNotifier {
@@ -12,8 +14,8 @@ class UserFeedViewModel extends ChangeNotifier {
   Timer? _pollingTimer;
 
   UserFeedViewModel() {
-    fetchUserFeed(); // Initial fetch when ViewModel is created
-    startPolling();  // Start polling automatically
+    fetchUserFeed();
+    startPolling();
   }
 
   Future<void> fetchUserFeed({bool showLoading = false}) async {
@@ -22,16 +24,15 @@ class UserFeedViewModel extends ChangeNotifier {
       notifyListeners();
     }
 
-     try {
-
+    try {
       final newFeedItems = await _feedApi.getUserFeed();
-      newFeedItems.sort((a, b) => b.createdAt.compareTo(a.createdAt));
 
-      // Force UI update by replacing the list reference(ensures ui is replaced during update operation)
-      feedItems.clear();  
-      feedItems.addAll(newFeedItems);
-      notifyListeners();
-      
+      if (!listEquals(feedItems, newFeedItems)) {
+        // Only update if there's a change
+        feedItems.clear();
+        feedItems.addAll(newFeedItems);
+        notifyListeners();
+      }
     } catch (e) {
       errorMessage = 'Could not fetch user feed: $e';
       notifyListeners();
@@ -43,15 +44,17 @@ class UserFeedViewModel extends ChangeNotifier {
     }
   }
 
-  void startPolling({int intervalSeconds = 10}) {
+  void startPolling({int intervalSeconds = 30}) {
+    // Increase interval to 30s or more
     _pollingTimer?.cancel();
     _pollingTimer = Timer.periodic(Duration(seconds: intervalSeconds), (timer) {
-      fetchUserFeed();  // Fetch without showing a loading indicator
+      fetchUserFeed(showLoading: false);
     });
   }
 
   void stopPolling() {
     _pollingTimer?.cancel();
+    _pollingTimer = null;
   }
 
   @override
@@ -60,8 +63,6 @@ class UserFeedViewModel extends ChangeNotifier {
     super.dispose();
   }
 }
-
-
 
 // import 'package:dev_track_app/api/user_feed_api.dart';
 // import 'package:flutter/material.dart';
@@ -91,5 +92,3 @@ class UserFeedViewModel extends ChangeNotifier {
 //     notifyListeners();
 //   }
 // }
-
-

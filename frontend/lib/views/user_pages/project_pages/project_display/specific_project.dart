@@ -1,10 +1,11 @@
+import 'package:dev_track_app/models/new_specific_projectModels.dart';
+import 'package:dev_track_app/theme/colors.dart';
 import 'package:dev_track_app/utils/bottomnavbar.dart';
-import 'package:dev_track_app/views/user_pages/user_feed_page.dart';
+import 'package:dev_track_app/utils/topnavbar.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:dev_track_app/theme/colors.dart';
-import 'package:dev_track_app/utils/topnavbar.dart';
-import 'package:dev_track_app/models/new_specific_projectModels.dart';
+
+import '../../user_feed_page.dart';
 
 class TeamMemberCard extends StatelessWidget {
   final TeamMember member;
@@ -249,7 +250,6 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
       ),
       bottomNavigationBar: BottomNavBar(
         currentIndex: _selectedIndex,
-        onTap: _onNavBarTapped,
       ),
     );
   }

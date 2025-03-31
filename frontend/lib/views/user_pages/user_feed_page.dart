@@ -1,9 +1,13 @@
-import 'package:dev_track_app/views/user_pages/project_pages/project_display/previous_projects.dart';
-import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:dev_track_app/models/user_feed_model.dart';
-import 'package:dev_track_app/view_models/user_feed_view_model.dart';
 import 'package:dev_track_app/utils/bottomnavbar.dart';
+import 'package:dev_track_app/utils/topnavbar.dart';
+import 'package:dev_track_app/view_models/user_feed_view_model.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
+import '../../view_models/login_view_model.dart';
+import '../common_pages/login_page.dart';
 
 class UserFeedPage extends StatefulWidget {
   const UserFeedPage({super.key});
@@ -14,29 +18,6 @@ class UserFeedPage extends StatefulWidget {
 
 class _UserFeedPageState extends State<UserFeedPage> {
   int _selectedIndex = 0;
-
-  void _onNavBarTapped(int index) {
-    print("Tapped index: $index"); // Debugging print statement
-
-    setState(() {
-      _selectedIndex = index;
-    });
-
-    switch (index) {
-      case 0:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const UserFeedPage()),
-        );
-        break;
-      case 1:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const PreviousProjects()),
-        );
-        break;
-    }
-  }
 
   @override
   void initState() {
@@ -50,13 +31,13 @@ class _UserFeedPageState extends State<UserFeedPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        appBar: TopNavBar(onNotificationTap: () {}),
         backgroundColor: Colors.white,
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildTopBar(),
               const SizedBox(height: 10),
               _buildHeader(),
               const SizedBox(height: 10),
@@ -87,7 +68,6 @@ class _UserFeedPageState extends State<UserFeedPage> {
         ),
         bottomNavigationBar: BottomNavBar(
           currentIndex: _selectedIndex,
-          onTap: _onNavBarTapped,
         ),
       ),
     );
@@ -104,6 +84,19 @@ class _UserFeedPageState extends State<UserFeedPage> {
         IconButton(
           icon: const Icon(Icons.notifications, color: Colors.black),
           onPressed: () {},
+        ),
+        ElevatedButton(
+          onPressed: () async {
+            final loginViewModel =
+                Provider.of<LoginViewModel>(context, listen: false);
+            await loginViewModel.logout();
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => LoginPage()),
+            );
+          },
+          child: Text("Logout"),
         ),
       ],
     );
@@ -133,7 +126,7 @@ class _UserFeedPageState extends State<UserFeedPage> {
       children: [
         Text("WELCOME BACK"),
         Text(
-          "Bharathan",
+          "Retard",
           style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
         ),
       ],
@@ -147,6 +140,22 @@ class UserFeedCard extends StatelessWidget {
 
   const UserFeedCard({Key? key, required this.post, required this.onViewMore})
       : super(key: key);
+
+  String formatDate(String createdAt) {
+    DateTime postDate = DateTime.parse(createdAt).toLocal();
+    DateTime now = DateTime.now();
+
+    String formattedDate = DateFormat("dd/MMM hh:mm a").format(postDate);
+    int difference = now.difference(postDate).inDays;
+
+    String daysAgo = (difference == 0)
+        ? "Today"
+        : (difference == 1)
+            ? "Yesterday"
+            : "$difference Days ago";
+
+    return "$daysAgo • $formattedDate";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -175,8 +184,8 @@ class UserFeedCard extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   Text(
-                    "Posted on ${post.createdAt}",
-                    style: const TextStyle(fontSize: 12, color: Colors.grey),
+                    "${post.createdAt}",
+                    style: TextStyle(fontSize: 12, color: Colors.grey[800]),
                   ),
                 ],
               ),
@@ -202,14 +211,26 @@ class UserFeedCard extends StatelessWidget {
                   ),
                 ),
               ),
-              FloatingActionButton(
-                tooltip: 'View More',
-                onPressed: onViewMore,
-                backgroundColor: Colors.purple,
-                mini: true,
-                child: const Icon(Icons.arrow_forward,
-                    color: Colors.white, size: 18),
-              ),
+              SizedBox(
+                width: 50,
+                child: ElevatedButton(
+                  onPressed: onViewMore,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.purple,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: EdgeInsets.zero,
+                  ),
+                  child: Center(
+                    child: const Icon(
+                      Icons.arrow_forward,
+                      color: Colors.white,
+                      size: 18,
+                    ),
+                  ),
+                ),
+              )
             ],
           ),
         ],

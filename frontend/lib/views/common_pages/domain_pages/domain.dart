@@ -1,5 +1,6 @@
 import 'package:dev_track_app/utils/bottomnavbar.dart';
-import 'package:dev_track_app/views/user_pages/user_feed_page.dart';
+import 'package:dev_track_app/utils/topnavbar.dart';
+import 'package:dev_track_app/views/user_pages/enroll_pages/enroll_page.dart';
 import 'package:flutter/material.dart';
 
 class DomainPage extends StatefulWidget {
@@ -13,29 +14,6 @@ class _DomainPageState extends State<DomainPage> {
   //bottomnavbar index
   int _selectedIndex = 1;
 
-  void _onNavBarTapped(int index) {
-    print("Tapped index: $index"); // Debugging print statement
-
-    setState(() {
-      _selectedIndex = index;
-    });
-
-    switch (index) {
-      case 0:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const UserFeedPage()),
-        );
-        break;
-      case 1:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const DomainPage()),
-        );
-        break;
-    }
-  }
-
   final List<Map<String, String>> projects = List.generate(
     6,
     (index) => {
@@ -48,7 +26,7 @@ class _DomainPageState extends State<DomainPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: appBarCommon(),
+        appBar: TopNavBar(onNotificationTap: () {}),
         backgroundColor: Colors.white,
         body: Column(
           children: [
@@ -68,7 +46,6 @@ class _DomainPageState extends State<DomainPage> {
         ),
         bottomNavigationBar: BottomNavBar(
           currentIndex: _selectedIndex,
-          onTap: _onNavBarTapped,
         ),
       ),
     );
@@ -120,11 +97,39 @@ class _DomainPageState extends State<DomainPage> {
           Row(
             children: [
               Text(
-                'STUDENT',
-                style: TextStyle(fontSize: 40),
+                'VIEWER',
+                style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(width: 20), // Space between text and button
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => EnrollPage()),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.purple[100], // Cute color
+                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20), // Rounded edges
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      'My Projects',
+                      style:
+                          TextStyle(fontSize: 10, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(width: 8),
+                    Icon(Icons.arrow_forward_ios, size: 20), // Arrow icon
+                  ],
+                ),
               ),
             ],
-          )
+          ),
         ],
       ),
     );

@@ -1,10 +1,11 @@
-import 'package:dev_track_app/utils/bottomnavbar.dart';
-import 'package:dev_track_app/views/user_pages/user_feed_page.dart';
-import 'package:flutter/material.dart';
-import 'package:dev_track_app/utils/topnavbar.dart';
 import 'package:dev_track_app/routing/previous_projects_routing.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:dev_track_app/theme/colors.dart';
+import 'package:dev_track_app/utils/bottomnavbar.dart';
+import 'package:dev_track_app/utils/topnavbar.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import '../../user_feed_page.dart';
 
 class PreviousProjects extends StatefulWidget {
   const PreviousProjects({super.key});
@@ -72,7 +73,6 @@ class _PreviousProjectsState extends State<PreviousProjects> {
         ),
         bottomNavigationBar: BottomNavBar(
           currentIndex: _selectedIndex,
-          onTap: _onNavBarTapped,
         ),
       ),
     );
@@ -125,25 +125,25 @@ class _PreviousProjectsState extends State<PreviousProjects> {
       "title": "Dev Track",
       "subtitle": "Project management tool",
       "description": "A tool to track developer progress in real-time.",
-      "image": "assets/images/devtrack.png"
+      "image": "assets/images/dev_track_logo.jpg"
     },
     {
       "title": "E-commerce App",
       "subtitle": "Shopping made easy",
       "description": "An intuitive mobile shopping experience.",
-      "image": "assets/images/ecommerce.png"
+      "image": "assets/images/user.png"
     },
     {
       "title": "E-commerce App",
       "subtitle": "Shopping made easy",
       "description": "An intuitive mobile shopping experience.",
-      "image": "assets/images/ecommerce.png"
+      "image": "assets/images/game.png"
     },
     {
       "title": "E-commerce App",
       "subtitle": "Shopping made easy",
       "description": "An intuitive mobile shopping experience.",
-      "image": "assets/images/ecommerce.png"
+      "image": "assets/images/hitler.png"
     },
   ];
 

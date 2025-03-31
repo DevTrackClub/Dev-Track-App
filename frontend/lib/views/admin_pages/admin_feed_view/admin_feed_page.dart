@@ -1,12 +1,14 @@
-
+import 'package:dev_track_app/utils/bottomnavbar.dart';
+import 'package:dev_track_app/utils/topnavbar.dart';
 import 'package:dev_track_app/views/admin_pages/admin_feed_view/edit_post_dialog.dart';
-import 'package:dev_track_app/views/common_pages/domain_pages/domain.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:dev_track_app/utils/bottomnavbar.dart';
+
 import '../../../models/admin_post_model.dart';
 import '../../../view_models/admin_post_view_model.dart';
+import '../../../view_models/login_view_model.dart';
+import '../../common_pages/login_page.dart';
 import '../admin_feed_view/create_post_dialog.dart';
 
 class AdminFeedPage extends StatefulWidget {
@@ -17,33 +19,8 @@ class AdminFeedPage extends StatefulWidget {
 }
 
 class _FeedScreenState extends State<AdminFeedPage> {
-
   //bottomnavbar index
-    int _selectedIndex = 0;
-
-void _onNavBarTapped(int index) {
-
-  print("Tapped index: $index"); // Debugging print statement
-
-  setState(() {
-    _selectedIndex = index;
-  });
-
-  switch (index) {
-      case 0:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const AdminFeedPage()),
-        );
-        break;
-      case 1:
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const DomainPage()),
-        );
-        break;
-  }
-}
+  int _selectedIndex = 0;
 
   String formatDate(String createdAt) {
     DateTime postDate = DateTime.parse(createdAt).toLocal();
@@ -71,13 +48,13 @@ void _onNavBarTapped(int index) {
     final postViewModel = Provider.of<PostViewModel>(context);
     return SafeArea(
       child: Scaffold(
+        appBar: TopNavBar(onNotificationTap: () {}),
         backgroundColor: Colors.white,
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildTopBar(),
               const SizedBox(height: 10),
               _buildHeader(),
               const SizedBox(height: 10),
@@ -98,7 +75,6 @@ void _onNavBarTapped(int index) {
         ),
         bottomNavigationBar: BottomNavBar(
           currentIndex: _selectedIndex,
-          onTap: _onNavBarTapped,
         ),
       ),
     );
@@ -109,12 +85,26 @@ void _onNavBarTapped(int index) {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {},
-        ),
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
         IconButton(
           icon: const Icon(Icons.notifications, color: Colors.black),
           onPressed: () {},
+        ),
+        ElevatedButton(
+          onPressed: () async {
+            final loginViewModel =
+                Provider.of<LoginViewModel>(context, listen: false);
+            await loginViewModel.logout();
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => LoginPage()),
+            );
+          },
+          child: Text("Logout"),
         ),
       ],
     );
@@ -125,7 +115,7 @@ void _onNavBarTapped(int index) {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         const Text(
-          "Feed",
+          "Feeed",
           style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
         ),
         ElevatedButton(

@@ -26,6 +26,21 @@ class LoginViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> logout() async {
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      await _authService.logout();
+      user = null; // Clear user data
+    } catch (e) {
+      errorMessage = 'Logout failed';
+    }
+
+    isLoading = false;
+    notifyListeners();
+  }
+
   Future<String?> getUserRole() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('role');
