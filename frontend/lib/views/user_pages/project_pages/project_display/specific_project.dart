@@ -1,5 +1,5 @@
-import 'package:dev_track_app/pages/user_pages/user_feed_page.dart';
 import 'package:dev_track_app/utils/bottomnavbar.dart';
+import 'package:dev_track_app/views/user_pages/user_feed_page.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:dev_track_app/theme/colors.dart';
@@ -77,20 +77,17 @@ class ProjectDetailPage extends StatefulWidget {
 }
 
 class _ProjectDetailPageState extends State<ProjectDetailPage> {
+  //bottomnavbarindex index
+  int _selectedIndex = 1;
 
- //bottomnavbarindex index
- int _selectedIndex = 1;
+  void _onNavBarTapped(int index) {
+    print("Tapped index: $index"); // Debugging print statement
 
+    setState(() {
+      _selectedIndex = index;
+    });
 
-void _onNavBarTapped(int index) {
-
-  print("Tapped index: $index"); // Debugging print statement
-
-  setState(() {
-    _selectedIndex = index;
-  });
-
-  switch (index) {
+    switch (index) {
       case 0:
         Navigator.pushReplacement(
           context,
@@ -103,9 +100,8 @@ void _onNavBarTapped(int index) {
           MaterialPageRoute(builder: (context) => const ProjectDetailPage()),
         );
         break;
+    }
   }
-}
-
 
   @override
   Widget build(BuildContext context) {

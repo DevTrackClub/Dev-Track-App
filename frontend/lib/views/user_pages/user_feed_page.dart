@@ -1,4 +1,4 @@
-import 'package:dev_track_app/pages/user_pages/project_pages/project_display/previous_projects.dart';
+import 'package:dev_track_app/views/user_pages/project_pages/project_display/previous_projects.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:dev_track_app/models/user_feed_model.dart';
@@ -15,16 +15,14 @@ class UserFeedPage extends StatefulWidget {
 class _UserFeedPageState extends State<UserFeedPage> {
   int _selectedIndex = 0;
 
+  void _onNavBarTapped(int index) {
+    print("Tapped index: $index"); // Debugging print statement
 
-void _onNavBarTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
 
-  print("Tapped index: $index"); // Debugging print statement
-
-  setState(() {
-    _selectedIndex = index;
-  });
-
-  switch (index) {
+    switch (index) {
       case 0:
         Navigator.pushReplacement(
           context,
@@ -37,9 +35,8 @@ void _onNavBarTapped(int index) {
           MaterialPageRoute(builder: (context) => const PreviousProjects()),
         );
         break;
+    }
   }
-}
-
 
   @override
   void initState() {
@@ -148,7 +145,8 @@ class UserFeedCard extends StatelessWidget {
   final UserFeedModel post;
   final VoidCallback onViewMore;
 
-  const UserFeedCard({Key? key, required this.post, required this.onViewMore}) : super(key: key);
+  const UserFeedCard({Key? key, required this.post, required this.onViewMore})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -209,7 +207,8 @@ class UserFeedCard extends StatelessWidget {
                 onPressed: onViewMore,
                 backgroundColor: Colors.purple,
                 mini: true,
-                child: const Icon(Icons.arrow_forward, color: Colors.white, size: 18),
+                child: const Icon(Icons.arrow_forward,
+                    color: Colors.white, size: 18),
               ),
             ],
           ),
@@ -218,4 +217,3 @@ class UserFeedCard extends StatelessWidget {
     );
   }
 }
-

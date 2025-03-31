@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:dev_track_app/theme/theme.dart'; // Import your theme file
 
 class ThemedPage extends StatelessWidget {
   const ThemedPage({super.key});
