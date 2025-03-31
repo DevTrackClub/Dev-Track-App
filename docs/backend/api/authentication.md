@@ -91,7 +91,7 @@ The authentication system in **Dev-Track-App** is based on **token-based authent
 
 ---
 
-## API Endpoints
+## Authentication Procedure
 
 ### 1. User Registration
 
@@ -151,46 +151,6 @@ The authentication system in **Dev-Track-App** is based on **token-based authent
 - **Endpoint:** `/api/auth/logout/`
 - **Method:** `POST`
 - **Action:** Invalidates the token.
-
----
-
-## Authentication APIs
-
-### UserAuthAPI Class
-
-- Handles user authentication-related API calls using the Django Ninja framework.
-
-### Login Endpoint
-
-- **Endpoint:** `/user/login`
-- **Method:** `POST`
-- **Functionality:** Authenticates users based on provided credentials (username and password). Calls `login_user` from `UserAuthService`. Returns an authentication token on success. Responds with `401 Unauthorized` for invalid credentials.
-
-### Logout Endpoint
-
-- **Endpoint:** `/user/logout`
-- **Method:** `POST`
-- **Functionality:** Logs out the authenticated user. Calls `logout_user` from `UserAuthService`.
-
-### User Profile Endpoint
-
-- **Endpoint:** `/user`
-- **Method:** `GET`
-- **Functionality:** Retrieves authenticated user's profile. Calls `get_user_profile` from `UserAuthService`. Responds with `401 Unauthorized` if the user is not logged in.
-
-### Edit Profile Endpoint
-
-- **Endpoint:** `/user/edit`
-- **Method:** `PUT`
-- **Functionality:** Allows authenticated users to update profile details. Calls `edit_user_profile` from `UserAuthService`.
-
-### Import Users Endpoint
-
-- **Endpoint:** `/user/import-users/`
-- **Method:** `POST`
-- **Functionality:** Enables bulk user import from a file using a management command. The `import_users` method handles the file upload.
-
----
 
 ## Authentication System Overview
 
