@@ -10,12 +10,12 @@ class UserFeedApi {
 
   Future<List<UserFeedModel>> getUserFeed() async {
 
-    print('--- UserFeedService: getUserFeed() called ---');
+    // print('--- UserFeedService: getUserFeed() called ---');
 
     // Retrieve the stored CSRF token
     final prefs = await SharedPreferences.getInstance();
     final csrfToken = prefs.getString('csrf_token');
-    print('CSRF token from prefs: $csrfToken');
+    // print('CSRF token from prefs: $csrfToken');
 
     // 2. Prepare the headers
     final headers = {
@@ -24,20 +24,20 @@ class UserFeedApi {
       'X-CSRFToken': csrfToken ?? '',
     };
 
-    print('Making GET request to $feedUrl');
-    print('Request headers: $headers');
+    // print('Making GET request to $feedUrl');
+    // print('Request headers: $headers');
 
  try {
       // 3. Make the GET request
       final response = await http.get(Uri.parse(feedUrl), headers: headers);
 
-      print('Response status: ${response.statusCode}');
-      print('Response body: ${response.body}');
+      // print('Response status: ${response.statusCode}');
+      // print('Response body: ${response.body}');
 
       // 4. Check if the call was successful
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
-        print('Parsed data length: ${data.length}');
+        // print('Parsed data length: ${data.length}');
         // Convert each item in the list to UserFeedModel
         return data.map((item) => UserFeedModel.fromJson(item)).toList();
       } else {
@@ -47,7 +47,7 @@ class UserFeedApi {
       }
     } catch (e) {
       // Catch any network or parsing exceptions
-      print('Exception in getUserFeed: $e');
+      // print('Exception in getUserFeed: $e');
       rethrow; // rethrow so the ViewModel can handle it
     }
   }

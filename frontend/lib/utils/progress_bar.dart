@@ -1,4 +1,3 @@
-import 'package:dev_track_app/views/user_pages/timeline_page.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -17,13 +16,15 @@ class _ProgressBarState extends State<ProgressBar> {
   double barHeight = 20; // Height of progress bar
   Timer? timer;
   double knobSize = 22; // Diameter of the knob
+  List<DateTime> scrumMeetDates = [];
 
   @override
   void initState() {
     super.initState();
-    _updateProgress(); // Initial progress update
+    _updateProgress(); 
+    _calculateScrumMeetDates();
     timer = Timer.periodic(const Duration(seconds: 5), (timer) {
-      _updateProgress(); // Periodic progress update
+      _updateProgress(); 
     });
   }
 
@@ -34,13 +35,19 @@ class _ProgressBarState extends State<ProgressBar> {
 
     setState(() {
       progress = (elapsedDays / totalDays).clamp(0.0, 1.0);
-
-      print("Total Days: $totalDays");
-      print("Elapsed Days: $elapsedDays");
-      print("Progress: $progress");
-      print("Knob Position: ${(barWidth - knobSize) * progress}");
     });
   }
+
+  void _calculateScrumMeetDates() {
+    DateTime current = startDate;
+    while (current.isBefore(endDate) || current.isAtSameMomentAs(endDate)) {
+      if (current.weekday == DateTime.saturday) {
+        scrumMeetDates.add(current);
+      }
+      current = current.add(const Duration(days: 1));
+    }
+  }
+  
 
   @override
   void dispose() {
@@ -50,66 +57,122 @@ class _ProgressBarState extends State<ProgressBar> {
 
   @override
   Widget build(BuildContext context) {
-    // Ensure knob is centered and does not exceed bar width
     double knobPosition = ((barWidth - knobSize) * progress).clamp(0, barWidth - knobSize);
     double progressFillWidth = ((barWidth - knobSize) * progress) + (knobSize / 2);
 
-    return Center(
-      child: Stack(
-        alignment: Alignment.centerLeft,
-        children: [
-          // Background of the progress bar
-          Container(
-            height: barHeight,
-            width: barWidth,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(10),
-            ),
-          ),
-          // Filled portion of the progress bar
-          Positioned(
-            left: 0,
-            child: Container(
-              height: 20,
-              width: progressFillWidth, // ✅ Updates dynamically
-              decoration: BoxDecoration(
-                color: Colors.purple,
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-          ),
-          // Knob (Circle) moving with progress
-          Positioned(
-            left: knobPosition, // Align knob correctly
-            child: GestureDetector(
-              onTap: () {
-                print("Knob Clicked - Open Timeline Page");
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const TimelinePage()),
-                );
-              },
-              child: Container(
-                width: knobSize,
-                height: knobSize,
+    return Column(
+      children: [
+        // ScrumMeetIndicator Above Progress Bar
+        ScrumMeetIndicator(
+          startDate: startDate,
+          endDate: endDate,
+          barWidth: barWidth,
+          knobSize: knobSize,
+          scrumMeetDates: scrumMeetDates,
+        ),
+        // Progress Bar
+        Center(
+          child: Stack(
+            alignment: Alignment.centerLeft,
+            children: [
+              // Background of the progress bar
+              Container(
+                height: barHeight,
+                width: barWidth,
                 decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                  border: Border.all(color: Colors.grey, width: 2),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 4,
-                      spreadRadius: 1,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(10),
                 ),
               ),
-            ),
+              // Filled portion of the progress bar
+              Positioned(
+                left: 0,
+                child: Container(
+                  height: 20,
+                  width: progressFillWidth, // ✅ Updates dynamically
+                  decoration: BoxDecoration(
+                    color: Colors.purple,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+              ),
+              // Knob (Circle) moving with progress
+              Positioned(
+                left: knobPosition, // Align knob correctly
+                child: GestureDetector(
+                  onTap: () {
+                    print("Knob Clicked - Open Timeline Page");
+                  },
+                  child: Container(
+                    width: knobSize,
+                    height: knobSize,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                      border: Border.all(color: Colors.grey, width: 2),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.2),
+                          blurRadius: 4,
+                          spreadRadius: 1,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
+      ],
+    );
+  }
+}
+
+/// Scrum Meet Indicator Widget
+class ScrumMeetIndicator extends StatelessWidget {
+  final DateTime startDate;
+  final DateTime endDate;
+  final double barWidth;
+  final double knobSize;
+  final List<DateTime> scrumMeetDates;
+
+  const ScrumMeetIndicator({
+    Key? key,
+    required this.startDate,
+    required this.endDate,
+    required this.barWidth,
+    required this.knobSize,
+    required this.scrumMeetDates,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    DateTime today = DateTime.now();
+    DateTime? nextScrumMeet = scrumMeetDates.firstWhere(
+      (date) => date.isAfter(today),
+      orElse: () => scrumMeetDates.last,
+    );
+
+    return SizedBox(
+      width: barWidth,
+      height:20, // Space for indicators
+      child: Stack(
+        children: scrumMeetDates.map((date) {
+          double position = ((date.difference(startDate).inDays) / 
+                             (endDate.difference(startDate).inDays)) * (barWidth - knobSize);
+          bool isNext = date == nextScrumMeet;
+
+          return Positioned(
+            left: position.clamp(0, barWidth - knobSize),
+            child: Icon(
+              Icons.arrow_drop_down,
+              size: 20,
+              color: isNext ? Colors.grey : Colors.white,
+            ),
+          );
+        }).toList(),
       ),
     );
   }

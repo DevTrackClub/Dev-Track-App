@@ -12,10 +12,11 @@ class _ScrumMeetIndicatorState extends State<ScrumMeetIndicator> {
   DateTime startDate = DateTime(2024, 4, 1);
   DateTime endDate = DateTime(2024, 4, 30);
   double barWidth = 340;
+  double knobSize = 25; // Match knob size from progress bar
   List<DateTime> scrumMeetDates = [];
   DateTime? nextScrumMeet;
   Timer? timer;
-  
+
   @override
   void initState() {
     super.initState();
@@ -38,7 +39,10 @@ class _ScrumMeetIndicatorState extends State<ScrumMeetIndicator> {
 
   void _updateNextScrumMeet() {
     DateTime today = DateTime.now();
-    nextScrumMeet = scrumMeetDates.firstWhere((date) => date.isAfter(today), orElse: () => scrumMeetDates.last);
+    nextScrumMeet = scrumMeetDates.firstWhere(
+      (date) => date.isAfter(today),
+      orElse: () => scrumMeetDates.last,
+    );
     setState(() {});
   }
 
@@ -50,16 +54,20 @@ class _ScrumMeetIndicatorState extends State<ScrumMeetIndicator> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          // Scrum Indicators
-          Stack(
+    return Column(
+      children: [
+        // Scrum Meet Indicators
+        SizedBox(
+          width: barWidth + knobSize, // Extend width to match progress bar logic
+          height: 30, // Space for indicators
+          child: Stack(
             children: scrumMeetDates.map((date) {
-              double position = ((date.difference(startDate).inDays) / (endDate.difference(startDate).inDays)) * barWidth;
+              double position = ((date.difference(startDate).inDays) / 
+                                 (endDate.difference(startDate).inDays)) * (barWidth - knobSize);
               bool isNext = date == nextScrumMeet;
+
               return Positioned(
-                left: position.clamp(0, barWidth - 10),
+                left: position.clamp(0, barWidth - knobSize),
                 child: Icon(
                   Icons.arrow_drop_up,
                   size: 20,
@@ -68,18 +76,20 @@ class _ScrumMeetIndicatorState extends State<ScrumMeetIndicator> {
               );
             }).toList(),
           ),
-          const SizedBox(height: 5),
-          // Progress Bar
-          Container(
-            height: 20,
-            width: barWidth,
-            decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: BorderRadius.circular(10),
-            ),
+        ),
+
+        const SizedBox(height: 5),
+
+        // Progress Bar
+        Container(
+          height: 20,
+          width: barWidth,
+          decoration: BoxDecoration(
+            color: Colors.grey[300],
+            borderRadius: BorderRadius.circular(10),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

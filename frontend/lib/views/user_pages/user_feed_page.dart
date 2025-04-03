@@ -63,7 +63,6 @@ void _onNavBarTapped(int index) {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               _buildTopBar(),
-              const SizedBox(height: 10),
               const ProgressBar(), 
               const SizedBox(height: 20),
               _buildHeader(),

@@ -1,4 +1,5 @@
 import 'package:dev_track_app/models/enrollment_model.dart';
+import 'package:dev_track_app/utils/progress_bar.dart';
 import 'package:dev_track_app/views/common_pages/domain_pages/domain.dart';
 import 'package:dev_track_app/views/common_pages/general_feed_page.dart';
 import 'package:dev_track_app/views/user_pages/user_feed_page.dart';
