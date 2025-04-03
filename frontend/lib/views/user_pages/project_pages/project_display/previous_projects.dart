@@ -1,4 +1,4 @@
-import 'package:dev_track_app/pages/user_pages/user_feed_page.dart';
+import 'package:dev_track_app/views/user_pages/user_feed_page.dart';
 import 'package:dev_track_app/utils/bottomnavbar.dart';
 import 'package:flutter/material.dart';
 import 'package:dev_track_app/utils/topnavbar.dart';

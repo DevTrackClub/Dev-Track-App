@@ -1,9 +1,12 @@
-import 'package:dev_track_app/pages/user_pages/project_pages/project_display/previous_projects.dart';
+import 'package:dev_track_app/views/user_pages/project_pages/project_display/previous_projects.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:dev_track_app/models/user_feed_model.dart';
 import 'package:dev_track_app/view_models/user_feed_view_model.dart';
 import 'package:dev_track_app/utils/bottomnavbar.dart';
+import 'package:dev_track_app/utils/progress_bar.dart';
+import 'package:dev_track_app/utils/scrum_meet_indicator.dart';
+
 
 class UserFeedPage extends StatefulWidget {
   const UserFeedPage({super.key});
@@ -61,6 +64,8 @@ void _onNavBarTapped(int index) {
             children: [
               _buildTopBar(),
               const SizedBox(height: 10),
+              const ProgressBar(), 
+              const SizedBox(height: 20),
               _buildHeader(),
               const SizedBox(height: 10),
               Expanded(
