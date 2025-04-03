@@ -1,5 +1,6 @@
 from ninja import ModelSchema
 from pydantic import BaseModel, Field
+from datetime import date, datetime
 from ninja import Schema
 from projects.models import ProjectModel, DomainModel
 
@@ -27,10 +28,26 @@ class CreateProjectSchema(Schema):
     youtube_link : str 
 
 
-class CreateProjectCycleSchema(Schema):
-    cycle_name : str
-    start_date : str 
-    end_date : str 
-    is_active : bool = Field(default=False)
 
+class CreateProjectCycleSchema(Schema):
+    cycle_name: str
+    start_date: date
+    end_date: date
+    is_active: bool = Field(default=False)
+
+
+
+class PCSchema(Schema):
+    id: int
+    cycle_name: str
+    start_date: datetime
+    end_date: datetime
+    is_active: bool
+    
+
+class UpdateProjectCycleSchema(Schema):
+    cycle_name: str
+    start_date: datetime
+    end_date: datetime
+    is_active: bool
 

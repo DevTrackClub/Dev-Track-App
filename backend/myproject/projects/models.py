@@ -55,11 +55,13 @@ class ScrumModel(models.Model):
     domain = models.ForeignKey(DomainModel, on_delete=models.CASCADE)
     scheduled_time = models.DateField()
 
-
 class ProjectCycleModel(models.Model):
-    cycle_name = models.CharField(max_length=256)
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
-    is_active = models.BooleanField()
+    cycle_name = models.CharField(max_length=100, unique=True)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    is_active = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.cycle_name} ({self.start_date} - {self.end_date})"
 
 

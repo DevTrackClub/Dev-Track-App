@@ -7,7 +7,7 @@ from django.middleware.csrf import get_token
 from . import schemas
 from .models import CustomUser as User
 from .services import UserAuthService
-from projects.api import ProjectsAPI
+from projects.api import ProjectsAPI,ProjectCycleController
 from announcements.api import PostAPIController
 from registrations.api import ProjectApplicationAPI 
 
@@ -56,3 +56,4 @@ api.register_controllers(UserAuthAPI)
 api.register_controllers(PostAPIController)
 api.register_controllers(ProjectsAPI)
 api.register_controllers(ProjectApplicationAPI)
+api.register_controllers(ProjectCycleController)

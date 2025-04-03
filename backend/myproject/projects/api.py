@@ -9,9 +9,11 @@ from ninja import File, Form, UploadedFile
 from ninja.errors import HttpError
 from datetime import datetime
 
-from .services import ProjectService, DomainService
-from .schemas import ListProjectSchema, CreateDomainSchema, ListDomainSchema 
-from .models import ProjectModel, DomainModel
+from .services import ProjectCycleService, ProjectService, DomainService
+from .schemas import CreateProjectCycleSchema, ListProjectSchema, CreateDomainSchema, ListDomainSchema, PCSchema, UpdateProjectCycleSchema 
+from .models import ProjectCycleModel, ProjectModel, DomainModel
+
+
 
 
 @api_controller("/projects", tags="Projects")
@@ -42,11 +44,61 @@ class ProjectsAPI(ControllerBase):
             raise HttpError(400, str(e))
         
 
-    #API call to create a new project cycle.
-    @route.post("/cycle/create", url_name="Create project cycle")
-    def create_project_cycle(self, request, payload:schemas.CreateProjectCycleSchema):
-        return self.project_service.create_project_cycle(payload)
+@api_controller("/cycle", tags=["Project Cycle"])
+class ProjectCycleController(ControllerBase):
+    def __init__(self) -> None:
+        self.cycle_service = ProjectCycleService()
 
+    #Create a new project cycle
+    @route.post("/create", url_name="Create Project Cycle")
+    def create_cycle(self, request, payload: CreateProjectCycleSchema):
+        admin_check = self.cycle_service._check_admin(request)
+        if admin_check:
+            return admin_check
+
+        response = self.cycle_service.create_cycle(payload)  # Calls service layer
+        if 'error' in response:
+            raise HttpError(400, response['error'])
+        return response
+    #List all project cycles
+    @route.get("/list", url_name="List Project Cycles", response=list[PCSchema])
+    def list_cycles(self, request):
+       
+        admin_check = self.cycle_service._check_admin(request)
+        if admin_check:
+            return admin_check
+
+        
+        response = self.cycle_service.get_all_cycles()
+        if 'error' in response:
+            raise HttpError(400, response['error'])
+        return response
+
+    #Update a project cycle
+    @route.put("/update/{cycle_id}", url_name="Update Project Cycle", response=PCSchema)
+    def update_cycle(self, request, cycle_id: int, payload: UpdateProjectCycleSchema):
+        admin_check = self.cycle_service._check_admin(request)
+        if admin_check:
+            return admin_check
+
+        cycle = get_object_or_404(ProjectCycleModel, id=cycle_id)
+        response = self.cycle_service.update_cycle(cycle, payload)
+        if 'error' in response:
+            raise HttpError(400, response['error'])
+        return response
+
+    #Deactivate a project cycle
+    @route.delete("/deactivate/{cycle_id}", url_name="Deactivate Project Cycle")
+    def deactivate_cycle(self, request, cycle_id: int):
+        admin_check = self.cycle_service._check_admin(request)
+        if admin_check:
+            return admin_check
+
+        
+        response = self.cycle_service.deactivate_project_cycle(request, cycle_id)  
+        if 'error' in response:
+            raise HttpError(400, response['error'])
+        return response
 
     # #API call to create a new project
     # @route.post("/create", url_name="Create project")
