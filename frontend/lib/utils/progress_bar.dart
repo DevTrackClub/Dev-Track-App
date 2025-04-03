@@ -12,19 +12,22 @@ class _ProgressBarState extends State<ProgressBar> {
   DateTime startDate = DateTime(2025, 4, 1); // Start Date
   DateTime endDate = DateTime(2025, 5, 1); // End Date
   double progress = 0.0; // Progress in percentage (0.0 - 1.0)
-  double barWidth = 350; // Width of progress bar
-  double barHeight = 20; // Height of progress bar
+  double barWidth = 375; // Width of progress bar
+  double barHeight = 25; // Height of progress bar
   Timer? timer;
-  double knobSize = 22; // Diameter of the knob
+  double knobSize = 24; // Diameter of the knob
   List<DateTime> scrumMeetDates = [];
+  Duration timeLeft = Duration.zero;
 
   @override
   void initState() {
     super.initState();
     _updateProgress(); 
     _calculateScrumMeetDates();
+    _updateTimeLeft();
     timer = Timer.periodic(const Duration(seconds: 5), (timer) {
       _updateProgress(); 
+      _updateTimeLeft();
     });
   }
 
@@ -38,6 +41,12 @@ class _ProgressBarState extends State<ProgressBar> {
     });
   }
 
+  void _updateTimeLeft() {
+    setState(() {
+      timeLeft = endDate.difference(DateTime.now());
+    });
+  }
+
   void _calculateScrumMeetDates() {
     DateTime current = startDate;
     while (current.isBefore(endDate) || current.isAtSameMomentAs(endDate)) {
@@ -47,7 +56,6 @@ class _ProgressBarState extends State<ProgressBar> {
       current = current.add(const Duration(days: 1));
     }
   }
-  
 
   @override
   void dispose() {
@@ -62,7 +70,6 @@ class _ProgressBarState extends State<ProgressBar> {
 
     return Column(
       children: [
-        // ScrumMeetIndicator Above Progress Bar
         ScrumMeetIndicator(
           startDate: startDate,
           endDate: endDate,
@@ -70,67 +77,84 @@ class _ProgressBarState extends State<ProgressBar> {
           knobSize: knobSize,
           scrumMeetDates: scrumMeetDates,
         ),
-        // Progress Bar
-        Center(
-          child: Stack(
-            alignment: Alignment.centerLeft,
-            children: [
-              // Background of the progress bar
-              Container(
-                height: barHeight,
-                width: barWidth,
+        Stack(
+          alignment: Alignment.centerLeft,
+          children: [
+            Container(
+              height: barHeight,
+              width: barWidth,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            Positioned(
+              left: 0,
+              child: Container(
+                height: 25,
+                width: progressFillWidth,
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
+                  color: Colors.purple,
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-              // Filled portion of the progress bar
-              Positioned(
-                left: 0,
+            ),
+            Positioned(
+              left: knobPosition,
+              child: GestureDetector(
+                onTap: () {
+                  print("Knob Clicked - Open Timeline Page");
+                },
                 child: Container(
-                  height: 20,
-                  width: progressFillWidth, // ✅ Updates dynamically
+                  width: knobSize,
+                  height: knobSize,
                   decoration: BoxDecoration(
-                    color: Colors.purple,
-                    borderRadius: BorderRadius.circular(10),
+                    shape: BoxShape.circle,
+                    color: Colors.white,
+                    border: Border.all(color: Colors.grey, width: 2),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 4,
+                        spreadRadius: 1,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
                 ),
               ),
-              // Knob (Circle) moving with progress
-              Positioned(
-                left: knobPosition, // Align knob correctly
-                child: GestureDetector(
-                  onTap: () {
-                    print("Knob Clicked - Open Timeline Page");
-                  },
-                  child: Container(
-                    width: knobSize,
-                    height: knobSize,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                      border: Border.all(color: Colors.grey, width: 2),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.2),
-                          blurRadius: 4,
-                          spreadRadius: 1,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                  ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 5),
+        // Time Left Indicator - Positioned at Right Edge
+        Align(
+          alignment: Alignment.centerRight,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.hourglass_bottom, size: 12, color: Colors.black54),
+                const SizedBox(width: 3),
+                Text(
+                  " ${timeLeft.inDays}d ${timeLeft.inHours % 24}h",
+                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.black54),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
+
       ],
     );
   }
 }
 
-/// Scrum Meet Indicator Widget
 class ScrumMeetIndicator extends StatelessWidget {
   final DateTime startDate;
   final DateTime endDate;
@@ -157,19 +181,20 @@ class ScrumMeetIndicator extends StatelessWidget {
 
     return SizedBox(
       width: barWidth,
-      height:20, // Space for indicators
+      height: 20,
       child: Stack(
         children: scrumMeetDates.map((date) {
-          double position = ((date.difference(startDate).inDays) / 
-                             (endDate.difference(startDate).inDays)) * (barWidth - knobSize);
+          double position = ((date.difference(startDate).inDays) /
+                  (endDate.difference(startDate).inDays)) *
+              (barWidth - knobSize);
           bool isNext = date == nextScrumMeet;
 
           return Positioned(
             left: position.clamp(0, barWidth - knobSize),
             child: Icon(
               Icons.arrow_drop_down,
-              size: 20,
-              color: isNext ? Colors.grey : Colors.white,
+              size: 24,
+              color: isNext ? Colors.purple : Colors.white,
             ),
           );
         }).toList(),

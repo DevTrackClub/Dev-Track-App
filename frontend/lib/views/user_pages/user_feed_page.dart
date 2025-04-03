@@ -5,7 +5,6 @@ import 'package:dev_track_app/models/user_feed_model.dart';
 import 'package:dev_track_app/view_models/user_feed_view_model.dart';
 import 'package:dev_track_app/utils/bottomnavbar.dart';
 import 'package:dev_track_app/utils/progress_bar.dart';
-import 'package:dev_track_app/utils/scrum_meet_indicator.dart';
 
 
 class UserFeedPage extends StatefulWidget {
@@ -64,7 +63,6 @@ void _onNavBarTapped(int index) {
             children: [
               _buildTopBar(),
               const ProgressBar(), 
-              const SizedBox(height: 20),
               _buildHeader(),
               const SizedBox(height: 10),
               Expanded(
