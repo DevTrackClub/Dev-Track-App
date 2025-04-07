@@ -4,15 +4,15 @@ class UserFeedModel {
   final int id;
   final String title;
   final String description;
-  final DateTime createdAt;
-  final int createdById;
+  final String createdAt;
+  final int createdBy;
 
   UserFeedModel({
     required this.id,
     required this.title,
     required this.description,
     required this.createdAt,
-    required this.createdById,
+    required this.createdBy,
   });
 
   factory UserFeedModel.fromJson(Map<String, dynamic> json) {
@@ -20,8 +20,18 @@ class UserFeedModel {
       id: json['id'],
       title: json['title'],
       description: json['description'],
-      createdAt: DateTime.parse(json['created_at']),
-      createdById: json['created_by'],
+      createdAt: json['created_at'],
+      createdBy: json['created_by'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'description': description,
+      'created_at': createdAt,
+      'created_by': createdBy,
+    };
   }
 }

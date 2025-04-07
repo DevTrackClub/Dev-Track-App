@@ -8,48 +8,43 @@ import '../models/user_feed_model.dart';
 class UserFeedViewModel extends ChangeNotifier {
   final UserFeedApi _feedApi = UserFeedApi();
 
-  bool isLoading = false;
-  String? errorMessage;
-  List<UserFeedModel> feedItems = [];
+  List<UserFeedModel> _posts = [];
+  bool _isLoading = false;
+  String? _error;
   Timer? _pollingTimer;
 
-  UserFeedViewModel() {
-    fetchUserFeed();
-    startPolling();
-  }
+  List<UserFeedModel> get posts => _posts;
+  bool get isLoading => _isLoading;
+  String? get error => _error;
 
-  Future<void> fetchUserFeed({bool showLoading = false}) async {
-    if (showLoading) {
-      isLoading = true;
-      notifyListeners();
-    }
+  Future<void> fetchUserFeed({bool showLoading = true}) async {
+    if (showLoading) _isLoading = true;
+    _error = null;
+    notifyListeners();
 
     try {
-      final newFeedItems = await _feedApi.getUserFeed();
-
-      if (!listEquals(feedItems, newFeedItems)) {
-        // Only update if there's a change
-        feedItems.clear();
-        feedItems.addAll(newFeedItems);
+      final fetchedPosts = await _feedApi.getUserFeed();
+      if (!listEquals(_posts, fetchedPosts)) {
+        _posts = fetchedPosts;
         notifyListeners();
       }
     } catch (e) {
-      errorMessage = 'Could not fetch user feed: $e';
+      _error = e.toString();
       notifyListeners();
     }
 
     if (showLoading) {
-      isLoading = false;
+      _isLoading = false;
       notifyListeners();
     }
   }
 
   void startPolling({int intervalSeconds = 30}) {
-    // Increase interval to 30s or more
     _pollingTimer?.cancel();
-    _pollingTimer = Timer.periodic(Duration(seconds: intervalSeconds), (timer) {
-      fetchUserFeed(showLoading: false);
-    });
+    _pollingTimer = Timer.periodic(
+      Duration(seconds: intervalSeconds),
+      (_) => fetchUserFeed(showLoading: false),
+    );
   }
 
   void stopPolling() {
@@ -63,32 +58,3 @@ class UserFeedViewModel extends ChangeNotifier {
     super.dispose();
   }
 }
-
-// import 'package:dev_track_app/api/user_feed_api.dart';
-// import 'package:flutter/material.dart';
-// import '../models/user_feed_model.dart';
-
-// class UserFeedViewModel extends ChangeNotifier {
-//   final UserFeedApi _feedApi = UserFeedApi();
-
-//   bool isLoading = false;
-//   String? errorMessage;
-//   List<UserFeedModel> feedItems = [];
-
-//   Future<void> fetchUserFeed() async {
-//     isLoading = true;
-//     errorMessage = null;
-//     notifyListeners();
-
-//     try {
-//       feedItems = await _feedApi.getUserFeed();
-//       // Sort by date (most recent on top) if needed
-//       feedItems.sort((a, b) => b.createdAt.compareTo(a.createdAt));
-//     } catch (e) {
-//       errorMessage = 'Could not fetch user feed: $e';
-//     }
-
-//     isLoading = false;
-//     notifyListeners();
-//   }
-// }

@@ -6,9 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../view_models/login_view_model.dart';
-import '../common_pages/login_page.dart';
-
 class UserFeedPage extends StatefulWidget {
   const UserFeedPage({super.key});
 
@@ -23,8 +20,16 @@ class _UserFeedPageState extends State<UserFeedPage> {
   void initState() {
     super.initState();
     Future.microtask(() {
-      context.read<UserFeedViewModel>().fetchUserFeed();
+      final viewModel = context.read<UserFeedViewModel>();
+      viewModel.fetchUserFeed();
+      viewModel.startPolling();
     });
+  }
+
+  @override
+  void dispose() {
+    context.read<UserFeedViewModel>().stopPolling();
+    super.dispose();
   }
 
   @override
@@ -47,16 +52,15 @@ class _UserFeedPageState extends State<UserFeedPage> {
                     if (feedVM.isLoading) {
                       return const Center(child: CircularProgressIndicator());
                     }
-                    if (feedVM.errorMessage != null) {
-                      return Center(child: Text(feedVM.errorMessage!));
+                    if (feedVM.error != null) {
+                      return Center(child: Text(feedVM.error!));
                     }
                     return ListView.builder(
-                      itemCount: feedVM.feedItems.length,
+                      itemCount: feedVM.posts.length,
                       itemBuilder: (context, index) {
-                        final post = feedVM.feedItems[index];
+                        final post = feedVM.posts[index];
                         return UserFeedCard(
                           post: post,
-                          onViewMore: () => _showPopup(context, post),
                         );
                       },
                     );
@@ -70,53 +74,6 @@ class _UserFeedPageState extends State<UserFeedPage> {
           currentIndex: _selectedIndex,
         ),
       ),
-    );
-  }
-
-  Widget _buildTopBar() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () {},
-        ),
-        IconButton(
-          icon: const Icon(Icons.notifications, color: Colors.black),
-          onPressed: () {},
-        ),
-        ElevatedButton(
-          onPressed: () async {
-            final loginViewModel =
-                Provider.of<LoginViewModel>(context, listen: false);
-            await loginViewModel.logout();
-
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => LoginPage()),
-            );
-          },
-          child: Text("Logout"),
-        ),
-      ],
-    );
-  }
-
-  void _showPopup(BuildContext context, UserFeedModel post) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(post.title),
-          content: Text(post.description),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text("Close"),
-            ),
-          ],
-        );
-      },
     );
   }
 
@@ -134,13 +91,16 @@ class _UserFeedPageState extends State<UserFeedPage> {
   }
 }
 
-class UserFeedCard extends StatelessWidget {
+class UserFeedCard extends StatefulWidget {
   final UserFeedModel post;
-  final VoidCallback onViewMore;
 
-  const UserFeedCard({Key? key, required this.post, required this.onViewMore})
-      : super(key: key);
+  UserFeedCard({Key? key, required this.post}) : super(key: key);
 
+  @override
+  State<UserFeedCard> createState() => _UserFeedCardState();
+}
+
+class _UserFeedCardState extends State<UserFeedCard> {
   String formatDate(String createdAt) {
     DateTime postDate = DateTime.parse(createdAt).toLocal();
     DateTime now = DateTime.now();
@@ -156,6 +116,8 @@ class UserFeedCard extends StatelessWidget {
 
     return "$daysAgo • $formattedDate";
   }
+
+  bool _isExpanded = false;
 
   @override
   Widget build(BuildContext context) {
@@ -179,24 +141,33 @@ class UserFeedCard extends StatelessWidget {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    "Name",
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  Text(
+                    "${widget.post.title}",
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 16),
                   ),
                   Text(
-                    "${post.createdAt}",
+                    formatDate(widget.post.createdAt),
                     style: TextStyle(fontSize: 12, color: Colors.grey[800]),
                   ),
                 ],
               ),
             ],
           ),
+
           const SizedBox(height: 10),
+
+          // Description
           Text(
-            post.description,
+            widget.post.description,
+            maxLines: _isExpanded ? null : 2,
+            overflow:
+                _isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
             style: const TextStyle(fontSize: 14),
           ),
+
           const SizedBox(height: 10),
+
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -211,26 +182,21 @@ class UserFeedCard extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(
-                width: 50,
-                child: ElevatedButton(
-                  onPressed: onViewMore,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.purple,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    padding: EdgeInsets.zero,
-                  ),
-                  child: Center(
-                    child: const Icon(
-                      Icons.arrow_forward,
-                      color: Colors.white,
-                      size: 18,
-                    ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _isExpanded = !_isExpanded;
+                  });
+                },
+                child: Text(
+                  _isExpanded ? "View less" : "View more",
+                  style: const TextStyle(
+                    color: Colors.blue,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
-              )
+              ),
             ],
           ),
         ],
