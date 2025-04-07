@@ -2,10 +2,12 @@ import 'package:dev_track_app/view_models/user_feed_view_model.dart';
 import 'package:dev_track_app/views/admin_pages/admin_feed_view/admin_feed_page.dart';
 import 'package:dev_track_app/views/common_pages/domain_pages/domain.dart';
 import 'package:dev_track_app/views/common_pages/login_page.dart';
+import 'package:dev_track_app/views/user_pages/demo.dart';
 import 'package:dev_track_app/views/user_pages/project_pages/project_display/previous_projects.dart';
 import 'package:dev_track_app/views/user_pages/user_feed_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:dev_track_app/views/user_pages/profile.dart';
 
 import 'view_models/admin_post_view_model.dart';
 //other models
@@ -48,6 +50,6 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.green,
         ),
         debugShowCheckedModeBanner: false,
-        home: LoginPage());
+        home: ProfileHeader());
   }
 }
