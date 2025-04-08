@@ -1,3 +1,4 @@
+import 'package:dev_track_app/theme/colors.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavBar extends StatelessWidget {
@@ -49,7 +50,7 @@ class BottomNavBar extends StatelessWidget {
                 shadowColor: Colors.black54, // Darker shadow
                 shape: const CircleBorder(),
                 child: CircleAvatar(
-                  backgroundColor: Colors.purple,
+                  backgroundColor: AppColors.primaryLight,
                   radius: 28, // Slightly bigger for emphasis
                   child: Icon(
                     _getIcon(currentIndex),

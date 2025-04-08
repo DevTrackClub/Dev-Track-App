@@ -1,3 +1,4 @@
+import 'package:dev_track_app/theme/colors.dart';
 import 'package:dev_track_app/views/user_pages/project_pages/project_display/previous_projects.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -209,7 +210,7 @@ class UserFeedCard extends StatelessWidget {
               FloatingActionButton(
                 tooltip: 'View More',
                 onPressed: onViewMore,
-                backgroundColor: Colors.purple,
+                backgroundColor: AppColors.primaryLight,
                 mini: true,
                 child: const Icon(Icons.arrow_forward, color: Colors.white, size: 18),
               ),

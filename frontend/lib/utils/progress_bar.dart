@@ -1,3 +1,4 @@
+import 'package:dev_track_app/theme/colors.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -94,7 +95,7 @@ class _ProgressBarState extends State<ProgressBar> {
                 height: 25,
                 width: progressFillWidth,
                 decoration: BoxDecoration(
-                  color: Colors.purple,
+                  color: AppColors.primaryLight,
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
