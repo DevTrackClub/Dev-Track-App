@@ -1,5 +1,5 @@
 from ninja import ModelSchema
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from ninja import Schema
 from projects.models import ProjectModel, DomainModel
 
@@ -25,5 +25,12 @@ class CreateProjectSchema(Schema):
     domain_id : int  
     github_link : str 
     youtube_link : str 
+
+
+class CreateProjectCycleSchema(Schema):
+    cycle_name : str
+    start_date : str 
+    end_date : str 
+    is_active : bool = Field(default=False)
 
 

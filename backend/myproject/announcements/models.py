@@ -5,7 +5,7 @@ from members.models import CustomUser
 
 
 
-class AnnouncementModel: 
+class PostModel(models.Model): 
     title = models.CharField(max_length=100, blank=False, null=False)
     description = models.TextField(max_length=512, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)

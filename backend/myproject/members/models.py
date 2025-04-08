@@ -2,6 +2,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from pydantic import ValidationError
+from .managers import CustomUserManager
+from django.core.validators import MinValueValidator
 
 
 from django.core.exceptions import ValidationError
@@ -21,12 +23,24 @@ class CustomUser(AbstractUser):
     phone = models.CharField(max_length=10)
     srn = models.CharField(max_length=8)
     branch = models.CharField(max_length=50)
-    semester = models.CharField(max_length=2, default='1')
+    passout_year = models.PositiveIntegerField(validators=[MinValueValidator(2025)], default=2025)    
     github = models.URLField(default='', blank=True)
     linkedin = models.URLField(default='', blank=True)
+    is_active = models.BooleanField(default=True)
+    otp_token = models.CharField(max_length=6, blank=True, null=True)
+    otp_expiration = models.DateTimeField(null=True, blank=True)
+
+
+
+    ROLE_CHOICES = [
+        ('admin', 'Admin'),
+        ('student', 'Student')
+    ]
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='student')
+    objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['username', 'first_name', 'last_name', 'phone', 'srn', 'branch', 'semester']
+    REQUIRED_FIELDS = ['username', 'first_name', 'last_name', 'phone', 'srn', 'branch', 'passout_year']
 
     def __str__(self):
         return self.email
