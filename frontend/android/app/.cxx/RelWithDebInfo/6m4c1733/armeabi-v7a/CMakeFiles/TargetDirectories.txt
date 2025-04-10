@@ -1,0 +1,2 @@
+C:/Users/Deekshith C/Documents/DTapp/Dev-Track-App/frontend/android/app/.cxx/RelWithDebInfo/6m4c1733/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/Deekshith C/Documents/DTapp/Dev-Track-App/frontend/android/app/.cxx/RelWithDebInfo/6m4c1733/armeabi-v7a/CMakeFiles/rebuild_cache.dir

@@ -7,7 +7,6 @@ import 'package:dev_track_app/view_models/user_feed_view_model.dart';
 import 'package:dev_track_app/utils/bottomnavbar.dart';
 import 'package:dev_track_app/utils/progress_bar.dart';
 
-
 class UserFeedPage extends StatefulWidget {
   const UserFeedPage({super.key});
 
@@ -17,17 +16,14 @@ class UserFeedPage extends StatefulWidget {
 
 class _UserFeedPageState extends State<UserFeedPage> {
   int _selectedIndex = 0;
+  bool _isProgressBarExpanded = false;
 
+  void _onNavBarTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
 
-void _onNavBarTapped(int index) {
-
-  print("Tapped index: $index"); // Debugging print statement
-
-  setState(() {
-    _selectedIndex = index;
-  });
-
-  switch (index) {
+    switch (index) {
       case 0:
         Navigator.pushReplacement(
           context,
@@ -40,9 +36,14 @@ void _onNavBarTapped(int index) {
           MaterialPageRoute(builder: (context) => const PreviousProjects()),
         );
         break;
+    }
   }
-}
 
+  void _onProgressBarExpansionChanged(bool isExpanded) {
+    setState(() {
+      _isProgressBarExpanded = isExpanded;
+    });
+  }
 
   @override
   void initState() {
@@ -57,44 +58,62 @@ void _onNavBarTapped(int index) {
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildTopBar(),
-              const ProgressBar(), 
-              _buildHeader(),
-              const SizedBox(height: 10),
-              Expanded(
-                child: Consumer<UserFeedViewModel>(
-                  builder: (context, feedVM, child) {
-                    if (feedVM.isLoading) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-                    if (feedVM.errorMessage != null) {
-                      return Center(child: Text(feedVM.errorMessage!));
-                    }
-                    return ListView.builder(
-                      itemCount: feedVM.feedItems.length,
-                      itemBuilder: (context, index) {
-                        final post = feedVM.feedItems[index];
-                        return UserFeedCard(
-                          post: post,
-                          onViewMore: () => _showPopup(context, post),
-                        );
-                      },
-                    );
-                  },
+        body: NotificationListener<ProgressBarExpansionNotification>(
+          onNotification: (notification) {
+            _onProgressBarExpansionChanged(notification.isExpanded);
+            return true;
+          },
+          child: SingleChildScrollView(
+            // Wrap in SingleChildScrollView to avoid overflow
+            physics: _isProgressBarExpanded
+                ? const NeverScrollableScrollPhysics()
+                : const AlwaysScrollableScrollPhysics(),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height -
+                    MediaQuery.of(context).padding.top -
+                    MediaQuery.of(context).padding.bottom,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildTopBar(),
+                    // Progress bar always visible
+                    const ProgressBar(),
+                    // Content only visible when progress bar is not expanded
+                    AnimatedCrossFade(
+                      duration: const Duration(milliseconds: 300),
+                      crossFadeState: _isProgressBarExpanded
+                          ? CrossFadeState.showSecond
+                          : CrossFadeState.showFirst,
+                      firstChild: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildHeader(),
+                          const SizedBox(height: 10),
+                          _buildFeedContent(),
+                        ],
+                      ),
+                      secondChild: SizedBox(
+                        height: MediaQuery.of(context).size.height - 130,
+                        width: double.infinity,
+                        // Empty space when expanded
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
         ),
-        bottomNavigationBar: BottomNavBar(
-          currentIndex: _selectedIndex,
-          onTap: _onNavBarTapped,
-        ),
+        bottomNavigationBar: _isProgressBarExpanded
+            ? null
+            : BottomNavBar(
+                currentIndex: _selectedIndex,
+                onTap: _onNavBarTapped,
+              ),
       ),
     );
   }
@@ -112,6 +131,32 @@ void _onNavBarTapped(int index) {
           onPressed: () {},
         ),
       ],
+    );
+  }
+
+  Widget _buildFeedContent() {
+    return Consumer<UserFeedViewModel>(
+      builder: (context, feedVM, child) {
+        if (feedVM.isLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (feedVM.errorMessage != null) {
+          return Center(child: Text(feedVM.errorMessage!));
+        }
+
+        return ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          itemCount: feedVM.feedItems.length,
+          itemBuilder: (context, index) {
+            final post = feedVM.feedItems[index];
+            return UserFeedCard(
+              post: post,
+              onViewMore: () => _showPopup(context, post),
+            );
+          },
+        );
+      },
     );
   }
 
@@ -151,7 +196,8 @@ class UserFeedCard extends StatelessWidget {
   final UserFeedModel post;
   final VoidCallback onViewMore;
 
-  const UserFeedCard({Key? key, required this.post, required this.onViewMore}) : super(key: key);
+  const UserFeedCard({Key? key, required this.post, required this.onViewMore})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -212,7 +258,8 @@ class UserFeedCard extends StatelessWidget {
                 onPressed: onViewMore,
                 backgroundColor: AppColors.primaryLight,
                 mini: true,
-                child: const Icon(Icons.arrow_forward, color: Colors.white, size: 18),
+                child: const Icon(Icons.arrow_forward,
+                    color: Colors.white, size: 18),
               ),
             ],
           ),
@@ -221,4 +268,3 @@ class UserFeedCard extends StatelessWidget {
     );
   }
 }
-
