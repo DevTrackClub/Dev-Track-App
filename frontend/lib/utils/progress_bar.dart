@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:math' show max;
 import 'package:dev_track_app/theme/colors.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ProgressBar extends StatefulWidget {
   const ProgressBar({Key? key}) : super(key: key);
@@ -11,6 +13,8 @@ class ProgressBar extends StatefulWidget {
 
 class _ProgressBarState extends State<ProgressBar>
     with SingleTickerProviderStateMixin {
+  bool c1 = false;
+  bool c2 = false;
   DateTime startDate = DateTime(2025, 4, 1); // Start Date
   DateTime endDate = DateTime(2025, 5, 1); // End Date
   double progress = 0.0; // Progress in percentage (0.0 - 1.0)
@@ -168,60 +172,70 @@ class _ProgressBarState extends State<ProgressBar>
         title: "Concept Design",
         description: "Initial wireframes and design concepts",
         tasks: ["Task 1: Completed", "Task 2: In Progress", "Task 3: Pending"],
+        isCompleted: [true, false, false],
       ),
       TimelineEvent(
         time: "18 Mar",
         title: "UX Research",
         description: "User testing and interviews",
         tasks: ["Task 1: Completed", "Task 2: In Progress"],
+        isCompleted: [true, false],
       ),
       TimelineEvent(
         time: "20 Mar",
         title: "UI Design",
         description: "Visual design and component library",
         tasks: ["Task 1: Completed", "Task 2: In Progress", "Task 3: Pending"],
+        isCompleted: [true, false, false],
       ),
       TimelineEvent(
         time: "22 Mar",
         title: "Frontend Dev",
         description: "Implementation of the UI components",
         tasks: ["Task 1: Completed"],
+        isCompleted: [true],
       ),
       TimelineEvent(
         time: "25 Mar",
         title: "Backend Integration",
         description: "API integration and data flow",
         tasks: ["Task 1: Completed", "Task 2: In Progress", "Task 3: Pending"],
+        isCompleted: [true, false, false],
       ),
       TimelineEvent(
         time: "28 Mar",
         title: "Testing",
         description: "QA testing and bug fixing",
         tasks: ["Task 1: Completed", "Task 2: In Progress"],
+        isCompleted: [true, false],
       ),
       TimelineEvent(
         time: "2 Apr",
         title: "Final Release",
         description: "Product launch and monitoring",
         tasks: ["Task 1: In Progress", "Task 2: Pending"],
+        isCompleted: [false, false],
       ),
       TimelineEvent(
         time: "5 Apr",
         title: "User Feedback",
         description: "Collecting initial user feedback",
         tasks: ["Task 1: Pending", "Task 2: Pending"],
+        isCompleted: [false, false],
       ),
       TimelineEvent(
         time: "10 Apr",
         title: "Iterations",
         description: "Implementing improvements based on feedback",
         tasks: ["Task 1: Pending"],
+        isCompleted: [false],
       ),
       TimelineEvent(
         time: "15 Apr",
         title: "Marketing",
         description: "Promotion and user acquisition",
         tasks: ["Task 1: Pending", "Task 2: Pending"],
+        isCompleted: [false, false],
       ),
     ];
   }
@@ -252,6 +266,14 @@ class _ProgressBarState extends State<ProgressBar>
     return index.clamp(0, timelineEvents.length - 1);
   }
 
+  final Uri _url = Uri.parse('https://meet.ggogle.com/gdo-nbrf-zwz');
+
+  void _launchURL() async {
+    if (!await launchUrl(_url)) {
+      throw 'Could not launch $_url';
+    }
+  }
+
   @override
   void dispose() {
     timer?.cancel();
@@ -276,11 +298,9 @@ class _ProgressBarState extends State<ProgressBar>
     return AnimatedBuilder(
       animation: _animationController,
       builder: (context, child) {
-        // Calculate the height of the container based on animation
-        double height = _isExpanded
-            ? barHeight +
-                (_containerAnimation.value * (expandedBarHeight - barHeight))
-            : barHeight;
+        // For expand and collapse animations
+        final animationValue = _animationController.value;
+        final reverseAnimationValue = 1.0 - animationValue;
 
         // Calculate the width and thickness of the progress bar
         double progressBarThickness = _isExpanded
@@ -297,151 +317,273 @@ class _ProgressBarState extends State<ProgressBar>
               2.0 + ((1.0 - _barThinningAnimation.value) * (barHeight - 2.0));
         }
 
-        // Calculate the current timeline height for vertical progress bar
-        double timelineHeight = timelinePosition + 30; // Add some padding
+        // Calculate heights for different phases of animation
+        double height;
 
-        // Calculate vertical progress bar height based on animation
-        double progressBarHeight = barHeight;
-        if (_isExpanded && _progressBarHeightAnimation.value > 0.0) {
-          // Animate height from bar height to full container height
-          progressBarHeight = barHeight +
-              (_progressBarHeightAnimation.value * (height - barHeight));
-        } else if (!_isExpanded &&
-            _animationController.status == AnimationStatus.reverse) {
-          // Reverse animation - shrinking from full height to bar height
-          progressBarHeight = height -
-              ((1.0 - _progressBarHeightAnimation.value) *
-                  (height - barHeight));
-        }
-
-        // Calculate the width of the progress bar
-        double progressWidth = _isExpanded
-            ? 2.0 // Always thin when expanded
-            : ((barWidth - knobSize) * progress + (knobSize / 2));
-
-        // Interpolate during animation
-        if (_isExpanded && _barThinningAnimation.value < 1.0) {
-          progressWidth = ((barWidth - knobSize) * progress + (knobSize / 2)) -
-              (_barThinningAnimation.value *
-                  (((barWidth - knobSize) * progress + (knobSize / 2)) - 2.0));
-        } else if (!_isExpanded &&
-            _animationController.status == AnimationStatus.reverse) {
-          progressWidth = 2.0 +
-              ((1.0 - _barThinningAnimation.value) *
-                  (((barWidth - knobSize) * progress + (knobSize / 2)) - 2.0));
-        }
-
-        // Calculate knob position with animation - horizontal alignment
-        double knobX = normalKnobPosition; // Default position
         if (_isExpanded) {
-          // When expanding, move knob to the left edge first
+          // During expansion: follow the container animation (from first code)
+          height = barHeight +
+              (_containerAnimation.value * (expandedBarHeight - barHeight));
+        } else if (_animationController.status == AnimationStatus.reverse) {
+          // During collapse: use the improved collapse animation from second code
+          // When knob is moving up (first phase of collapse), the container should shrink
+          double knobMovementFactor;
+
+          // Knob is moving up during 0.8-0.5 of original animation (equivalent to 0.2-0.5 of reverse animation)
+          if (reverseAnimationValue < 0.2) {
+            // Knob hasn't started moving yet
+            knobMovementFactor = 0.0;
+          } else if (reverseAnimationValue > 0.5) {
+            // Knob has completed its upward movement
+            knobMovementFactor = 1.0;
+          } else {
+            // Knob is in the process of moving up (normalize to 0.0-1.0 range)
+            knobMovementFactor = (reverseAnimationValue - 0.2) / 0.3;
+          }
+
+          // Height shrinks proportionally as knob moves up
+          height = expandedBarHeight -
+              (knobMovementFactor * (expandedBarHeight - barHeight));
+        } else {
+          height = barHeight;
+        }
+
+        // Calculate the width and thickness of the progress bar
+        if (_isExpanded) {
+          // Thinning during expansion (from first code)
+          progressBarThickness =
+              barHeight - (_barThinningAnimation.value * (barHeight - 2.0));
+        } else if (_animationController.status == AnimationStatus.reverse) {
+          // Thickening during collapse (improved from second code)
+          // This should happen after the knob has moved back horizontally (after 0.7 of reverse animation)
+          double thickeningFactor;
+
+          if (reverseAnimationValue < 0.7) {
+            // Still thin
+            thickeningFactor = 0.0;
+          } else {
+            // Start thickening (normalize to 0.0-1.0 range)
+            thickeningFactor = (reverseAnimationValue - 0.7) / 0.3;
+          }
+
+          progressBarThickness = 2.0 + (thickeningFactor * (barHeight - 2.0));
+        } else {
+          progressBarThickness = _isExpanded ? 2.0 : barHeight;
+        }
+
+        // Calculate knob positions using the approach from both code samples
+        double knobX;
+        double knobY;
+
+        if (_isExpanded) {
+          // Horizontal movement during expansion (first phase) - from first code
           knobX = normalKnobPosition -
               (_knobHorizontalAnimation.value *
                   (normalKnobPosition - (20 - (knobSize / 2))));
-        } else if (!_isExpanded &&
-            _animationController.status == AnimationStatus.reverse) {
-          // When collapsing, move knob from left edge back to normal position
-          knobX = (20 - (knobSize / 2)) +
-              ((1.0 - _knobHorizontalAnimation.value) *
-                  (normalKnobPosition - (20 - (knobSize / 2))));
-        }
 
-        // Vertical position depends on animation state
-        double knobY = (barHeight - knobSize) / 2; // Default centered position
-        if (_isExpanded && _knobVerticalAnimation.value > 0.0) {
-          // Only move down vertically after horizontal movement is done
+          // Vertical movement during expansion (third phase) - from first code
           knobY = (barHeight - knobSize) / 2 +
               (_knobVerticalAnimation.value *
                   (timelinePosition - ((barHeight - knobSize) / 2)));
-        } else if (!_isExpanded &&
-            _animationController.status == AnimationStatus.reverse) {
-          // Moving back up during collapse
+        } else if (_animationController.status == AnimationStatus.reverse) {
+          // For collapse animation, we need to reverse the order (from second code):
+          // First move knob up, then move it horizontally
+
+          // Vertical movement (moving up) - happens first (0.2-0.5 of reverse animation)
+          double verticalFactor;
+
+          if (reverseAnimationValue < 0.2) {
+            // Knob still at bottom
+            verticalFactor = 0.0;
+          } else if (reverseAnimationValue > 0.5) {
+            // Knob has reached the top
+            verticalFactor = 1.0;
+          } else {
+            // Knob is moving up (normalize to 0.0-1.0)
+            verticalFactor = (reverseAnimationValue - 0.2) / 0.3;
+          }
+
           knobY = timelinePosition -
-              ((1.0 - _knobVerticalAnimation.value) *
+              (verticalFactor *
                   (timelinePosition - ((barHeight - knobSize) / 2)));
+
+          // Horizontal movement - happens after vertical (0.7-1.0 of reverse animation)
+          double horizontalFactor;
+
+          if (reverseAnimationValue < 0.7) {
+            // Knob still at left
+            horizontalFactor = 0.0;
+          } else {
+            // Knob moving horizontally (normalize to 0.0-1.0)
+            horizontalFactor = (reverseAnimationValue - 0.7) / 0.3;
+          }
+
+          knobX = (20 - (knobSize / 2)) +
+              (horizontalFactor * (normalKnobPosition - (20 - (knobSize / 2))));
+        } else {
+          // Default positions
+          knobX = _isExpanded ? (20 - (knobSize / 2)) : normalKnobPosition;
+          knobY = _isExpanded ? timelinePosition : (barHeight - knobSize) / 2;
         }
 
-        // Calculate the left position of the progress bar
-        double progressLeft = _isExpanded ? 20 : 0;
+        // Calculate progress bar position and width (IMPROVED to fix disappearing purple bar)
+        double progressBarLeft;
+        double progressBarWidth;
+
+        if (_isExpanded) {
+          // In expanded state: align with knob center
+          progressBarLeft =
+              knobX + (knobSize / 2) - 1; // -1 for half of 2px width
+          progressBarWidth = 2.0;
+        } else if (_animationController.status == AnimationStatus.reverse) {
+          // During collapse: keep aligned with knob until final phase
+          if (reverseAnimationValue < 0.7) {
+            // Still in vertical alignment phase
+            progressBarLeft = knobX + (knobSize / 2) - 1;
+            progressBarWidth = 2.0;
+          } else {
+            // Transitioning back to horizontal bar
+            double transitionFactor = (reverseAnimationValue - 0.7) / 0.3;
+
+            // Gradually move from knob-aligned to left=0
+            progressBarLeft =
+                (knobX + (knobSize / 2) - 1) * (1 - transitionFactor);
+
+            // Ensure width is never zero during transition
+            // Width should exactly reach the knob position
+            progressBarWidth =
+                max(2.0, knobX + (knobSize / 2) - progressBarLeft);
+          }
+        } else {
+          // Normal state: progress bar width should reach the knob position
+          progressBarLeft = 0;
+          progressBarWidth = max(
+              2.0, knobX + (knobSize / 2)); // End exactly at the knob's center
+        }
 
         // Show knob in normal mode or during animation, but hide when fully expanded with details
         bool showMovingKnob = !_isExpanded || (_isExpanded && !_showDetails);
 
-        // Calculate vertical line visibility and height
-        double lineHeight = _isExpanded
-            ? _lineExtensionAnimation.value *
-                (timelinePosition - (barHeight / 2))
-            : 0.0;
+        // Calculate vertical line height for expanded view - improved from second code
+        double lineHeight = 0.0;
+        if (_isExpanded) {
+          lineHeight = _lineExtensionAnimation.value *
+              (timelinePosition - (barHeight / 2));
+        } else if (_animationController.status == AnimationStatus.reverse) {
+          // Line retraction during collapse matches knob vertical movement
+          double verticalFactor;
+
+          if (reverseAnimationValue < 0.2) {
+            // Line still fully extended
+            verticalFactor = 0.0;
+          } else if (reverseAnimationValue > 0.5) {
+            // Line fully retracted
+            verticalFactor = 1.0;
+          } else {
+            // Line retracting (normalize to 0.0-1.0)
+            verticalFactor = (reverseAnimationValue - 0.2) / 0.3;
+          }
+
+          lineHeight =
+              (1.0 - verticalFactor) * (timelinePosition - (barHeight / 2));
+        }
+
+        // Calculate vertical progress bar height
+        double progressBarHeight = barHeight;
+        if (_isExpanded && _progressBarHeightAnimation.value > 0.0) {
+          // During expansion
+          progressBarHeight = barHeight +
+              (_progressBarHeightAnimation.value * (height - barHeight));
+        } else if (!_isExpanded &&
+            _animationController.status == AnimationStatus.reverse) {
+          // During collapse
+          double verticalFactor;
+
+          if (reverseAnimationValue < 0.2) {
+            // Still full height
+            verticalFactor = 0.0;
+          } else if (reverseAnimationValue > 0.5) {
+            // Fully retracted to bar height
+            verticalFactor = 1.0;
+          } else {
+            // Retracting (normalize to 0.0-1.0)
+            verticalFactor = (reverseAnimationValue - 0.2) / 0.3;
+          }
+
+          progressBarHeight = height - (verticalFactor * (height - barHeight));
+        }
+
+        // Only show the vertical line when needed (improved from second code)
+        bool showVerticalLine =
+            (_isExpanded && _lineExtensionAnimation.value > 0) ||
+                (!_isExpanded &&
+                    _animationController.status == AnimationStatus.reverse &&
+                    lineHeight > 0 &&
+                    reverseAnimationValue < 0.5);
+
+        // Use solid color for the progress bar - don't change opacity during transition
+        Color progressBarColor = AppColors.primaryLight;
+        Color verticalLineColor = progressBarColor.withOpacity(_isExpanded
+            ? _lineExtensionAnimation.value
+            : (_animationController.status == AnimationStatus.reverse
+                ? reverseAnimationValue < 0.5
+                    ? 1.0 - ((reverseAnimationValue) / 0.5)
+                    : 0.0
+                : 1.0));
 
         return Column(
           children: [
             // Progress bar container
-            GestureDetector(
-              onTap: _toggleExpanded,
-              child: Container(
-                width: barWidth,
-                height: height,
-                decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius:
-                      BorderRadius.circular(15), // Slightly rounded corners
-                ),
-                child: Stack(
-                  children: [
-                    // Progress fill - horizontal bar that transitions to vertical
-                    Positioned(
-                      left: progressLeft,
-                      top: (barHeight - progressBarThickness) /
-                          2, // Center the thin bar
-                      child: _isExpanded ||
+            Container(
+              width: barWidth,
+              height: height,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius:
+                    BorderRadius.circular(15), // Slightly rounded corners
+              ),
+              child: Stack(
+                children: [
+                  // Progress fill - horizontal bar that transitions to vertical
+                  Positioned(
+                    left: progressBarLeft,
+                    top: (barHeight - progressBarThickness) / 2,
+                    child: Container(
+                      width: progressBarWidth,
+                      height: _isExpanded ||
                               _animationController.status ==
                                   AnimationStatus.reverse
-                          ? Container(
-                              width: progressWidth,
-                              height: progressBarHeight,
-                              decoration: BoxDecoration(
-                                color: AppColors.primaryLight,
-                                borderRadius: BorderRadius.only(
-                                  topLeft:
-                                      Radius.circular(_isExpanded ? 0 : 15),
-                                  topRight:
-                                      Radius.circular(_isExpanded ? 0 : 15),
-                                ),
-                              ),
-                            )
-                          : Container(
-                              width: progressWidth,
-                              height: progressBarThickness,
-                              decoration: BoxDecoration(
-                                color: AppColors.primaryLight,
-                                borderRadius:
-                                    BorderRadius.circular(_isExpanded ? 0 : 15),
-                              ),
-                            ),
+                          ? progressBarHeight
+                          : progressBarThickness,
+                      decoration: BoxDecoration(
+                        color: progressBarColor,
+                        borderRadius:
+                            BorderRadius.circular(_isExpanded ? 0 : 15),
+                      ),
+                    ),
+                  ),
+
+                  // Vertical line for the knob - only shown when needed
+                  if (showVerticalLine)
+                    Positioned(
+                      left: knobX +
+                          (knobSize / 2) -
+                          1, // centers the 2px line with the knob
+                      top: barHeight / 2, // start from bar center
+                      child: Container(
+                        width: 2,
+                        height: lineHeight,
+                        color: verticalLineColor,
+                      ),
                     ),
 
-                    // Vertical line extension - only needed if we're not using the vertical progress bar
-                    if ((_isExpanded &&
-                            _lineExtensionAnimation.value > 0 &&
-                            _progressBarHeightAnimation.value == 0) ||
-                        (!_isExpanded &&
-                            _animationController.status ==
-                                AnimationStatus.reverse))
-                      Positioned(
-                        left: 20,
-                        top: barHeight / 2,
-                        child: Container(
-                          width: 2,
-                          height: lineHeight,
-                          color: AppColors.primaryLight,
-                        ),
-                      ),
-
-                    // Moving knob (visible during animation and normal mode)
-                    if (showMovingKnob)
-                      Positioned(
-                        left: knobX,
-                        top: knobY,
+                  // Moving knob (visible during animation and normal mode) - FIX: Now with GestureDetector
+                  if (showMovingKnob)
+                    Positioned(
+                      left: knobX,
+                      top: knobY,
+                      child: GestureDetector(
+                        onTap: _toggleExpanded, // Only expand/collapse when knob is tapped
                         child: Container(
                           width: knobSize,
                           height: knobSize,
@@ -460,33 +602,32 @@ class _ProgressBarState extends State<ProgressBar>
                           ),
                         ),
                       ),
+                    ),
 
-                    // Timeline events - only visible when details should show
-                    if (_isExpanded)
-                      Positioned(
-                        left: 0,
-                        top: barHeight,
-                        right: 0,
-                        bottom: 0,
-                        child: Opacity(
-                          opacity: _detailsAnimation.value,
-                          child: Container(
-                            padding: const EdgeInsets.only(top: 20),
-                            child: SingleChildScrollView(
-                              controller: _scrollController,
-                              child: Padding(
-                                padding: const EdgeInsets.only(bottom: 30),
-                                child: Column(
-                                  children:
-                                      _buildTimelineItems(currentEventIndex),
-                                ),
+                  // Timeline events - only visible when details should show
+                  if (_isExpanded)
+                    Positioned(
+                      left: 0,
+                      top: barHeight,
+                      right: 0,
+                      bottom: 0,
+                      child: Opacity(
+                        opacity: _detailsAnimation.value,
+                        child: Container(
+                          padding: const EdgeInsets.only(top: 20),
+                          child: SingleChildScrollView(
+                            controller: _scrollController,
+                            child: Padding(
+                              padding: const EdgeInsets.only(bottom: 30),
+                              child: Column(
+                                children: _buildTimelineItems(currentEventIndex),
                               ),
                             ),
                           ),
                         ),
                       ),
-                  ],
-                ),
+                    ),
+                ],
               ),
             ),
 
@@ -547,24 +688,27 @@ class _ProgressBarState extends State<ProgressBar>
                 width: 40,
                 child: Column(
                   children: [
-                    Container(
-                      width: knobSize,
-                      height: knobSize,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                        border: Border.all(
-                          color: isCurrentEvent ? Colors.purple : Colors.grey,
-                          width: 2,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            blurRadius: 4,
-                            spreadRadius: 1,
-                            offset: const Offset(0, 2),
+                    GestureDetector(
+                      onTap: _toggleExpanded, // FIX: Add collapse functionality to timeline knobs
+                      child: Container(
+                        width: knobSize,
+                        height: knobSize,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: Colors.white,
+                          border: Border.all(
+                            color: isCurrentEvent ? Colors.purple : Colors.grey,
+                            width: 2,
                           ),
-                        ],
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.2),
+                              blurRadius: 4,
+                              spreadRadius: 1,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     if (i < timelineEvents.length - 1)
@@ -622,40 +766,67 @@ class _ProgressBarState extends State<ProgressBar>
                         ),
                       ),
                       const SizedBox(height: 8),
-                      ...event.tasks
-                          .map((task) => Padding(
-                                padding: const EdgeInsets.only(bottom: 4),
-                                child: Row(
-                                  children: [
-                                    Icon(
-                                      task.contains("Completed")
-                                          ? Icons.check_circle
-                                          : (task.contains("In Progress")
-                                              ? Icons.play_circle_outline
-                                              : Icons.pending_outlined),
-                                      size: 16,
-                                      color: task.contains("Completed")
-                                          ? Colors.green
-                                          : (task.contains("In Progress")
-                                              ? Colors.orange
-                                              : Colors.grey),
-                                    ),
-                                    const SizedBox(width: 6),
-                                    Text(
-                                      task,
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: task.contains("Completed")
-                                            ? Colors.green[800]
-                                            : (task.contains("In Progress")
-                                                ? Colors.orange[800]
-                                                : Colors.grey[700]),
-                                      ),
-                                    ),
-                                  ],
+                      // FIX: Task checkboxes with individual state tracking
+                      ...List.generate(
+                        event.tasks.length,
+                        (index) => Padding(
+                          padding: const EdgeInsets.only(bottom: 4),
+                          child: Row(
+                            children: [
+                              // FIX: Isolated checkbox with its own tap target
+                              SizedBox(
+                                width: 24,
+                                height: 24,
+                                child: Checkbox(
+                                  value: event.isCompleted[index],
+                                  onChanged: (bool? value) {
+                                    setState(() {
+                                      // Update only this specific task's completion status
+                                      event.isCompleted[index] = value!;
+                                    });
+                                  },
                                 ),
-                              ))
-                          .toList(),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  event.tasks[index],
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: event.isCompleted[index]
+                                        ? Colors.green[800]
+                                        : Colors.grey[700],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      // FIX: Only launch URL when blue text or icon is clicked
+                      Padding(
+                        padding: const EdgeInsets.only(top: 8),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            GestureDetector(
+                              onTap: _launchURL, // URL launches when icon is clicked
+                              child: const Icon(
+                                Icons.video_call,
+                                color: Colors.blue,
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            GestureDetector(
+                              onTap: _launchURL, // URL launches when text is clicked
+                              child: const Text(
+                                "Scrum meet 8:00 p.m.",
+                                style: TextStyle(color: Colors.blue),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -675,12 +846,14 @@ class TimelineEvent {
   final String title;
   final String description;
   final List<String> tasks;
+  List<bool> isCompleted; // Changed to a mutable field to track checkbox states
 
   TimelineEvent({
     required this.time,
     required this.title,
     required this.description,
     required this.tasks,
+    required this.isCompleted,
   });
 }
 
