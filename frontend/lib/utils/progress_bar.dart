@@ -16,7 +16,7 @@ class _ProgressBarState extends State<ProgressBar>
   bool c1 = false;
   bool c2 = false;
   DateTime startDate = DateTime(2025, 4, 1); // Start Date
-  DateTime endDate = DateTime(2025, 5, 1); // End Date
+  DateTime endDate = DateTime(2025, 5, 31); // End Date
   double progress = 0.0; // Progress in percentage (0.0 - 1.0)
   double barWidth = 375; // Width of progress bar
   double barHeight = 30; // Height of progress bar - slightly increased
@@ -57,57 +57,57 @@ class _ProgressBarState extends State<ProgressBar>
     // Initialize single animation controller with longer duration
     _animationController = AnimationController(
       duration: const Duration(
-          milliseconds: 1400), // Slightly longer total animation time
+          milliseconds: 1800), // Increased duration for smoother animation
       vsync: this,
     );
 
-    // Set up interval animations - rearranged for new sequence
+    // Set up interval animations with smoother transitions
 
-    // 1. First phase: Bar thins down & knob aligns horizontally (0-30%)
+    // 1. First phase: Bar thins down & knob aligns horizontally (0-40%)
     _barThinningAnimation =
         Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
       parent: _animationController,
-      curve: const Interval(0.0, 0.3, curve: Curves.easeInOut),
+      curve: const Interval(0.0, 0.4, curve: Curves.easeInOutCubic),
     ));
 
     _knobHorizontalAnimation =
         Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
       parent: _animationController,
-      curve: const Interval(0.0, 0.3, curve: Curves.easeInOut),
+      curve: const Interval(0.0, 0.4, curve: Curves.easeInOutCubic),
     ));
 
-    // 2. Second phase: Container expands (20-60%)
+    // 2. Second phase: Container expands (30-70%)
     _containerAnimation =
         Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
       parent: _animationController,
-      curve: const Interval(0.2, 0.6, curve: Curves.easeInOut),
+      curve: const Interval(0.3, 0.7, curve: Curves.easeInOutCubic),
     ));
 
-    // 3. Third phase: Line extends & knob moves down (50-80%)
+    // 3. Third phase: Line extends & knob moves down (60-100%)
     _lineExtensionAnimation =
         Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
       parent: _animationController,
-      curve: const Interval(0.5, 0.8, curve: Curves.easeInOut),
+      curve: const Interval(0.6, 1.0, curve: Curves.easeInOutCubic),
     ));
 
     _knobVerticalAnimation =
         Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
       parent: _animationController,
-      curve: const Interval(0.5, 0.8, curve: Curves.easeInOut),
+      curve: const Interval(0.6, 1.0, curve: Curves.easeInOutCubic),
     ));
 
-    // New animation: Progress bar height extension (50-80%) - matching line extension timing
+    // Progress bar height extension (60-100%)
     _progressBarHeightAnimation =
         Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
       parent: _animationController,
-      curve: const Interval(0.5, 0.8, curve: Curves.easeInOut),
+      curve: const Interval(0.6, 1.0, curve: Curves.easeInOutCubic),
     ));
 
-    // 4. Final phase: Show details (75-100%)
+    // 4. Final phase: Show details (90-100%)
     _detailsAnimation =
         Tween<double>(begin: 0.0, end: 1.0).animate(CurvedAnimation(
       parent: _animationController,
-      curve: const Interval(0.75, 1.0, curve: Curves.easeInOut),
+      curve: const Interval(0.9, 1.0, curve: Curves.easeInOutCubic),
     ));
 
     // Listen to animation status to update UI states
@@ -120,6 +120,7 @@ class _ProgressBarState extends State<ProgressBar>
 
           // Scroll to current event
           int currentIndex = getCurrentEventIndex();
+
           WidgetsBinding.instance.addPostFrameCallback((_) {
             if (_scrollController.hasClients) {
               _scrollController.animateTo(
@@ -150,6 +151,14 @@ class _ProgressBarState extends State<ProgressBar>
 
   void _updateProgress() {
     DateTime currentDate = DateTime.now();
+    // Add null safety check
+    if (startDate == null || endDate == null) {
+      setState(() {
+        progress = 0.0;
+      });
+      return;
+    }
+
     int totalDays = endDate.difference(startDate).inDays + 1;
     int elapsedDays = currentDate.difference(startDate).inDays;
 
@@ -159,16 +168,27 @@ class _ProgressBarState extends State<ProgressBar>
   }
 
   void _updateTimeLeft() {
+    // Add null safety check
+    if (endDate == null) {
+      setState(() {
+        timeLeft = Duration.zero;
+      });
+      return;
+    }
+
     setState(() {
       timeLeft = endDate.difference(DateTime.now());
     });
   }
 
   void _generateTimelineEvents() {
-    // Generate sample timeline events
+    // Generate sample timeline events with proper dates
+    final totalDuration = endDate.difference(startDate).inDays;
+
     timelineEvents = [
       TimelineEvent(
         time: "15 Mar",
+        date: DateTime(2025, 4, 15),
         title: "Concept Design",
         description: "Initial wireframes and design concepts",
         tasks: ["Task 1: Completed", "Task 2: In Progress", "Task 3: Pending"],
@@ -176,6 +196,7 @@ class _ProgressBarState extends State<ProgressBar>
       ),
       TimelineEvent(
         time: "18 Mar",
+        date: DateTime(2025, 4, 18),
         title: "UX Research",
         description: "User testing and interviews",
         tasks: ["Task 1: Completed", "Task 2: In Progress"],
@@ -183,6 +204,7 @@ class _ProgressBarState extends State<ProgressBar>
       ),
       TimelineEvent(
         time: "20 Mar",
+        date: DateTime(2025, 4, 20),
         title: "UI Design",
         description: "Visual design and component library",
         tasks: ["Task 1: Completed", "Task 2: In Progress", "Task 3: Pending"],
@@ -190,6 +212,7 @@ class _ProgressBarState extends State<ProgressBar>
       ),
       TimelineEvent(
         time: "22 Mar",
+        date: DateTime(2025, 4, 22),
         title: "Frontend Dev",
         description: "Implementation of the UI components",
         tasks: ["Task 1: Completed"],
@@ -197,6 +220,7 @@ class _ProgressBarState extends State<ProgressBar>
       ),
       TimelineEvent(
         time: "25 Mar",
+        date: DateTime(2025, 4, 25),
         title: "Backend Integration",
         description: "API integration and data flow",
         tasks: ["Task 1: Completed", "Task 2: In Progress", "Task 3: Pending"],
@@ -204,6 +228,7 @@ class _ProgressBarState extends State<ProgressBar>
       ),
       TimelineEvent(
         time: "28 Mar",
+        date: DateTime(2025, 4, 28),
         title: "Testing",
         description: "QA testing and bug fixing",
         tasks: ["Task 1: Completed", "Task 2: In Progress"],
@@ -211,6 +236,7 @@ class _ProgressBarState extends State<ProgressBar>
       ),
       TimelineEvent(
         time: "2 Apr",
+        date: DateTime(2025, 5, 2),
         title: "Final Release",
         description: "Product launch and monitoring",
         tasks: ["Task 1: In Progress", "Task 2: Pending"],
@@ -218,6 +244,7 @@ class _ProgressBarState extends State<ProgressBar>
       ),
       TimelineEvent(
         time: "5 Apr",
+        date: DateTime(2025, 5, 5),
         title: "User Feedback",
         description: "Collecting initial user feedback",
         tasks: ["Task 1: Pending", "Task 2: Pending"],
@@ -225,6 +252,7 @@ class _ProgressBarState extends State<ProgressBar>
       ),
       TimelineEvent(
         time: "10 Apr",
+        date: DateTime(2025, 5, 10),
         title: "Iterations",
         description: "Implementing improvements based on feedback",
         tasks: ["Task 1: Pending"],
@@ -232,6 +260,7 @@ class _ProgressBarState extends State<ProgressBar>
       ),
       TimelineEvent(
         time: "15 Apr",
+        date: DateTime(2025, 5, 15),
         title: "Marketing",
         description: "Promotion and user acquisition",
         tasks: ["Task 1: Pending", "Task 2: Pending"],
@@ -245,7 +274,7 @@ class _ProgressBarState extends State<ProgressBar>
     return (currentEventIndex * 90.0).clamp(0.0, timelineEvents.length * 90.0);
   }
 
-  void _toggleExpanded() {
+  void _toggleExpanded({int? arrowIndex}) {
     setState(() {
       _isExpanded = !_isExpanded;
 
@@ -264,6 +293,14 @@ class _ProgressBarState extends State<ProgressBar>
     // Map progress to event index
     int index = (progress * timelineEvents.length).floor();
     return index.clamp(0, timelineEvents.length - 1);
+  }
+
+  // Calculate position for event arrows
+  double calculateEventPosition(DateTime eventDate) {
+    final totalDays = endDate.difference(startDate).inDays;
+    final daysFromStart = eventDate.difference(startDate).inDays;
+    final position = (daysFromStart / totalDays).clamp(0.0, 1.0);
+    return position * (barWidth - 35) + 10;
   }
 
   final Uri _url = Uri.parse('https://meet.ggogle.com/gdo-nbrf-zwz');
@@ -376,14 +413,37 @@ class _ProgressBarState extends State<ProgressBar>
         double knobY;
 
         if (_isExpanded) {
-          // Horizontal movement during expansion (first phase) - from first code
-          knobX = normalKnobPosition -
-              (_knobHorizontalAnimation.value *
-                  (normalKnobPosition - (20 - (knobSize / 2))));
+          // Horizontal movement during expansion (first phase)
+          double horizontalFactor;
+          if (animationValue < 0.2) {
+            // Knob still at normal position
+            horizontalFactor = 0.0;
+          } else if (animationValue > 0.5) {
+            // Knob has reached left position
+            horizontalFactor = 1.0;
+          } else {
+            // Knob moving horizontally (normalize to 0.0-1.0)
+            horizontalFactor = (animationValue - 0.2) / 0.3;
+          }
 
-          // Vertical movement during expansion (third phase) - from first code
+          knobX = normalKnobPosition -
+              (horizontalFactor * (normalKnobPosition - (20 - (knobSize / 2))));
+
+          // Vertical movement during expansion (third phase)
+          double verticalFactor;
+          if (animationValue < 0.5) {
+            // Knob still at top
+            verticalFactor = 0.0;
+          } else if (animationValue > 0.8) {
+            // Knob has reached bottom
+            verticalFactor = 1.0;
+          } else {
+            // Knob moving vertically (normalize to 0.0-1.0)
+            verticalFactor = (animationValue - 0.5) / 0.3;
+          }
+
           knobY = (barHeight - knobSize) / 2 +
-              (_knobVerticalAnimation.value *
+              (verticalFactor *
                   (timelinePosition - ((barHeight - knobSize) / 2)));
         } else if (_animationController.status == AnimationStatus.reverse) {
           // For collapse animation, we need to reverse the order (from second code):
@@ -533,6 +593,53 @@ class _ProgressBarState extends State<ProgressBar>
 
         return Column(
           children: [
+            // Event arrow indicators
+            SizedBox(
+              width: barWidth,
+              height: 35,
+              child: Stack(
+                children: [
+                  // Generate arrow for each event - only show when not animating
+                  if (!_animationController.isAnimating)
+                    ...List.generate(timelineEvents.length, (index) {
+                      final event = timelineEvents[index];
+                      final position = calculateEventPosition(event.date);
+
+                      // Determine color
+                      Color arrowColor;
+                      if (_isExpanded) {
+                        arrowColor = Colors.white;
+                      } else {
+                        int currentEventIndex = getCurrentEventIndex();
+                        arrowColor = (index <= currentEventIndex)
+                            ? Colors.white
+                            : AppColors.primaryLight;
+                      }
+
+                      return Positioned(
+                        left: position - 17.5,
+                        child: Icon(
+                          Icons.arrow_drop_down_rounded,
+                          color: arrowColor,
+                          size: 35,
+                        ),
+                      );
+                    }),
+
+                  // Show center arrow only during animation
+                  if (_animationController.isAnimating)
+                    Positioned(
+                      left: barWidth / 2 - 17.5,
+                      child: Icon(
+                        Icons.arrow_drop_down_rounded,
+                        color: Colors.white,
+                        size: 35,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+
             // Progress bar container
             Container(
               width: barWidth,
@@ -583,7 +690,8 @@ class _ProgressBarState extends State<ProgressBar>
                       left: knobX,
                       top: knobY,
                       child: GestureDetector(
-                        onTap: _toggleExpanded, // Only expand/collapse when knob is tapped
+                        onTap:
+                            _toggleExpanded, // Only expand/collapse when knob is tapped
                         child: Container(
                           width: knobSize,
                           height: knobSize,
@@ -620,7 +728,8 @@ class _ProgressBarState extends State<ProgressBar>
                             child: Padding(
                               padding: const EdgeInsets.only(bottom: 30),
                               child: Column(
-                                children: _buildTimelineItems(currentEventIndex),
+                                children:
+                                    _buildTimelineItems(currentEventIndex),
                               ),
                             ),
                           ),
@@ -689,7 +798,8 @@ class _ProgressBarState extends State<ProgressBar>
                 child: Column(
                   children: [
                     GestureDetector(
-                      onTap: _toggleExpanded, // FIX: Add collapse functionality to timeline knobs
+                      onTap:
+                          _toggleExpanded, // FIX: Add collapse functionality to timeline knobs
                       child: Container(
                         width: knobSize,
                         height: knobSize,
@@ -810,7 +920,8 @@ class _ProgressBarState extends State<ProgressBar>
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             GestureDetector(
-                              onTap: _launchURL, // URL launches when icon is clicked
+                              onTap:
+                                  _launchURL, // URL launches when icon is clicked
                               child: const Icon(
                                 Icons.video_call,
                                 color: Colors.blue,
@@ -818,7 +929,8 @@ class _ProgressBarState extends State<ProgressBar>
                             ),
                             const SizedBox(width: 5),
                             GestureDetector(
-                              onTap: _launchURL, // URL launches when text is clicked
+                              onTap:
+                                  _launchURL, // URL launches when text is clicked
                               child: const Text(
                                 "Scrum meet 8:00 p.m.",
                                 style: TextStyle(color: Colors.blue),
@@ -844,6 +956,7 @@ class _ProgressBarState extends State<ProgressBar>
 class TimelineEvent {
   final String time;
   final String title;
+  final DateTime date;
   final String description;
   final List<String> tasks;
   List<bool> isCompleted; // Changed to a mutable field to track checkbox states
@@ -851,6 +964,7 @@ class TimelineEvent {
   TimelineEvent({
     required this.time,
     required this.title,
+    required this.date,
     required this.description,
     required this.tasks,
     required this.isCompleted,
